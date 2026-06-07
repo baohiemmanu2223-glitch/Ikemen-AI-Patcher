@@ -1,0 +1,1933 @@
+{
+  "backupId": "20260606_160159_Roxy",
+  "backupRoot": "E:\\x1\\Ikemen_Nighty\\AI_Patcher\\backups\\20260606_160159_Roxy",
+  "characterPath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy",
+  "filesChanged": [
+    {
+      "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+      "relativePath": "Command.cmd",
+      "operations": [
+        {
+          "id": "variable_comments:0",
+          "moduleId": "variable_comments",
+          "risk": "low",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:variable_comments:v1",
+          "insertBefore": [
+            "[Command]",
+            "[Statedef -1]",
+            "[State -1"
+          ],
+          "insertAfter": [],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": null,
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "status": "inserted-before-anchor",
+          "anchorUsed": "[Command]",
+          "contentLines": 23,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:variable_comments:v1\n; AI_PATCH_VAR ai_enabled = var(59)\n; AI_PATCH_VAR rock_route = var(1)\n; AI_PATCH_VAR rock_air_route = var(12)\n; AI_PATCH_VAR rock_action_lock = var(14)\n; AI_PATCH_VAR rock_enemy_grounded = var(27)\n; AI_PATCH_VAR rock_hit_confirm_time = var(28)\n; AI_PATCH_VAR rock_enemy_juggle_ok = var(29)\n; AI_PATCH_VAR rock_enemy_wakeup = var(31)\n; AI_PATCH_VAR rock_enemy_unjuggle = var(32)\n; AI_PATCH_VAR rock_guard_memory = var(49)\n; AI_PATCH_VAR rock_projectile_flag = var(44)\n; AI_PATCH_VAR rock_jump_intent = var(37)\n; AI_PATCH_VAR rock_grab_cd = var(46)\n; AI_PATCH_VAR rock_guard_state_1 = var(50)\n; AI_PATCH_VAR rock_guard_state_2 = var(51)\n; AI_PATCH_VAR rock_guard_state_3 = var(52)\n; AI_PATCH_FVAR rock_enemy_x = fvar(1)\n; AI_PATCH_FVAR rock_enemy_y = fvar(2)\n; AI_PATCH_FVAR rock_enemy_vel_x = fvar(3)\n; AI_PATCH_FVAR rock_air_angle = fvar(4)\n; AI_PATCH_FVAR rock_ai_chance = fvar(6)\n; AI_PATCH_END: rockai_bl:variable_comments:v1",
+          "routeTargets": []
+        },
+        {
+          "id": "rock_measurement_core:0",
+          "moduleId": "rock_measurement_core",
+          "risk": "unknown",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:rock_measurement_core:v1",
+          "insertBefore": [
+            "[State -1, AI Guard",
+            "[State -1, AI Activate",
+            "[State -1"
+          ],
+          "insertAfter": [],
+          "fallbackInsertBefore": [
+            "[Statedef -1]"
+          ],
+          "insertAfterModule": null,
+          "routePreview": [],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "status": "inserted-before-anchor",
+          "anchorUsed": "[State -1",
+          "contentLines": 49,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:rock_measurement_core:v1\n[State -1, RockAI AILevel Bridge]\ntype = VarSet\ntrigger1 = AILevel > 0\nvar(59) = AILevel\nignoreHitPause = 1\n\n[State -1, RockAI AILevel Bridge Off]\ntype = VarSet\ntrigger1 = AILevel <= 0\nvar(59) = 0\nignoreHitPause = 1\n\n[State -1, RockAI Measure X]\ntype = Null\ntriggerAll = var(59) && NumEnemy\ntrigger1 = 1 || (fvar(1) := P2BodyDist X * Const(size.xscale))\ntrigger1 = 1 || (fvar(2) := P2BodyDist Y)\ntrigger1 = 1 || (fvar(3) := EnemyNear,Vel X)\ntrigger1 = 1 || (var(27) := (EnemyNear,StateType = S || EnemyNear,StateType = C))\ntrigger1 = 1 || (var(28) := Cond(NumTarget, Cond(EnemyNear,GetHitVar(ctrlTime) > EnemyNear,GetHitVar(hitTime), EnemyNear,GetHitVar(ctrlTime), EnemyNear,GetHitVar(hitTime)), 0))\ntrigger1 = 1 || (var(32) := (EnemyNear,Anim = 5120 && EnemyNear,AnimTime < -7 || EnemyNear,StateNo = 5040 || EnemyNear,StateType = L))\ntrigger1 = 1 || (var(29) := (!var(32) && EnemyNear,HitFall))\ntrigger1 = 1 || (var(31) := (EnemyNear,Anim = 5120 || EnemyNear,StateNo = [5110,5119]))\nignoreHitPause = 1\n\n[State -1, RockAI Chance Scalar]\ntype = Null\ntriggerAll = var(59)\ntrigger1 = 1 || (fvar(6) := (var(59) ** 2 / 64.0))\nignoreHitPause = 1\n\n[State -1, RockAI Clear Routes]\ntype = VarSet\ntriggerAll = var(59)\ntrigger1 = RoundState != 2 || MoveType = H\ntrigger2 = StateType = A && var(1)\ntrigger3 = StateType != A && var(12)\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, RockAI Clear Air Route]\ntype = VarSet\ntriggerAll = var(59)\ntrigger1 = RoundState != 2 || MoveType = H\ntrigger2 = StateType != A\nvar(12) = 0\nignoreHitPause = 1\n; AI_PATCH_END: rockai_bl:rock_measurement_core:v1",
+          "routeTargets": [
+            "P2BodyDist X * Const(size.xscale)",
+            "P2BodyDist Y",
+            "EnemyNear,Vel X",
+            "(EnemyNear,StateType = S || EnemyNear,StateType = C)",
+            "Cond(NumTarget, Cond(EnemyNear,GetHitVar(ctrlTime) > EnemyNear,GetHitVar(hitTime), EnemyNear,GetHitVar(ctrlTime), EnemyNear,GetHitVar(hitTime)), 0)",
+            "(EnemyNear,Anim = 5120 && EnemyNear,AnimTime < -7 || EnemyNear,StateNo = 5040 || EnemyNear,StateType = L)",
+            "(!var(32) && EnemyNear,HitFall)",
+            "(EnemyNear,Anim = 5120 || EnemyNear,StateNo = [5110,5119])",
+            "(var(59) ** 2 / 64.0)"
+          ]
+        },
+        {
+          "id": "adaptive_guard_memory:0",
+          "moduleId": "adaptive_guard_memory",
+          "risk": "unknown",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:adaptive_guard_memory:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [
+            "[State -1, AI Guard",
+            "[State -1"
+          ],
+          "insertAfterModule": "rock_measurement_core",
+          "routePreview": [],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "status": "inserted-after-module",
+          "anchorUsed": "rockai_bl:rock_measurement_core:v1",
+          "contentLines": 37,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:adaptive_guard_memory:v1\n[State -1, RockAI Guard Memory Timer Down]\ntype = VarAdd\ntriggerAll = var(59)\ntrigger1 = var(49) > 0\nvar(49) = -1\nignoreHitPause = 1\n\n[State -1, RockAI Learn Guarded Starter A]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = EnemyNear,MoveHit = 1\ntriggerAll = PrevStateNo = 131 || PrevStateNo = 152 || PrevStateNo = 153 || StateNo = 760 || StateNo = 761\ntriggerAll = EnemyNear,StateType != A\ntrigger1 = !var(50)\ntrigger1 = 1 || (var(50) := EnemyNear,StateNo)\ntrigger1 = 1 || (var(49) := 90)\ntrigger2 = var(50) && !var(51) && EnemyNear,StateNo != var(50)\ntrigger2 = 1 || (var(51) := EnemyNear,StateNo)\ntrigger2 = 1 || (var(49) := 90)\ntrigger3 = var(50) && var(51) && !var(52) && EnemyNear,StateNo != var(50) && EnemyNear,StateNo != var(51)\ntrigger3 = 1 || (var(52) := EnemyNear,StateNo)\ntrigger3 = 1 || (var(49) := 90)\nignoreHitPause = 1\n\n[State -1, RockAI Adaptive Low Guard]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2 && StateType != A\ntriggerAll = Ctrl && InGuardDist\ntriggerAll = EnemyNear,MoveType = A\ntriggerAll = P2BodyDist X <= 115\ntrigger1 = EnemyNear,StateType = C\ntrigger2 = EnemyNear,StateNo = var(50)\ntrigger3 = EnemyNear,StateNo = var(51)\ntrigger4 = EnemyNear,StateNo = var(52)\nvalue = 131\n; AI_PATCH_END: rockai_bl:adaptive_guard_memory:v1",
+          "routeTargets": [
+            "131",
+            "EnemyNear,StateNo"
+          ]
+        },
+        {
+          "id": "rock_defensive_router:0",
+          "moduleId": "rock_defensive_router",
+          "risk": "unknown",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:rock_defensive_router:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [
+            "[State -1, AI Guard",
+            "[State -1"
+          ],
+          "insertAfterModule": "adaptive_guard_memory",
+          "routePreview": [
+            {
+              "id": "rock_defensive_escape_routes",
+              "type": "defensive_route",
+              "source": "divine_rock_ai_guard_parry_roll_logic",
+              "chain": [
+                "parry_crouch",
+                "parry_stand",
+                "parry_air",
+                "roll_forward",
+                "roll_back"
+              ],
+              "condition": [
+                "enemy_attack_or_projectile",
+                "guard_distance",
+                "low_attack_memory",
+                "point_blank_escape"
+              ],
+              "policy": [
+                "parry_before_rushdown",
+                "roll_forward_through_projectiles",
+                "roll_back_to_reset_spacing"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "status": "inserted-after-module",
+          "anchorUsed": "rockai_bl:adaptive_guard_memory:v1",
+          "contentLines": 66,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:rock_defensive_router:v1\n[State -1, RockAI Crouch Parry Read]\ntype = HitOverride\ntriggerAll = var(59) && NumEnemy\ntriggerAll = RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Ctrl || StateNo = 761\ntriggerAll = InGuardDist || EnemyNear,MoveType = A || Enemy,NumProj > 0\ntriggerAll = P2BodyDist X <= 115 || Enemy,NumProj > 0\ntriggerAll = EnemyNear,StateType = C || EnemyNear,StateNo = var(50) || EnemyNear,StateNo = var(51) || EnemyNear,StateNo = var(52)\ntrigger1 = Random < Ceil((80 + (var(49) > 0) * 120) * fvar(6))\ntrigger1 = var(49) := 35\nattr = C, NA, SA, HA\nstateNo = 761\nslot = 0\ntime = 8\n\n[State -1, RockAI Stand Parry Read]\ntype = HitOverride\ntriggerAll = var(59) && NumEnemy\ntriggerAll = RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Ctrl || StateNo = 760\ntriggerAll = InGuardDist || EnemyNear,MoveType = A || Enemy,NumProj > 0\ntriggerAll = !(EnemyNear,StateType = C && EnemyNear,MoveType = A)\ntrigger1 = Random < Ceil((55 + (var(49) > 0) * 80) * fvar(6))\ntrigger1 = var(49) := 25\nattr = SA, AA, AP\nstateNo = 760\nslot = 0\ntime = 8\n\n[State -1, RockAI Air Parry Read]\ntype = HitOverride\ntriggerAll = var(59) && NumEnemy\ntriggerAll = RoundState = 2 && StateType = A && MoveType != H\ntriggerAll = Ctrl || StateNo = 762\ntriggerAll = StateNo != [5000,5999]\ntriggerAll = InGuardDist || EnemyNear,MoveType = A || Enemy,NumProj > 0\ntrigger1 = Random < Ceil((55 + (var(49) > 0) * 70) * fvar(6))\ntrigger1 = var(49) := 30\nattr = SA, AA, AP\nstateNo = 762\nforceAir = 1\nslot = 0\ntime = 7\n\n[State -1, RockAI Roll Through Projectile]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && Ctrl\ntriggerAll = Enemy,NumProj > 0 || EnemyNear,MoveType = A\ntriggerAll = P2BodyDist X = [55,220]\ntrigger1 = FrontEdgeBodyDist > 80 && Random < Ceil(260 * fvar(6))\nvalue = 710\n; AI_PATCH_MULTI_HIT_NO_EVADE: do not interrupt active multi-hit before final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\n\n[State -1, RockAI Roll Back Point Blank]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && Ctrl\ntriggerAll = EnemyNear,MoveType = A || P2BodyDist X <= 18\ntrigger1 = BackEdgeBodyDist > 60 && Random < Ceil(240 * fvar(6))\nvalue = 715\n; AI_PATCH_MULTI_HIT_NO_EVADE: do not interrupt active multi-hit before final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\n; AI_PATCH_END: rockai_bl:rock_defensive_router:v1",
+          "routeTargets": [
+            "710",
+            "715"
+          ]
+        },
+        {
+          "id": "rock_combo_meter_bridge:0",
+          "moduleId": "rock_combo_meter_bridge",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:rock_combo_meter_bridge:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [
+            "[State -1, AI Hyper Combo",
+            "[State -1, AI Special Combo",
+            "[State -1"
+          ],
+          "insertAfterModule": "rock_defensive_router",
+          "routePreview": [
+            {
+              "id": "rock_priority_meter_bridge",
+              "type": "meter_bridge",
+              "source": "divine_rock_ai_meter_reliability_cashout_routes",
+              "chain": [
+                "close_confirm_super",
+                "rush_super_max",
+                "rush_super",
+                "level3_super",
+                "ex_projectile",
+                "rush_special",
+                "projectile_light"
+              ],
+              "condition": [
+                "power_gate",
+                "hit_confirm_or_movecontact",
+                "grounded_enemy",
+                "scanner_resolved_range"
+              ],
+              "policy": [
+                "prefer_meter_before_generic_normals",
+                "close_confirm_supers_only_after_hit_confirm",
+                "meter_state_x_y_window_must_come_from_target_scan",
+                "no_ifelse_between_meter_states_with_different_cost_or_reach",
+                "level3_super_only_as_point_blank_punish",
+                "skip_liedown_or_unjuggle_targets"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "priorityInsertBefore": [
+            "[State -1, Hyper Drill]"
+          ],
+          "priorityInsertReason": "before old AI meter state 3100 at original line 901",
+          "status": "inserted-before-old-ai-meter",
+          "anchorUsed": "[State -1, Hyper Drill]",
+          "contentLines": 149,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:rock_combo_meter_bridge:v1\n[State -1, AI_PATCH_METER_POLICY RockAI Point Blank Level3 Punish]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && EnemyNear,StateType != L\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3000 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-23,25]\ntriggerAll = P2BodyDist Y = [-27,22]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = !var(32)\ntriggerAll = Ctrl && !InGuardDist && Enemy,NumProj = 0\ntrigger1 = EnemyNear,Ctrl = 0 && EnemyNear,MoveType != A\ntrigger1 = Random < Ceil(95 * fvar(6))\ntrigger2 = EnemyNear,MoveType = H && EnemyNear,Life < 320\ntrigger2 = Random < Ceil(120 * fvar(6))\nvalue = 3000\n\n[State -1, AI_PATCH_METER_POLICY RockAI Priority Close Confirm Super Cashout]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && EnemyNear,StateType != L\ntriggerAll = Power >= 1000\n; AI_PATCH_STATE_WINDOW 3005 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-23,25]\ntriggerAll = P2BodyDist Y = [-27,22]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = !var(32)\n; AI_PATCH_HITCONFIRM_SOURCE_GATE: MoveHit/MoveContact must come from allowed source state.\ntriggerAll = Ctrl || StateNo = [200,699] || StateNo = [1000,2999]\ntriggerAll = Ctrl || MoveHit || MoveContact\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = MoveHit || var(28) > 4\ntrigger2 = EnemyNear,Life < 450\ntrigger3 = StateNo = [200,699] && MoveContact && Random < Ceil(280 * fvar(6))\nvalue = 3005\n\n[State -1, AI_PATCH_METER_POLICY RockAI Priority Rush Super Max Cashout]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && EnemyNear,StateType != L\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3100 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-5,57]\ntriggerAll = P2BodyDist Y = [-100,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = !var(32)\n; AI_PATCH_HITCONFIRM_SOURCE_GATE: MoveHit/MoveContact must come from allowed source state.\ntriggerAll = Ctrl || StateNo = [200,699] || StateNo = [1000,2999]\ntriggerAll = Ctrl || MoveHit || MoveContact\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = MoveHit || var(28) > 4\ntrigger2 = EnemyNear,Life < 420\ntrigger3 = StateNo = [200,699] && MoveContact && Random < Ceil(240 * fvar(6))\nvalue = 3100\n\n[State -1, AI_PATCH_METER_POLICY RockAI Priority Rush Super Cashout]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && EnemyNear,StateType != L\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3100 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-5,57]\ntriggerAll = P2BodyDist Y = [-100,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = !var(32)\n; AI_PATCH_HITCONFIRM_SOURCE_GATE: MoveHit/MoveContact must come from allowed source state.\ntriggerAll = Ctrl || StateNo = [200,699] || StateNo = [1000,2999]\ntriggerAll = Ctrl || MoveHit || MoveContact\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = MoveHit || var(28) > 4\ntrigger2 = EnemyNear,Life < 420\ntrigger3 = StateNo = [200,699] && MoveContact && Random < Ceil(210 * fvar(6))\nvalue = 3100\n\n[State -1, AI_PATCH_METER_POLICY RockAI Normal Contact To EX Projectile]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && EnemyNear,StateType != L\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3050 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [0,119]\ntriggerAll = P2BodyDist Y = [-140,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = StateNo = [200,499] && MoveContact\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = MoveHit && Random < Ceil(520 * fvar(6))\ntrigger2 = Random < Ceil(180 * fvar(6))\nvalue = 3050\n\n[State -1, RockAI Normal Contact To Rush Special]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && EnemyNear,StateType != L\ntriggerAll = StateNo = [200,499] && MoveContact\ntriggerAll = P2BodyDist X = [-8,115]\ntriggerAll = P2BodyDist Y > -65\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = MoveHit && Random < Ceil(420 * fvar(6))\ntrigger2 = Random < Ceil(220 * fvar(6))\nvalue = 1050\n\n[State -1, AI_PATCH_METER_POLICY RockAI Strong Contact To EX Projectile]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && EnemyNear,StateType != L\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3050 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [0,119]\ntriggerAll = P2BodyDist Y = [-140,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = StateNo = [400,699] && MoveContact\ntriggerAll = !NumHelper\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = MoveHit && Random < Ceil(420 * fvar(6))\ntrigger2 = var(28) > 2 && Random < Ceil(220 * fvar(6))\nvalue = 3050\n\n[State -1, RockAI Strong Contact To Projectile Special]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && EnemyNear,StateType != L\ntriggerAll = StateNo = [400,699] && MoveContact\ntriggerAll = P2BodyDist X = [55,300]\ntriggerAll = !NumHelper\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = MoveHit && Random < Ceil(320 * fvar(6))\ntrigger2 = var(28) > 2 && Random < Ceil(240 * fvar(6))\nvalue = 1000\n; AI_PATCH_END: rockai_bl:rock_combo_meter_bridge:v1",
+          "routeTargets": [
+            "3000",
+            "3005",
+            "3100",
+            "3050",
+            "1050",
+            "1000"
+          ]
+        },
+        {
+          "id": "rock_ground_route_selector:0",
+          "moduleId": "rock_ground_route_selector",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:rock_ground_route_selector:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [
+            "[State -1, AI Hyper Combo",
+            "[State -1, AI Special Combo",
+            "[State -1"
+          ],
+          "insertAfterModule": "rock_defensive_router",
+          "routePreview": [
+            {
+              "id": "rock_ground_selector_routes",
+              "type": "ground_route",
+              "source": "divine_rock_ai_var18_ground_selector",
+              "chain": [
+                "anti_air_special",
+                "launcher_low",
+                "light_low",
+                "long_low",
+                "light_stand",
+                "medium_low",
+                "medium_stand",
+                "ex_projectile",
+                "projectile_light",
+                "throw_close",
+                "ex_grab_special"
+              ],
+              "condition": [
+                "anti_air_window",
+                "hitstun_link_window",
+                "neutral_light_medium_window",
+                "projectile_poke_window",
+                "close_throw_window"
+              ],
+              "policy": [
+                "route_aliases_are_resolved_per_character",
+                "prefer_combo_scan_evidence_before_fallback"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "priorityInsertBefore": [
+            "[State -1, Hyper Drill]"
+          ],
+          "priorityInsertReason": "before old AI meter state 3100 at original line 901",
+          "status": "inserted-before-old-ai-meter",
+          "anchorUsed": "[State -1, Hyper Drill]",
+          "contentLines": 150,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:rock_ground_route_selector:v1\n[State -1, RockAI Reset Ground Route]\ntype = VarSet\ntriggerAll = var(59)\ntrigger1 = RoundState != 2 || StateType = A || MoveType = H\ntrigger2 = var(1) && StateNo = var(1)\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, RockAI AntiAir Route Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && (Ctrl || StateNo = 20 || StateNo = 100)\ntriggerAll = !var(1) && !var(32)\ntriggerAll = EnemyNear,StateType = A && !EnemyNear,HitFall && EnemyNear,StateNo != 5040\ntrigger1 = P2BodyDist X = [-20,65]\ntrigger1 = P2BodyDist Y = [-75,10]\ntrigger1 = Random < Ceil(520 * fvar(6))\n; AI_PATCH_ROUTE_CONFIRM_ONLY_GUARD: power-gain normal route state(s) 1060, 420 are hit-confirm only\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = !EnemyNear,Ctrl || EnemyNear,GetHitVar(HitTime) >= 5\ntriggerAll = !(Ctrl && !MoveHit && !MoveContact && EnemyNear,Ctrl)\ntrigger1 = 1 || (var(1) := 1060)\ntrigger2 = P2BodyDist X = [20,65]\ntrigger2 = P2BodyDist Y = [-75,10]\ntrigger2 = Random < Ceil(420 * fvar(6))\ntrigger2 = 1 || (var(1) := 420)\n\n[State -1, RockAI Hitstun Link Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1)\ntriggerAll = Ctrl || StateNo = 20 || StateNo = 100\ntriggerAll = var(27) && var(28) > 2\ntrigger1 = P2BodyDist X <= 55\n; AI_PATCH_ROUTE_CONFIRM_ONLY_GUARD: power-gain normal route state(s) 440, 400 are hit-confirm only\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = !EnemyNear,Ctrl || EnemyNear,GetHitVar(HitTime) >= 4\ntriggerAll = !(Ctrl && !MoveHit && !MoveContact && EnemyNear,Ctrl)\ntrigger1 = 1 || (var(1) := IfElse(P2BodyDist X < 30, 400, 440))\ntrigger2 = P2BodyDist X = [55,115]\ntrigger2 = 1 || (var(1) := 440)\n\n[State -1, RockAI Neutral Light Medium Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1) && var(27)\ntriggerAll = Ctrl || StateNo = 20 || StateNo = 100\ntriggerAll = EnemyNear,MoveType != A && EnemyNear,StateType != L\ntrigger1 = P2BodyDist X <= 55\ntrigger1 = Random < Ceil(420 * fvar(6))\n; AI_PATCH_ROUTE_CONFIRM_ONLY_GUARD: power-gain normal route state(s) 400, 200, 410, 210 are hit-confirm only\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = !EnemyNear,Ctrl || EnemyNear,GetHitVar(HitTime) >= 4\ntriggerAll = !(Ctrl && !MoveHit && !MoveContact && EnemyNear,Ctrl)\ntrigger1 = 1 || (var(1) := IfElse(EnemyNear,StateType = C, 400, 200))\ntrigger2 = P2BodyDist X = [55,115]\ntrigger2 = Random < Ceil(300 * fvar(6))\ntrigger2 = 1 || (var(1) := IfElse(Random < 500, 410, 210))\n\n[State -1, AI_PATCH_METER_POLICY RockAI Poke EX Projectile Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1)\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3050 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [0,119]\ntriggerAll = P2BodyDist Y = [-140,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = Ctrl || StateNo = 20 || StateNo = 100\ntriggerAll = EnemyNear,MoveType != A || EnemyNear,StateType = L\ntrigger1 = !NumHelper && !var(32)\ntrigger1 = Random < Ceil(140 * fvar(6))\ntrigger1 = 1 || (var(1) := 3050)\n\n[State -1, RockAI Poke Projectile Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1)\ntriggerAll = Ctrl || StateNo = 20 || StateNo = 100\ntriggerAll = EnemyNear,MoveType != A || EnemyNear,StateType = L\ntrigger1 = P2BodyDist X = [90,300]\ntrigger1 = !NumHelper && !var(32)\ntrigger1 = Random < Ceil(170 * fvar(6))\n; AI_PATCH_ROUTE_CONFIRM_ONLY_GUARD: power-gain normal route state(s) 440 are hit-confirm only\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = !EnemyNear,Ctrl || EnemyNear,GetHitVar(HitTime) >= 6\ntriggerAll = !(Ctrl && !MoveHit && !MoveContact && EnemyNear,Ctrl)\ntrigger1 = 1 || (var(1) := 1000)\ntrigger2 = P2BodyDist X = [115,140]\ntrigger2 = Random < Ceil(180 * fvar(6))\ntrigger2 = 1 || (var(1) := 440)\n\n[State -1, AI_PATCH_METER_POLICY RockAI Close EX Grab Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1) && !var(46)\ntriggerAll = Power >= 500\ntriggerAll = Ctrl || StateNo = 20 || StateNo = 100\ntriggerAll = EnemyNear,StateType != A && EnemyNear,MoveType != H && EnemyNear,NumProj = 0\ntrigger1 = P2BodyDist X = [-8,48]\ntrigger1 = P2BodyDist Y = [-132,10]\ntrigger1 = Random < Ceil(120 * fvar(6))\n; AI_PATCH_ROUTE_CONFIRM_ONLY_GUARD: power-gain normal route state(s) 1060 are hit-confirm only\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = !EnemyNear,Ctrl || EnemyNear,GetHitVar(HitTime) >= 5\ntriggerAll = !(Ctrl && !MoveHit && !MoveContact && EnemyNear,Ctrl)\ntrigger1 = 1 || (var(1) := 1060)\ntrigger1 = 1 || (var(46) := 45)\n\n[State -1, RockAI Close Throw Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1) && !var(46)\ntriggerAll = Ctrl || StateNo = 20 || StateNo = 100\ntriggerAll = EnemyNear,StateType != A && EnemyNear,StateType != L && EnemyNear,MoveType != H && EnemyNear,NumProj = 0\ntriggerAll = P2BodyDist X = [-8,32]\ntriggerAll = P2BodyDist Y = [-12,12]\ntriggerAll = EnemyNear,Ctrl = 0 || EnemyNear,MoveType = A || P2StateNo = [120,155]\ntriggerAll = P2StateNo != [800,899]\ntrigger1 = Random < Ceil(80 * fvar(6))\ntrigger1 = 1 || (var(1) := 800)\ntrigger1 = 1 || (var(46) := 45)\n\n[State -1, AI Patch Invalid Throw Fallback 800 To 400]\ntype = Null\n; AI_PATCH_INVALID_THROW_FALLBACK 800: close-range invalid throw -> scanned hit state 400\ntriggerAll = AILevel && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && MoveType != H\ntriggerAll = Ctrl || MoveHit || MoveContact || StateNo = [20,101]\ntriggerAll = P2BodyDist X = [-8,70]\ntriggerAll = P2BodyDist Y = [-73,12]\ntriggerAll = EnemyNear,StateType != A && EnemyNear,StateType != L\ntriggerAll = !(EnemyNear,Ctrl = 0 || EnemyNear,MoveType = A || P2StateNo = [120,155])\ntriggerAll = P2StateNo != [800,899]\ntriggerAll = !var(1)\ntriggerAll = !var(46)\ntrigger1 = Random < 120\ntrigger1 = 1 || (var(1) := 400)\ntrigger1 = 1 || (var(46) := 45)\n\n[State -1, RockAI Grab Cooldown]\ntype = VarAdd\ntriggerAll = var(59)\ntrigger1 = var(46) > 0\nvar(46) = -1\nignoreHitPause = 1\n; AI_PATCH_END: rockai_bl:rock_ground_route_selector:v1",
+          "routeTargets": [
+            "1060",
+            "420",
+            "IfElse(P2BodyDist X < 30, 400, 440)",
+            "440",
+            "IfElse(EnemyNear,StateType = C, 400, 200)",
+            "IfElse(Random < 500, 410, 210)",
+            "3050",
+            "1000",
+            "800",
+            "400"
+          ]
+        },
+        {
+          "id": "rock_air_route_selector:0",
+          "moduleId": "rock_air_route_selector",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:rock_air_route_selector:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [
+            "[State -1, Jump Light",
+            "[State -1"
+          ],
+          "insertAfterModule": "rock_ground_route_selector",
+          "routePreview": [
+            {
+              "id": "rock_air_followup_routes",
+              "type": "air_follow_up",
+              "source": "divine_rock_ai_air_normal_selector",
+              "chain": [
+                "air_strong",
+                "air_medium",
+                "air_light"
+              ],
+              "condition": [
+                "airborne_self",
+                "x_y_air_reach_window",
+                "enemy_airborne_or_combo_window"
+              ],
+              "policy": [
+                "never_call_ground_state_while_airborne",
+                "require_air_normal_role_or_air_reach"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "status": "inserted-after-module",
+          "anchorUsed": "rockai_bl:rock_ground_route_selector:v1",
+          "contentLines": 34,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:rock_air_route_selector:v1\n[State -1, RockAI Air Route Reset]\ntype = VarSet\ntriggerAll = var(59)\ntrigger1 = StateType != A || MoveType = H || RoundState != 2\ntrigger2 = var(12) && StateNo = var(12)\nvar(12) = 0\nignoreHitPause = 1\n\n[State -1, RockAI Air Normal Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType = A && (Ctrl || StateNo = 140)\ntriggerAll = !var(12)\ntriggerAll = P2BodyDist X > -12\ntriggerAll = EnemyNear,HitDefAttr != SCA,SA || var(59) < 6\ntrigger1 = P2BodyDist X = [-10,70]\ntrigger1 = P2BodyDist Y = [-30,55]\ntrigger1 = Vel Y > -1 || EnemyNear,StateType = A\ntrigger1 = Random < Ceil(520 * fvar(6))\n; AI_PATCH_ROUTE_CONFIRM_ONLY_GUARD: power-gain normal route state(s) 620, 610, 600 are hit-confirm only\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = !EnemyNear,Ctrl || EnemyNear,GetHitVar(HitTime) >= 6\ntriggerAll = !(Ctrl && !MoveHit && !MoveContact && EnemyNear,Ctrl)\ntrigger1 = 1 || (var(12) := 620)\ntrigger2 = P2BodyDist X = [-10,70]\ntrigger2 = P2BodyDist Y = [-15,55]\ntrigger2 = Random < Ceil(460 * fvar(6))\ntrigger2 = 1 || (var(12) := 610)\ntrigger3 = P2BodyDist X = [-10,55]\ntrigger3 = P2BodyDist Y = [-10,35]\ntrigger3 = Random < Ceil(620 * fvar(6))\ntrigger3 = 1 || (var(12) := 600)\n; AI_PATCH_END: rockai_bl:rock_air_route_selector:v1",
+          "routeTargets": [
+            "620",
+            "610",
+            "600"
+          ]
+        },
+        {
+          "id": "rock_meter_cashout:0",
+          "moduleId": "rock_meter_cashout",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:rock_meter_cashout:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [
+            "[State -1, AI Hyper Combo",
+            "[State -1, AI Special Combo",
+            "[State -1"
+          ],
+          "insertAfterModule": "rock_air_route_selector",
+          "routePreview": [
+            {
+              "id": "rock_meter_cashout_routes",
+              "type": "super_cashout",
+              "source": "divine_rock_ai_meter_reliability_cashout_policy",
+              "chain": [
+                "close_confirm_super",
+                "rush_super_max",
+                "rush_super",
+                "level3_super",
+                "max_mode"
+              ],
+              "condition": [
+                "power_gate",
+                "hit_confirm_or_low_life",
+                "fall_carry_or_grounded_enemy",
+                "range_matches_super_reach"
+              ],
+              "policy": [
+                "close_confirm_supers_only_after_hit_confirm",
+                "meter_state_x_y_window_must_come_from_target_scan",
+                "no_ifelse_between_meter_states_with_different_cost_or_reach",
+                "level3_only_on_point_blank_grab_punish",
+                "max_mode_only_when_knockdown_space_is_safe"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "priorityInsertBefore": [
+            "[State -1, Hyper Drill]"
+          ],
+          "priorityInsertReason": "before old AI meter state 3100 at original line 901",
+          "status": "inserted-before-old-ai-meter",
+          "anchorUsed": "[State -1, Hyper Drill]",
+          "contentLines": 78,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:rock_meter_cashout:v1\n[State -1, AI_PATCH_METER_POLICY RockAI Level3 Grab Punish Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1)\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3000 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-23,25]\ntriggerAll = P2BodyDist Y = [-27,22]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = !var(32)\ntriggerAll = Ctrl && !InGuardDist && Enemy,NumProj = 0\ntrigger1 = EnemyNear,Ctrl = 0 && EnemyNear,MoveType != A\ntrigger1 = Random < Ceil(95 * fvar(6))\ntrigger1 = 1 || (var(1) := 3000)\n\n[State -1, AI_PATCH_METER_POLICY RockAI Super Confirm Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1)\ntriggerAll = Power >= 1000\n; AI_PATCH_STATE_WINDOW 3005 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-23,25]\ntriggerAll = P2BodyDist Y = [-27,22]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = !var(32)\ntriggerAll = MoveHit || var(28) > 4 || EnemyNear,MoveType = H\ntrigger1 = Random < Ceil(420 * fvar(6))\ntrigger1 = 1 || (var(1) := 3005)\n\n[State -1, AI_PATCH_METER_POLICY RockAI Rush Super Max Route Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1)\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3100 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-5,57]\ntriggerAll = P2BodyDist Y = [-100,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = !var(32)\ntriggerAll = MoveHit || var(28) > 4 || EnemyNear,MoveType = H\ntrigger1 = Random < Ceil(320 * fvar(6))\ntrigger1 = 1 || (var(1) := 3100)\n\n[State -1, AI_PATCH_METER_POLICY RockAI Rush Super Route Pick]\ntype = Null\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && !var(1)\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3100 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-5,57]\ntriggerAll = P2BodyDist Y = [-100,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = !var(32)\ntriggerAll = MoveHit || var(28) > 4 || EnemyNear,MoveType = H\ntrigger1 = Random < Ceil(280 * fvar(6))\ntrigger1 = 1 || (var(1) := 3100)\n\n[State -1, RockAI MAX Mode Opportunist]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && Ctrl\ntriggerAll = var(20) <= 0 && Power >= 1000\ntriggerAll = EnemyNear,StateType = L || EnemyNear,HitFall\ntrigger1 = P2BodyDist X >= 120\ntrigger1 = Random < Ceil(150 * fvar(6))\nvalue = 770\n; AI_PATCH_MULTI_HIT_NO_EVADE: do not interrupt active multi-hit before final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\n; AI_PATCH_END: rockai_bl:rock_meter_cashout:v1",
+          "routeTargets": [
+            "770",
+            "3000",
+            "3005",
+            "3100"
+          ]
+        },
+        {
+          "id": "rock_route_executor:0",
+          "moduleId": "rock_route_executor",
+          "risk": "high",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:rock_route_executor:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [
+            "[State -1, AI Walk Fwd",
+            "[State -1"
+          ],
+          "insertAfterModule": "rock_meter_cashout",
+          "routePreview": [
+            {
+              "id": "rock_dynamic_route_executor",
+              "type": "dynamic_route_executor",
+              "source": "divine_rock_ai_var18_executor",
+              "chain": [
+                "rock_route",
+                "rock_air_route",
+                "power_charge",
+                "roll_back"
+              ],
+              "condition": [
+                "selector_route_variable_nonzero",
+                "ctrl_movecontact_or_hitconfirm",
+                "target_state_type_compatible",
+                "knockdown_reset_or_charge_window"
+              ],
+              "policy": [
+                "execute_selector_result_not_fixed_state",
+                "clear_projectile_route_at_point_blank",
+                "clear_liedown_unsafe_route"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "status": "inserted-after-module",
+          "anchorUsed": "rockai_bl:rock_meter_cashout:v1",
+          "contentLines": 70,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:rock_route_executor:v1\n[State -1, RockAI Prevent Impossible Close Route]\ntype = VarSet\ntriggerAll = var(59) && NumEnemy\ntriggerAll = var(1)\ntriggerAll = Abs(P2BodyDist X) <= 18\ntrigger1 = var(1) = 1000\ntrigger2 = var(1) = 3050\ntrigger3 = EnemyNear,StateType = L && var(1) != 715 && var(1) != 730\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, RockAI Prevent Meter Route Without Power]\ntype = VarSet\ntriggerAll = var(59) && NumEnemy\ntriggerAll = var(1)\ntrigger1 = var(1) = 3000 && Power < 2000\ntrigger2 = var(1) = 3005 && Power < 1000\ntrigger3 = var(1) = 3000 && Power < 2000\ntrigger4 = var(1) = 3050 && Power < 2000\ntrigger5 = var(1) = 3100 && Power < 2000\ntrigger6 = var(1) = 3100 && Power < 2000\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, RockAI Execute Ground Route]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A\ntriggerAll = var(1)\ntriggerAll = Ctrl || MoveContact || var(28) > 0 || StateNo = 20 || StateNo = 100\ntriggerAll = EnemyNear,StateType != L || var(1) = 730 || var(1) = 715\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = 1\nvalue = var(1)\n\n[State -1, RockAI Execute Air Route]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType = A\ntriggerAll = var(12)\ntriggerAll = Ctrl || StateNo = 140\ntrigger1 = 1\nvalue = var(12)\n\n[State -1, RockAI Knockdown Reset Charge]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && Ctrl\ntriggerAll = EnemyNear,StateType = L || EnemyNear,Anim = 5120 || EnemyNear,HitFall\ntriggerAll = P2BodyDist X >= 120\ntriggerAll = Power < PowerMax && !var(20)\ntrigger1 = Random < Ceil(300 * fvar(6))\nvalue = 730\n; AI_PATCH_MULTI_HIT_NO_EVADE: do not interrupt active multi-hit before final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\n\n[State -1, RockAI Knockdown Space Reset]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && Ctrl\ntriggerAll = EnemyNear,StateType = L || EnemyNear,Anim = 5120 || EnemyNear,HitFall\ntriggerAll = P2BodyDist X < 120\ntriggerAll = BackEdgeBodyDist > 50\ntrigger1 = Random < Ceil(260 * fvar(6))\nvalue = 715\n; AI_PATCH_MULTI_HIT_NO_EVADE: do not interrupt active multi-hit before final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\n; AI_PATCH_END: rockai_bl:rock_route_executor:v1",
+          "routeTargets": [
+            "var(1)",
+            "var(12)",
+            "730",
+            "715"
+          ]
+        },
+        {
+          "id": "anti_projectile_approach:0",
+          "moduleId": "anti_projectile_approach",
+          "risk": "unknown",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:anti_projectile_approach:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [
+            "[State -1, AI Roll Fwd",
+            "[State -1"
+          ],
+          "insertAfterModule": "rock_defensive_router",
+          "routePreview": [],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "priorityInsertBefore": [
+            "[State -1, Hyper Drill]"
+          ],
+          "priorityInsertReason": "before old AI meter state 3100 at original line 901",
+          "status": "inserted-before-old-ai-meter",
+          "anchorUsed": "[State -1, Hyper Drill]",
+          "contentLines": 54,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:anti_projectile_approach:v1\n[State -1, RockAI Projectile Flag]\ntype = VarSet\ntriggerAll = var(59) && NumEnemy\ntrigger1 = Enemy,NumProj > 0 || EnemyNear,NumProj > 0\ntrigger2 = EnemyNear,HitDefAttr = SCA,NP || EnemyNear,HitDefAttr = SCA,SP || EnemyNear,HitDefAttr = SCA,HP\nvar(44) = 18\nignoreHitPause = 1\n\n[State -1, RockAI Projectile Flag Down]\ntype = VarAdd\ntriggerAll = var(59)\ntrigger1 = var(44) > 0\nvar(44) = -1\nignoreHitPause = 1\n\n[State -1, RockAI Roll Fwd Projectile Dodge]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && Ctrl\ntriggerAll = var(44) > 0\ntriggerAll = P2BodyDist X = [55,220]\ntriggerAll = FrontEdgeBodyDist > 60\ntrigger1 = Random < Ceil(360 * fvar(6))\nvalue = 710\n; AI_PATCH_MULTI_HIT_NO_EVADE: do not interrupt active multi-hit before final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\n\n[State -1, AI_PATCH_METER_POLICY RockAI EX Projectile Counter Shot]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && Ctrl\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3050 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [0,119]\ntriggerAll = P2BodyDist Y = [-140,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = var(44) > 0\ntriggerAll = !NumHelper\ntrigger1 = Random < Ceil(180 * fvar(6))\nvalue = 3050\n\n[State -1, RockAI Projectile Counter Shot]\ntype = ChangeState\ntriggerAll = var(59) && NumEnemy && RoundState = 2\ntriggerAll = StateType != A && Ctrl\ntriggerAll = var(44) > 0\ntriggerAll = P2BodyDist X = [90,300]\ntriggerAll = !NumHelper\ntrigger1 = Random < Ceil(200 * fvar(6))\nvalue = 1000\n; AI_PATCH_END: rockai_bl:anti_projectile_approach:v1",
+          "routeTargets": [
+            "710",
+            "3050",
+            "1000"
+          ]
+        },
+        {
+          "id": "resolver_generated_combo_pool:0",
+          "moduleId": "resolver_generated_combo_pool",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:resolver_generated_combo_pool:v1",
+          "insertBefore": [
+            "[State -1, AI Power Charge]",
+            "[State -1"
+          ],
+          "insertAfter": [
+            "[Statedef -1]"
+          ],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": "meter_cashout_safe",
+          "routePreview": [
+            {
+              "id": "resolver_generated_combo_archetypes",
+              "type": "generated_combo_archetypes",
+              "source": "scan_report_route_candidates",
+              "chain": [
+                "430",
+                "230",
+                "1000",
+                "200",
+                "200",
+                "1050",
+                "3005",
+                "230",
+                "430",
+                "1060",
+                "3050",
+                "430",
+                "440",
+                "1050",
+                "3005",
+                "400",
+                "200"
+              ],
+              "condition": [
+                "scanner_confirmed_edge",
+                "movehit_or_movecontact",
+                "range_and_power_gate",
+                "boss_archetype_tags"
+              ],
+              "policy": [
+                "max_10_combo_archetype_routes",
+                "transition_level_patch_only"
+              ],
+              "archetypes": [
+                "Synthetic Mid Kick Shiden: 430->230->1000 [Heavy Confirm Combo, Pressure Combo, Character Native Chain] source=scan_report_synthetic_boss_route",
+                "Synthetic Light Repeat Special Meter: 200->200->1050->3005 [Light Confirm Combo, Pressure Combo, Super Combo] source=scan_report_synthetic_boss_route",
+                "Synthetic Heavy Special Level2: 230->430->1060->3050 [Heavy Confirm Combo, Punish Combo, Max Damage Combo] source=scan_report_synthetic_boss_route",
+                "Synthetic Mid Confirm Cashout: 430->440->1050->3005 [Counter Combo, Desperation Combo, Super Combo] source=scan_report_synthetic_boss_route",
+                "Light Confirm Combo: 400->200 [Light Confirm, Pressure Combo]"
+              ],
+              "styleAdapter": null
+            },
+            {
+              "id": "resolver_generated_air_poke_pool",
+              "type": "air_poke_options",
+              "source": "scan_report_air_normal_candidates",
+              "chain": [
+                "640",
+                "630",
+                "610"
+              ],
+              "condition": [
+                "air_state_only",
+                "range_y_window",
+                "anti_punish_jump_coverage"
+              ],
+              "policy": [
+                "max_3_air_pokes",
+                "do_not_force_air_to_ground_special"
+              ]
+            },
+            {
+              "id": "resolver_generated_free_special_pool",
+              "type": "special_options",
+              "source": "scan_report_free_special_candidates",
+              "chain": [
+                "1000",
+                "1050",
+                "1055",
+                "1005"
+              ],
+              "condition": [
+                "no_power_cost",
+                "state_has_hitdef_or_helper_hit",
+                "normal_contact_bridge"
+              ],
+              "policy": [
+                "max_4_free_special_states"
+              ]
+            },
+            {
+              "id": "resolver_generated_meter_pool",
+              "type": "meter_options",
+              "source": "scan_report_meter_candidates",
+              "chain": [
+                "3005",
+                "3000",
+                "3050",
+                "3100"
+              ],
+              "condition": [
+                "power_gate_equals_scanned_cost",
+                "hit_confirm_or_finish_window"
+              ],
+              "policy": [
+                "max_4_meter_states",
+                "do_not_add_costs_together"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "generatedFallback": true,
+          "resolverMode": "supplemental",
+          "generatedResolverPool": {
+            "meterStates": [
+              3005,
+              3000,
+              3050,
+              3100
+            ],
+            "freeSpecialStates": [
+              1000,
+              1050,
+              1055,
+              1005
+            ],
+            "airPokeStates": [
+              640,
+              630,
+              610
+            ],
+            "comboRoutes": [
+              {
+                "id": "synthetic_mid_kick_shiden",
+                "label": "Synthetic Mid Kick Shiden",
+                "tags": [
+                  "Heavy Confirm Combo",
+                  "Pressure Combo",
+                  "Character Native Chain"
+                ],
+                "edge": "430->230->1000",
+                "source": "scan_report_synthetic_boss_route",
+                "styleAdapter": null
+              },
+              {
+                "id": "synthetic_light_repeat_special_meter",
+                "label": "Synthetic Light Repeat Special Meter",
+                "tags": [
+                  "Light Confirm Combo",
+                  "Pressure Combo",
+                  "Super Combo"
+                ],
+                "edge": "200->200->1050->3005",
+                "source": "scan_report_synthetic_boss_route",
+                "styleAdapter": null
+              },
+              {
+                "id": "synthetic_heavy_special_level2",
+                "label": "Synthetic Heavy Special Level2",
+                "tags": [
+                  "Heavy Confirm Combo",
+                  "Punish Combo",
+                  "Max Damage Combo"
+                ],
+                "edge": "230->430->1060->3050",
+                "source": "scan_report_synthetic_boss_route",
+                "styleAdapter": null
+              },
+              {
+                "id": "synthetic_mid_confirm_cashout",
+                "label": "Synthetic Mid Confirm Cashout",
+                "tags": [
+                  "Counter Combo",
+                  "Desperation Combo",
+                  "Super Combo"
+                ],
+                "edge": "430->440->1050->3005",
+                "source": "scan_report_synthetic_boss_route",
+                "styleAdapter": null
+              },
+              {
+                "id": "light_confirm",
+                "label": "Light Confirm Combo",
+                "tags": [
+                  "Light Confirm",
+                  "Pressure Combo"
+                ],
+                "edge": "400->200",
+                "source": "scan_report",
+                "styleAdapter": null
+              }
+            ],
+            "styleAdapter": null
+          },
+          "priorityInsertBefore": [
+            "[State -1, Hyper Drill]"
+          ],
+          "priorityInsertReason": "before old AI meter state 3100 at original line 901",
+          "status": "inserted-before-old-ai-meter",
+          "anchorUsed": "[State -1, Hyper Drill]",
+          "contentLines": 585,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:resolver_generated_combo_pool:v1\n; Resolver-generated combo pool from current character scan report.\n; Limits: max 4 meter states, max 4 free specials, max 3 air pokes, max 10 scanner-selected combo archetype routes.\n; Each ChangeState is an independent gated transition, not a forced full chain.\n[State -1, AI Resolver Synthetic Mid Kick Shiden Step 1 430 To 230]\ntype = ChangeState\nvalue = 230\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 230\ntriggerAll = PrevStateNo != 230\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 430\ntriggerAll = P2BodyDist X = [-20,106]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = MoveHit || MoveContact\ntriggerAll = P2BodyDist X <= 115\ntriggerAll = EnemyNear,StateType != A\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 112\n[State -1, AI Resolver Synthetic Mid Kick Shiden Step 2 230 To 1000]\ntype = ChangeState\nvalue = 1000\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 1000\ntriggerAll = PrevStateNo != 1000\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 230\ntriggerAll = P2BodyDist X = [-20,35]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = P2BodyDist X = [-20,35]\ntriggerAll = P2BodyDist Y = [-27,22]\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = MoveHit || MoveContact\ntriggerAll = P2BodyDist X <= 115\ntriggerAll = EnemyNear,StateType != A\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 112\n[State -1, AI Resolver Synthetic Light Repeat Special Meter Step 1 200 To 200]\ntype = ChangeState\nvalue = 200\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 200\ntriggerAll = PrevStateNo != 200\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 200\ntriggerAll = P2BodyDist X = [-20,80]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 3 || MoveContact\ntriggerAll = P2BodyDist X <= 100\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 68\n[State -1, AI Resolver Synthetic Light Repeat Special Meter Step 2 200 To 1050]\ntype = ChangeState\nvalue = 1050\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 1050\ntriggerAll = PrevStateNo != 1050\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 200\ntriggerAll = P2BodyDist X = [-20,86]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = P2BodyDist X = [-20,86]\ntriggerAll = P2BodyDist Y = [-69,10]\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 3 || MoveContact\ntriggerAll = P2BodyDist X <= 100\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 68\n[State -1, AI Resolver Synthetic Light Repeat Special Meter Step 3 1050 To 3005]\ntype = ChangeState\nvalue = 3005\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 3005\ntriggerAll = PrevStateNo != 3005\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = Power >= 1000\n; AI_PATCH_STATE_WINDOW 3005 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-23,25]\ntriggerAll = P2BodyDist Y = [-27,22]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = StateNo = 1050\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 3 || MoveContact\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 68\n[State -1, AI Resolver Synthetic Heavy Special Level2 Step 1 230 To 430]\ntype = ChangeState\nvalue = 430\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 430\ntriggerAll = PrevStateNo != 430\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 230\ntriggerAll = P2BodyDist X = [-20,90]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = EnemyNear,MoveType = H || MoveHit\ntriggerAll = P2BodyDist X <= 120\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 54\n[State -1, AI Resolver Synthetic Heavy Special Level2 Step 2 430 To 1060]\ntype = ChangeState\nvalue = 1060\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 1060\ntriggerAll = PrevStateNo != 1060\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 430\ntriggerAll = P2BodyDist X = [-20,48]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = P2BodyDist X = [-20,48]\ntriggerAll = P2BodyDist Y = [-132,10]\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = EnemyNear,MoveType = H || MoveHit\ntriggerAll = P2BodyDist X <= 120\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 54\n[State -1, AI Resolver Synthetic Heavy Special Level2 Step 3 1060 To 3050]\ntype = ChangeState\nvalue = 3050\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 3050\ntriggerAll = PrevStateNo != 3050\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 3050 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [0,119]\ntriggerAll = P2BodyDist Y = [-140,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = StateNo = 1060\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = EnemyNear,MoveType = H || MoveHit\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 54\n[State -1, AI Resolver Synthetic Mid Confirm Cashout Step 1 430 To 440]\ntype = ChangeState\nvalue = 440\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 440\ntriggerAll = PrevStateNo != 440\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 430\ntriggerAll = P2BodyDist X = [-20,91]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = MoveHit || EnemyNear,Ctrl = 0\ntriggerAll = EnemyNear,StateType != A\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 60\n[State -1, AI Resolver Synthetic Mid Confirm Cashout Step 2 440 To 1050]\ntype = ChangeState\nvalue = 1050\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 1050\ntriggerAll = PrevStateNo != 1050\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 440\ntriggerAll = P2BodyDist X = [-20,86]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\n; AI_PATCH_PUSHBACK_COMPAT 440->1050 source push 7 projected 126 target reach 86\ntriggerAll = P2BodyDist X <= 70 || EnemyNear,StateType = A || EnemyNear,MoveType = H\ntriggerAll = Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0\ntriggerAll = P2BodyDist X = [-20,86]\ntriggerAll = P2BodyDist Y = [-69,10]\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = MoveHit || EnemyNear,Ctrl = 0\ntriggerAll = EnemyNear,StateType != A\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1055:elem7, 1065:elem4, 1070:elem14, 1075:elem17, 3050:elem38, 3055:elem39, 3070:elem15, 3075:elem16, 3100:elem18\ntriggerAll = (StateNo != 1055 || AnimElemTime(7) >= 0) && (StateNo != 1065 || AnimElemTime(4) >= 0) && (StateNo != 1070 || AnimElemTime(14) >= 0) && (StateNo != 1075 || AnimElemTime(17) >= 0) && (StateNo != 3050 || AnimElemTime(38) >= 0) && (StateNo != 3055 || AnimElemTime(39) >= 0) && (StateNo != 3070 || AnimElemTime(15) >= 0) && (StateNo != 3075 || AnimElemTime(16) >= 0) && (StateNo != 3100 || AnimElemTime(18) >= 0)\ntrigger1 = Random < 60\n[State -1, AI Resolver Synthetic Mid Confirm Cashout Step 3 1050 To 3005]",
+          "routeTargets": [
+            "230",
+            "1000",
+            "200",
+            "1050",
+            "3005",
+            "430",
+            "1060",
+            "3050",
+            "440",
+            "1055",
+            "1005",
+            "640",
+            "630",
+            "610",
+            "3000",
+            "3100"
+          ]
+        },
+        {
+          "id": "resolver_dynamic_meter_route_window_guard:0",
+          "moduleId": "resolver_dynamic_meter_route_window_guard",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:resolver_dynamic_meter_route_window_guard:v1",
+          "insertBefore": [
+            "[State -1"
+          ],
+          "insertAfter": [
+            "[Statedef -1]"
+          ],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": null,
+          "routePreview": [
+            {
+              "id": "resolver_dynamic_meter_route_window_guard",
+              "type": "dynamic_route_safety",
+              "source": "scan_report_meter_candidates",
+              "chain": [
+                "var(1) meter window clear",
+                "var(12) meter window clear"
+              ],
+              "condition": [
+                "route_var_points_to_meter_state",
+                "scanned_x_y_confirm_window_failed"
+              ],
+              "policy": [
+                "clear_route_var_before_dynamic_executor",
+                "prevents_stale_far_meter_call"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "generatedFallback": true,
+          "resolverMode": "supplemental",
+          "status": "inserted-before-anchor",
+          "anchorUsed": "[State -1",
+          "contentLines": 100,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:resolver_dynamic_meter_route_window_guard:v1\n; Runtime guard for dynamic route vars. If a route var points to a scanned meter state\n; but the current opponent x/y/confirm no longer matches that state, clear the route before executor ChangeState.\n\n[State -1, AI Patch Dynamic Route Window Guard 1 3005]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(1) = 3005\ntrigger1 = !((P2BodyDist X = [-23,25]) && (P2BodyDist Y = [-27,22]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Window Guard 1 3000]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(1) = 3000\ntrigger1 = !((P2BodyDist X = [-23,25]) && (P2BodyDist Y = [-27,22]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Window Guard 1 3050]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(1) = 3050\ntrigger1 = !((P2BodyDist X = [0,119]) && (P2BodyDist Y = [-140,10]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Window Guard 1 3100]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(1) = 3100\ntrigger1 = !((P2BodyDist X = [-5,57]) && (P2BodyDist Y = [-100,10]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Window Guard 1 3115]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(1) = 3115\ntrigger1 = !((P2BodyDist X = [-23,25]) && (P2BodyDist Y = [-27,22]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Block Unsafe 1 8330]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = var(1) = 8330\ntrigger1 = 1\nvar(1) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Window Guard 12 3005]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(12) = 3005\ntrigger1 = !((P2BodyDist X = [-23,25]) && (P2BodyDist Y = [-27,22]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(12) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Window Guard 12 3000]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(12) = 3000\ntrigger1 = !((P2BodyDist X = [-23,25]) && (P2BodyDist Y = [-27,22]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(12) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Window Guard 12 3050]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(12) = 3050\ntrigger1 = !((P2BodyDist X = [0,119]) && (P2BodyDist Y = [-140,10]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(12) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Window Guard 12 3100]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(12) = 3100\ntrigger1 = !((P2BodyDist X = [-5,57]) && (P2BodyDist Y = [-100,10]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(12) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Window Guard 12 3115]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2 && NumEnemy\ntriggerAll = var(12) = 3115\ntrigger1 = !((P2BodyDist X = [-23,25]) && (P2BodyDist Y = [-27,22]) && (EnemyNear,StateType != L) && (MoveHit || MoveContact || EnemyNear,MoveType = H) && (EnemyNear,MoveType != A || MoveHit || MoveContact))\nvar(12) = 0\nignoreHitPause = 1\n\n[State -1, AI Patch Dynamic Route Block Unsafe 12 8330]\ntype = VarSet\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = var(12) = 8330\ntrigger1 = 1\nvar(12) = 0\nignoreHitPause = 1\n; AI_PATCH_END: rockai_bl:resolver_dynamic_meter_route_window_guard:v1",
+          "routeTargets": []
+        },
+        {
+          "id": "old_ai_meter_range_guard:0",
+          "moduleId": "old_ai_meter_range_guard",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "patch-old-ai-meter-guards",
+          "markerId": "rockai_bl:old_ai_meter_range_guard:v1",
+          "patches": [
+            {
+              "state": 3100,
+              "cost": 2000,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "helper_trap",
+              "scanWindow": {
+                "xMin": -5,
+                "xMax": 57,
+                "yMin": -100,
+                "yMax": 10,
+                "startup": 6,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": null,
+                "y": null
+              },
+              "heading": "[State -1, Hyper Drill]",
+              "line": 901,
+              "valueExpr": "3100",
+              "triggerText": "!AIlevel && command = \"Hyper Drill\" && RoundState = 2 && StateType != A && ifelse(var(20) <= 0, power >= 3000, power >= 1000) && ctrl || StateNo = 40 || StateNo = 52 || (StateNo = [100,101]) && var(6)",
+              "triggerKey": "!ailevel && command = \"hyper drill\" && roundstate = 2 && statetype != a && ifelse(var(20) <= 0, power >= 3000, power >= 1000) && ctrl || stateno = 40 || stateno = 52 || (stateno = [100,101]) && var(6)",
+              "reason": "old AI has no upper P2BodyDist X gate; scan xMax is 57; old AI has no P2 Y gate; scan y window is -100..10; close_confirm meter is callable without MoveHit/MoveContact confirm; cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3100",
+              "reasons": [
+                "old AI has no upper P2BodyDist X gate; scan xMax is 57",
+                "old AI has no P2 Y gate; scan y window is -100..10",
+                "close_confirm meter is callable without MoveHit/MoveContact confirm",
+                "cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3100"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 3100 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-5,57]) ; AI_PATCH_OLD_AI_METER_WINDOW 3100",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-100,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 3100",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 3100",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 3100",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 3100",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->3100 source push 7 projected 154 target reach 57",
+                "P2BodyDist X <= 43 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0",
+                "; AI_PATCH_PUSHBACK_COMPAT 220->3100 source push 9 projected 124 target reach 57",
+                "P2BodyDist X <= 39 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "; AI_PATCH_PUSHBACK_COMPAT 221->3100 source push 12 projected 139 target reach 57",
+                "P2BodyDist X <= 33 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "; AI_PATCH_PUSHBACK_COMPAT 240->3100 source push 7 projected 116 target reach 57",
+                "; AI_PATCH_PUSHBACK_COMPAT 250->3100 source push 9 projected 151 target reach 57",
+                "; AI_PATCH_PUSHBACK_COMPAT 410->3100 source push 7 projected 112 target reach 57",
+                "; AI_PATCH_PUSHBACK_COMPAT 420->3100 source push 9 projected 130 target reach 57",
+                "; AI_PATCH_PUSHBACK_COMPAT 440->3100 source push 7 projected 126 target reach 57"
+              ]
+            },
+            {
+              "state": 3050,
+              "cost": 2000,
+              "classification": "close_confirm",
+              "rangeClass": "long",
+              "delivery": "helper_trap",
+              "scanWindow": {
+                "xMin": 20,
+                "xMax": 119,
+                "yMin": -140,
+                "yMax": 10,
+                "startup": 3,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": null,
+                "y": null
+              },
+              "heading": "[State -1, Hammer Buster]",
+              "line": 949,
+              "valueExpr": "3050",
+              "triggerText": "!AIlevel && command = \"Hammer Buster\" && RoundState = 2 && StateType != A && ifelse(var(20) <= 0, power >= 1000, power >= 0) && ctrl || StateNo = 40 || StateNo = 52 || (StateNo = [100,101]) && var(6)",
+              "triggerKey": "!ailevel && command = \"hammer buster\" && roundstate = 2 && statetype != a && ifelse(var(20) <= 0, power >= 1000, power >= 0) && ctrl || stateno = 40 || stateno = 52 || (stateno = [100,101]) && var(6)",
+              "reason": "old AI has no upper P2BodyDist X gate; scan xMax is 119; old AI has no P2 Y gate; scan y window is -140..10; close_confirm meter is callable without MoveHit/MoveContact confirm; cancel flag can route pushback source 210 into meter state 3050",
+              "reasons": [
+                "old AI has no upper P2BodyDist X gate; scan xMax is 119",
+                "old AI has no P2 Y gate; scan y window is -140..10",
+                "close_confirm meter is callable without MoveHit/MoveContact confirm",
+                "cancel flag can route pushback source 210 into meter state 3050"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 3050 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [0,119]) ; AI_PATCH_OLD_AI_METER_WINDOW 3050",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-140,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 3050",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 3050",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 3050",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 3050",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->3050 source push 7 projected 140 target reach 119",
+                "P2BodyDist X <= 70 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0",
+                "; AI_PATCH_PUSHBACK_COMPAT 220->3050 source push 9 projected 115 target reach 119",
+                "P2BodyDist X <= 95 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "; AI_PATCH_PUSHBACK_COMPAT 221->3050 source push 12 projected 127 target reach 119",
+                "; AI_PATCH_PUSHBACK_COMPAT 240->3050 source push 7 projected 102 target reach 119",
+                "; AI_PATCH_PUSHBACK_COMPAT 250->3050 source push 9 projected 133 target reach 119",
+                "; AI_PATCH_PUSHBACK_COMPAT 410->3050 source push 7 projected 98 target reach 119",
+                "; AI_PATCH_PUSHBACK_COMPAT 420->3050 source push 9 projected 112 target reach 119",
+                "; AI_PATCH_PUSHBACK_COMPAT 440->3050 source push 7 projected 119 target reach 119"
+              ]
+            },
+            {
+              "state": 3005,
+              "cost": 1000,
+              "classification": "close_confirm",
+              "rangeClass": "close",
+              "delivery": "helper_trap",
+              "scanWindow": {
+                "xMin": -23,
+                "xMax": 25,
+                "yMin": -27,
+                "yMax": 22,
+                "startup": null,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": null,
+                "y": null
+              },
+              "heading": "[State -1, Super Molotov Max]",
+              "line": 961,
+              "valueExpr": "3005",
+              "triggerText": "!AIlevel && command = \"Super Molotov Max\" && RoundState = 2 && StateType != A && ifelse(var(20) <= 0, power >= 2000, power >= 1000) && ctrl || StateNo = 40 || StateNo = 52 || (StateNo = [100,101]) && var(6) || var(7) && stateno = 3050 && movecontact && stateno = 3070 && movecontact",
+              "triggerKey": "!ailevel && command = \"super molotov max\" && roundstate = 2 && statetype != a && ifelse(var(20) <= 0, power >= 2000, power >= 1000) && ctrl || stateno = 40 || stateno = 52 || (stateno = [100,101]) && var(6) || var(7) && stateno = 3050 && movecontact && stateno = 3070 && movecontact",
+              "reason": "old AI has no upper P2BodyDist X gate; scan xMax is 25; old AI has no P2 Y gate; scan y window is -27..22; cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3005",
+              "reasons": [
+                "old AI has no upper P2BodyDist X gate; scan xMax is 25",
+                "old AI has no P2 Y gate; scan y window is -27..22",
+                "cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3005"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 3005 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-23,25]) ; AI_PATCH_OLD_AI_METER_WINDOW 3005",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-27,22]) ; AI_PATCH_OLD_AI_METER_WINDOW 3005",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 3005",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 3005",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 3005",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->3005 source push 7 projected 154 target reach 35",
+                "P2BodyDist X <= 30 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0",
+                "; AI_PATCH_PUSHBACK_COMPAT 220->3005 source push 9 projected 124 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 221->3005 source push 12 projected 139 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 240->3005 source push 7 projected 116 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 250->3005 source push 9 projected 151 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 410->3005 source push 7 projected 112 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 420->3005 source push 9 projected 130 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 440->3005 source push 7 projected 126 target reach 35"
+              ]
+            },
+            {
+              "state": 3000,
+              "cost": 2000,
+              "classification": "close_confirm",
+              "rangeClass": "close",
+              "delivery": "helper_trap",
+              "scanWindow": {
+                "xMin": -23,
+                "xMax": 25,
+                "yMin": -27,
+                "yMax": 22,
+                "startup": null,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": null,
+                "y": null
+              },
+              "heading": "[State -1, Super Molotov]",
+              "line": 973,
+              "valueExpr": "3000",
+              "triggerText": "!AIlevel && command = \"Super Molotov\" && RoundState = 2 && StateType != A && ifelse(var(20) <= 0, power >= 1000, power >= 0) && ctrl || StateNo = 40 || StateNo = 52 || (StateNo = [100,101]) && var(6)",
+              "triggerKey": "!ailevel && command = \"super molotov\" && roundstate = 2 && statetype != a && ifelse(var(20) <= 0, power >= 1000, power >= 0) && ctrl || stateno = 40 || stateno = 52 || (stateno = [100,101]) && var(6)",
+              "reason": "old AI has no upper P2BodyDist X gate; scan xMax is 25; old AI has no P2 Y gate; scan y window is -27..22; close_confirm meter is callable without MoveHit/MoveContact confirm; cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3000",
+              "reasons": [
+                "old AI has no upper P2BodyDist X gate; scan xMax is 25",
+                "old AI has no P2 Y gate; scan y window is -27..22",
+                "close_confirm meter is callable without MoveHit/MoveContact confirm",
+                "cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3000"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 3000 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-23,25]) ; AI_PATCH_OLD_AI_METER_WINDOW 3000",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-27,22]) ; AI_PATCH_OLD_AI_METER_WINDOW 3000",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 3000",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 3000",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 3000",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->3000 source push 7 projected 154 target reach 35",
+                "P2BodyDist X <= 30 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0",
+                "; AI_PATCH_PUSHBACK_COMPAT 220->3000 source push 9 projected 124 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 221->3000 source push 12 projected 139 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 240->3000 source push 7 projected 116 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 250->3000 source push 9 projected 151 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 410->3000 source push 7 projected 112 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 420->3000 source push 9 projected 130 target reach 35",
+                "; AI_PATCH_PUSHBACK_COMPAT 440->3000 source push 7 projected 126 target reach 35"
+              ]
+            },
+            {
+              "state": 3100,
+              "cost": 2000,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "helper_trap",
+              "scanWindow": {
+                "xMin": -5,
+                "xMax": 57,
+                "yMin": -100,
+                "yMax": 10,
+                "startup": 6,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": -10,
+                  "max": 100,
+                  "hasLower": true,
+                  "hasUpper": true
+                },
+                "y": {
+                  "min": -32,
+                  "max": 32,
+                  "hasLower": true,
+                  "hasUpper": true
+                }
+              },
+              "heading": "[State -1, Hyper Drill]",
+              "line": 1347,
+              "valueExpr": "3100",
+              "triggerText": "AIlevel && numenemy && RoundState = 2 && StateType != A && Power >= 3000 && var(20) <= 60 && !var(16) && (var(15) < 1 || var(20) || (StateNo = [1000,4999])) && !(EnemyNear, ctrl) && ((EnemyNear, StateNo != [120,155]) || EnemyNear, StateType = A) && (P2BodyDist x = [-10,100]) && (P2Dist y = [-32,32]) && P2StateType != A && P2StateType != L && (ctrl || StateNo = 52 || (StateNo = [100,101])) && Random < (100 * (AILevel ** 2 / 64.0)) && var(7) && MoveHit && Random < (ifElse((var(20) = [1,30]), 200, 50) * (AILevel ** 2 / 64.0)) && EnemyNear, GetHitVar(HitTime) >= 4",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && power >= 3000 && var(20) <= 60 && !var(16) && (var(15) < 1 || var(20) || (stateno = [1000,4999])) && !(enemynear, ctrl) && ((enemynear, stateno != [120,155]) || enemynear, statetype = a) && (p2bodydist x = [-10,100]) && (p2dist y = [-32,32]) && p2statetype != a && p2statetype != l && (ctrl || stateno = 52 || (stateno = [100,101])) && random < (100 * (ailevel ** 2 / 64.0)) && var(7) && movehit && random < (ifelse((var(20) = [1,30]), 200, 50) * (ailevel ** 2 / 64.0)) && enemynear, gethitvar(hittime) >= 4",
+              "reason": "old AI X max 100 exceeds scanned xMax 57",
+              "reasons": [
+                "old AI X max 100 exceeds scanned xMax 57"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 3100 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-5,57]) ; AI_PATCH_OLD_AI_METER_WINDOW 3100",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-100,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 3100",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 3100",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 3100",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 3100"
+              ]
+            },
+            {
+              "state": 3005,
+              "cost": 1000,
+              "classification": "close_confirm",
+              "rangeClass": "close",
+              "delivery": "helper_trap",
+              "scanWindow": {
+                "xMin": -23,
+                "xMax": 25,
+                "yMin": -27,
+                "yMax": 22,
+                "startup": null,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": -20,
+                  "max": 100,
+                  "hasLower": true,
+                  "hasUpper": true
+                },
+                "y": {
+                  "min": -32,
+                  "max": 32,
+                  "hasLower": true,
+                  "hasUpper": true
+                }
+              },
+              "heading": "[State -1, Super Molotov Max]",
+              "line": 1433,
+              "valueExpr": "3005",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && Power >= 2000 && var(20) <= 60 && !var(16) && (var(15) < 1 || var(20) || (StateNo = [1000,4999])) && !(EnemyNear, ctrl) && ((EnemyNear, StateNo != [120,155]) || EnemyNear, StateType = A) && (P2BodyDist x = [-20,100]) && (P2Dist y = [-32,32]) && P2StateType != A && P2StateType != L && P2MoveType != A && (ctrl || StateNo = 52 || (StateNo = [100,101])) && Random < (100 * (AILevel ** 2 / 64.0)) && var(7) && MoveHit && Random < (ifElse((var(20) = [1,30]), 200, 50) * (AILevel ** 2 / 64.0)) && EnemyNear, GetHitVar(HitTime) >= 4",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && power >= 2000 && var(20) <= 60 && !var(16) && (var(15) < 1 || var(20) || (stateno = [1000,4999])) && !(enemynear, ctrl) && ((enemynear, stateno != [120,155]) || enemynear, statetype = a) && (p2bodydist x = [-20,100]) && (p2dist y = [-32,32]) && p2statetype != a && p2statetype != l && p2movetype != a && (ctrl || stateno = 52 || (stateno = [100,101])) && random < (100 * (ailevel ** 2 / 64.0)) && var(7) && movehit && random < (ifelse((var(20) = [1,30]), 200, 50) * (ailevel ** 2 / 64.0)) && enemynear, gethitvar(hittime) >= 4",
+              "reason": "old AI X max 100 exceeds scanned xMax 25",
+              "reasons": [
+                "old AI X max 100 exceeds scanned xMax 25"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 3005 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-23,25]) ; AI_PATCH_OLD_AI_METER_WINDOW 3005",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-27,22]) ; AI_PATCH_OLD_AI_METER_WINDOW 3005",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 3005",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 3005",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 3005"
+              ]
+            },
+            {
+              "state": 3000,
+              "cost": 2000,
+              "classification": "close_confirm",
+              "rangeClass": "close",
+              "delivery": "helper_trap",
+              "scanWindow": {
+                "xMin": -23,
+                "xMax": 25,
+                "yMin": -27,
+                "yMax": 22,
+                "startup": null,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": -20,
+                  "max": 100,
+                  "hasLower": true,
+                  "hasUpper": true
+                },
+                "y": {
+                  "min": -32,
+                  "max": 32,
+                  "hasLower": true,
+                  "hasUpper": true
+                }
+              },
+              "heading": "[State -1, Super Molotov]",
+              "line": 1447,
+              "valueExpr": "3000",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && Power >= 1000 && var(20) <= 60 && !var(16) && (var(15) < 1 || var(20) || (StateNo = [1000,4999])) && !(EnemyNear, ctrl) && ((EnemyNear, StateNo != [120,155]) || EnemyNear, StateType = A) && (P2BodyDist x = [-20,100]) && (P2Dist y = [-32,32]) && P2StateType != A && P2StateType != L && P2MoveType != A && (ctrl || StateNo = 52 || (StateNo = [100,101])) && Random < (100 * (AILevel ** 2 / 64.0)) && var(7) && MoveHit && Random < (ifElse((var(20) = [1,30]), 200, 50) * (AILevel ** 2 / 64.0)) && EnemyNear, GetHitVar(HitTime) >= 4",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && power >= 1000 && var(20) <= 60 && !var(16) && (var(15) < 1 || var(20) || (stateno = [1000,4999])) && !(enemynear, ctrl) && ((enemynear, stateno != [120,155]) || enemynear, statetype = a) && (p2bodydist x = [-20,100]) && (p2dist y = [-32,32]) && p2statetype != a && p2statetype != l && p2movetype != a && (ctrl || stateno = 52 || (stateno = [100,101])) && random < (100 * (ailevel ** 2 / 64.0)) && var(7) && movehit && random < (ifelse((var(20) = [1,30]), 200, 50) * (ailevel ** 2 / 64.0)) && enemynear, gethitvar(hittime) >= 4",
+              "reason": "old AI X max 100 exceeds scanned xMax 25",
+              "reasons": [
+                "old AI X max 100 exceeds scanned xMax 25"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 3000 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-23,25]) ; AI_PATCH_OLD_AI_METER_WINDOW 3000",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-27,22]) ; AI_PATCH_OLD_AI_METER_WINDOW 3000",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 3000",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 3000",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 3000"
+              ]
+            }
+          ],
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": null,
+          "routePreview": [
+            {
+              "id": "old_ai_meter_range_guard",
+              "type": "old_ai_safety_audit",
+              "source": "scan_report_original_cmd",
+              "chain": [
+                "[State -1, Hyper Drill] -> 3100",
+                "[State -1, Hammer Buster] -> 3050",
+                "[State -1, Super Molotov Max] -> 3005",
+                "[State -1, Super Molotov] -> 3000",
+                "[State -1, Hyper Drill] -> 3100",
+                "[State -1, Super Molotov Max] -> 3005",
+                "[State -1, Super Molotov] -> 3000"
+              ],
+              "condition": [
+                "old_ai_meter_trigger_window_exceeds_scanned_state_window"
+              ],
+              "policy": [
+                "insert_ai_only_triggerall_guards_into_original_blocks",
+                "player_manual_input_remains_available"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "generatedFallback": true,
+          "resolverMode": "supplemental",
+          "status": "patched-old-ai-meter-guards",
+          "anchorUsed": null,
+          "appliedOldAiMeterGuards": [
+            {
+              "state": 3050,
+              "heading": "[State -1, Hammer Buster]",
+              "line": 2356,
+              "reason": "old AI has no upper P2BodyDist X gate; scan xMax is 119; old AI has no P2 Y gate; scan y window is -140..10; close_confirm meter is callable without MoveHit/MoveContact confirm; cancel flag can route pushback source 210 into meter state 3050"
+            },
+            {
+              "state": 3005,
+              "heading": "[State -1, Super Molotov Max]",
+              "line": 2386,
+              "reason": "old AI has no upper P2BodyDist X gate; scan xMax is 25; old AI has no P2 Y gate; scan y window is -27..22; cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3005"
+            },
+            {
+              "state": 3000,
+              "heading": "[State -1, Super Molotov]",
+              "line": 2415,
+              "reason": "old AI has no upper P2BodyDist X gate; scan xMax is 25; old AI has no P2 Y gate; scan y window is -27..22; close_confirm meter is callable without MoveHit/MoveContact confirm; cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3000"
+            },
+            {
+              "state": 3100,
+              "heading": "[State -1, Hyper Drill]",
+              "line": 2806,
+              "reason": "old AI X max 100 exceeds scanned xMax 57"
+            },
+            {
+              "state": 3005,
+              "heading": "[State -1, Super Molotov Max]",
+              "line": 2898,
+              "reason": "old AI X max 100 exceeds scanned xMax 25"
+            },
+            {
+              "state": 3000,
+              "heading": "[State -1, Super Molotov]",
+              "line": 2918,
+              "reason": "old AI X max 100 exceeds scanned xMax 25"
+            }
+          ],
+          "contentLines": 7,
+          "contentPreview": "[State -1, Hyper Drill] state 3100: old AI has no upper P2BodyDist X gate; scan xMax is 57; old AI has no P2 Y gate; scan y window is -100..10; close_confirm meter is callable without MoveHit/MoveContact confirm; cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3100\n[State -1, Hammer Buster] state 3050: old AI has no upper P2BodyDist X gate; scan xMax is 119; old AI has no P2 Y gate; scan y window is -140..10; close_confirm meter is callable without MoveHit/MoveContact confirm; cancel flag can route pushback source 210 into meter state 3050\n[State -1, Super Molotov Max] state 3005: old AI has no upper P2BodyDist X gate; scan xMax is 25; old AI has no P2 Y gate; scan y window is -27..22; cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3005\n[State -1, Super Molotov] state 3000: old AI has no upper P2BodyDist X gate; scan xMax is 25; old AI has no P2 Y gate; scan y window is -27..22; close_confirm meter is callable without MoveHit/MoveContact confirm; cancel flag can route pushback source 210/220/221/240/250/410/420/440 into meter state 3000\n[State -1, Hyper Drill] state 3100: old AI X max 100 exceeds scanned xMax 57\n[State -1, Super Molotov Max] state 3005: old AI X max 100 exceeds scanned xMax 25\n[State -1, Super Molotov] state 3000: old AI X max 100 exceeds scanned xMax 25",
+          "routeTargets": []
+        },
+        {
+          "id": "old_ai_repeat_farm_guard:0",
+          "moduleId": "old_ai_repeat_farm_guard",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\Command.cmd",
+          "mode": "patch-old-ai-meter-guards",
+          "markerId": "rockai_bl:old_ai_repeat_farm_guard:v1",
+          "patches": [
+            {
+              "state": 1060,
+              "heading": "[State -1, Sky Kick]",
+              "line": 1476,
+              "valueExpr": "ifElse((var(40) = 0 || var(40) = 3) && Power >= 500 && Random < 133, 1065, 1060)",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(39) && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [-48,48]) && (P2Dist y = [-32,32]) && P2StateType != A || EnemyNear, vel x < 0 && (ctrl || StateNo = 52 || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (ctrl || StateNo = 52 || (StateNo = [100,101])) && EnemyNear, Random < (50 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(39) && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [-48,48]) && (p2dist y = [-32,32]) && p2statetype != a || enemynear, vel x < 0 && (ctrl || stateno = 52 || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (ctrl || stateno = 52 || (stateno = [100,101])) && enemynear, random < (50 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 1060 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "special launcher",
+              "roleFamily": "anti_air_special",
+              "powerGainSignals": [
+                "70 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 1060: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 5) ; AI_PATCH_OLD_AI_REPEAT_FARM 1060",
+                "triggerAll = !AILevel || StateNo != 1060 ; AI_PATCH_OLD_AI_REPEAT_FARM 1060",
+                "triggerAll = !AILevel || PrevStateNo != 1060 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 1060"
+              ]
+            },
+            {
+              "state": 1050,
+              "heading": "[State -1, Hammer Fist]",
+              "line": 1489,
+              "valueExpr": "ifElse((var(40) = 0 || var(40) = 3) && Power >= 500 && Random < 133, 1055, 1050)",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(39) && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [-15,100]) && (P2Dist y = [-32,32]) && P2StateType != A || EnemyNear, vel x < 0 && (ctrl || StateNo = 52 || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (ctrl || StateNo = 52 || (StateNo = [100,101])) && EnemyNear, Random < (50 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(39) && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [-15,100]) && (p2dist y = [-32,32]) && p2statetype != a || enemynear, vel x < 0 && (ctrl || stateno = 52 || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (ctrl || stateno = 52 || (stateno = [100,101])) && enemynear, random < (50 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 1050 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "special launcher",
+              "roleFamily": "anti_air_special",
+              "powerGainSignals": [
+                "70 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 1050: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 8) ; AI_PATCH_OLD_AI_REPEAT_FARM 1050",
+                "triggerAll = !AILevel || StateNo != 1050 ; AI_PATCH_OLD_AI_REPEAT_FARM 1050",
+                "triggerAll = !AILevel || PrevStateNo != 1050 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 1050"
+              ]
+            },
+            {
+              "state": 200,
+              "heading": "[State -1, Stand Light Punch]",
+              "line": 1604,
+              "valueExpr": "200",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,63]) && (P2Dist y = [-87,0]) && P2StateType != C && P2StateType != L && (EnemyNear, const(size.head.pos.y) <= -40) || (EnemyNear, StateType = A) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 3) && Random < (250 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,63]) && (p2dist y = [-87,0]) && p2statetype != c && p2statetype != l && (enemynear, const(size.head.pos.y) <= -40) || (enemynear, statetype = a) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 3) && random < (250 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 200 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "launcher",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 200: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 4) ; AI_PATCH_OLD_AI_REPEAT_FARM 200",
+                "triggerAll = !AILevel || StateNo != 200 ; AI_PATCH_OLD_AI_REPEAT_FARM 200",
+                "triggerAll = !AILevel || PrevStateNo != 200 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 200"
+              ]
+            },
+            {
+              "state": 210,
+              "heading": "[State -1, Stand Medium Punch]",
+              "line": 1616,
+              "valueExpr": "210",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,80]) && (P2Dist y = [-129,0]) && P2StateType != L && (EnemyNear, const(size.head.pos.y) <= -40) || (EnemyNear, StateType = A) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 3) && Random < (250 * (AILevel ** 2 / 64.0)) && var(24) && stateno = 200 && movehit",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,80]) && (p2dist y = [-129,0]) && p2statetype != l && (enemynear, const(size.head.pos.y) <= -40) || (enemynear, statetype = a) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 3) && random < (250 * (ailevel ** 2 / 64.0)) && var(24) && stateno = 200 && movehit",
+              "reason": "old AI can call power-gain normal/root attack state 210 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "launcher",
+              "powerGainSignals": [
+                "20 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 210: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 5) ; AI_PATCH_OLD_AI_REPEAT_FARM 210",
+                "triggerAll = !AILevel || StateNo != 210 ; AI_PATCH_OLD_AI_REPEAT_FARM 210",
+                "triggerAll = !AILevel || PrevStateNo != 210 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 210"
+              ]
+            },
+            {
+              "state": 220,
+              "heading": "[State -1, Stand Strong Punch]",
+              "line": 1630,
+              "valueExpr": "220",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,101]) && (P2Dist y = [-111,0]) && P2StateType != L && (EnemyNear, const(size.head.pos.y) <= -40) || (EnemyNear, StateType = A) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 3) && Random < (250 * (AILevel ** 2 / 64.0)) && stateno = 210 && movehit",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,101]) && (p2dist y = [-111,0]) && p2statetype != l && (enemynear, const(size.head.pos.y) <= -40) || (enemynear, statetype = a) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 3) && random < (250 * (ailevel ** 2 / 64.0)) && stateno = 210 && movehit",
+              "reason": "old AI can call power-gain normal/root attack state 220 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "launcher",
+              "powerGainSignals": [
+                "30 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 220: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 6) ; AI_PATCH_OLD_AI_REPEAT_FARM 220",
+                "triggerAll = !AILevel || StateNo != 220 ; AI_PATCH_OLD_AI_REPEAT_FARM 220",
+                "triggerAll = !AILevel || PrevStateNo != 220 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 220"
+              ]
+            },
+            {
+              "state": 230,
+              "heading": "[State -1, Stand Light Kick]",
+              "line": 1643,
+              "valueExpr": "230",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,72]) && (P2Dist y = [-23,0]) && P2StateType != L && (EnemyNear, const(size.head.pos.y) <= -40) || (EnemyNear, StateType = A) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 2) && Random < (250 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,72]) && (p2dist y = [-23,0]) && p2statetype != l && (enemynear, const(size.head.pos.y) <= -40) || (enemynear, statetype = a) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 2) && random < (250 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 230 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "launcher",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 230: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 6) ; AI_PATCH_OLD_AI_REPEAT_FARM 230",
+                "triggerAll = !AILevel || StateNo != 230 ; AI_PATCH_OLD_AI_REPEAT_FARM 230",
+                "triggerAll = !AILevel || PrevStateNo != 230 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 230"
+              ]
+            },
+            {
+              "state": 240,
+              "heading": "[State -1, Stand Medium Kick]",
+              "line": 1655,
+              "valueExpr": "240",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,60]) && (P2Dist y = [-115,0]) && P2StateType != L && (EnemyNear, const(size.head.pos.y) <= -40) || (EnemyNear, StateType = A) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 3) && Random < (250 * (AILevel ** 2 / 64.0)) && stateno = 230 && movehit",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,60]) && (p2dist y = [-115,0]) && p2statetype != l && (enemynear, const(size.head.pos.y) <= -40) || (enemynear, statetype = a) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 3) && random < (250 * (ailevel ** 2 / 64.0)) && stateno = 230 && movehit",
+              "reason": "old AI can call power-gain normal/root attack state 240 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "launcher",
+              "powerGainSignals": [
+                "20 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 240: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 7) ; AI_PATCH_OLD_AI_REPEAT_FARM 240",
+                "triggerAll = !AILevel || StateNo != 240 ; AI_PATCH_OLD_AI_REPEAT_FARM 240",
+                "triggerAll = !AILevel || PrevStateNo != 240 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 240"
+              ]
+            },
+            {
+              "state": 250,
+              "heading": "[State -1, Standing Strong Kick]",
+              "line": 1668,
+              "valueExpr": "250",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,146]) && (P2Dist y = [-111,0]) && P2StateType != L && (EnemyNear, const(size.head.pos.y) <= -40) || (EnemyNear, StateType = A) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 4) && Random < (250 * (AILevel ** 2 / 64.0)) && stateno = 240 && movehit",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,146]) && (p2dist y = [-111,0]) && p2statetype != l && (enemynear, const(size.head.pos.y) <= -40) || (enemynear, statetype = a) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 4) && random < (250 * (ailevel ** 2 / 64.0)) && stateno = 240 && movehit",
+              "reason": "old AI can call power-gain normal/root attack state 250 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "launcher",
+              "powerGainSignals": [
+                "30 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 250: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 7) ; AI_PATCH_OLD_AI_REPEAT_FARM 250",
+                "triggerAll = !AILevel || StateNo != 250 ; AI_PATCH_OLD_AI_REPEAT_FARM 250",
+                "triggerAll = !AILevel || PrevStateNo != 250 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 250"
+              ]
+            },
+            {
+              "state": 400,
+              "heading": "[State -1, Crouching Light Punch]",
+              "line": 1681,
+              "valueExpr": "400",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,61]) && (P2Dist y = [-54,0]) && P2StateType != A && P2StateType != L && (EnemyNear, const(size.head.pos.y) <= -40) || (EnemyNear, StateType = A) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 2) && Random < (250 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,61]) && (p2dist y = [-54,0]) && p2statetype != a && p2statetype != l && (enemynear, const(size.head.pos.y) <= -40) || (enemynear, statetype = a) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 2) && random < (250 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 400 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "low_starter",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 400: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 4) ; AI_PATCH_OLD_AI_REPEAT_FARM 400",
+                "triggerAll = !AILevel || StateNo != 400 ; AI_PATCH_OLD_AI_REPEAT_FARM 400",
+                "triggerAll = !AILevel || PrevStateNo != 400 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 400"
+              ]
+            },
+            {
+              "state": 410,
+              "heading": "[State -1, Crouching Medium Punch]",
+              "line": 1693,
+              "valueExpr": "410",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,70]) && (P2Dist y = [-52,0]) && P2StateType != L && (EnemyNear, const(size.head.pos.y) <= -40) || (EnemyNear, StateType = A) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 3) && Random < (250 * (AILevel ** 2 / 64.0)) && stateno = 400 && movehit",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,70]) && (p2dist y = [-52,0]) && p2statetype != l && (enemynear, const(size.head.pos.y) <= -40) || (enemynear, statetype = a) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 3) && random < (250 * (ailevel ** 2 / 64.0)) && stateno = 400 && movehit",
+              "reason": "old AI can call power-gain normal/root attack state 410 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "low_starter",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 410: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 5) ; AI_PATCH_OLD_AI_REPEAT_FARM 410",
+                "triggerAll = !AILevel || StateNo != 410 ; AI_PATCH_OLD_AI_REPEAT_FARM 410",
+                "triggerAll = !AILevel || PrevStateNo != 410 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 410"
+              ]
+            },
+            {
+              "state": 420,
+              "heading": "[State -1, Crouching Strong Punch]",
+              "line": 1706,
+              "valueExpr": "420",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && Statetype != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,50]) && (P2Dist y = [-132,0]) && P2StateType != L && (EnemyNear, const(size.head.pos.y) <= -40) || (EnemyNear, StateType = A) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 4) && Random < (250 * (AILevel ** 2 / 64.0)) && stateno = 410 && movehit",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,50]) && (p2dist y = [-132,0]) && p2statetype != l && (enemynear, const(size.head.pos.y) <= -40) || (enemynear, statetype = a) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 4) && random < (250 * (ailevel ** 2 / 64.0)) && stateno = 410 && movehit",
+              "reason": "old AI can call power-gain normal/root attack state 420 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "launcher",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 420: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 5) ; AI_PATCH_OLD_AI_REPEAT_FARM 420",
+                "triggerAll = !AILevel || StateNo != 420 ; AI_PATCH_OLD_AI_REPEAT_FARM 420",
+                "triggerAll = !AILevel || PrevStateNo != 420 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 420"
+              ]
+            },
+            {
+              "state": 430,
+              "heading": "[State -1, Crouching Light Kick]",
+              "line": 1719,
+              "valueExpr": "430",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,90]) && (P2Dist y = [-27,0]) && P2StateType != A && P2StateType != L && (ctrl || (StateNo = [100, 101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200, 499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 3) && Random < (250 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,90]) && (p2dist y = [-27,0]) && p2statetype != a && p2statetype != l && (ctrl || (stateno = [100, 101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200, 499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 3) && random < (250 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 430 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "low_starter",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 430: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 6) ; AI_PATCH_OLD_AI_REPEAT_FARM 430",
+                "triggerAll = !AILevel || StateNo != 430 ; AI_PATCH_OLD_AI_REPEAT_FARM 430",
+                "triggerAll = !AILevel || PrevStateNo != 430 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 430"
+              ]
+            },
+            {
+              "state": 440,
+              "heading": "[State -1, Crouching Medium Kick]",
+              "line": 1730,
+              "valueExpr": "440",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,111]) && (P2Dist y = [-33,0]) && P2StateType != A && P2StateType != L && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 3) && Random < (250 * (AILevel ** 2 / 64.0)) && stateno = 430 && movehit",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,111]) && (p2dist y = [-33,0]) && p2statetype != a && p2statetype != l && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 3) && random < (250 * (ailevel ** 2 / 64.0)) && stateno = 430 && movehit",
+              "reason": "old AI can call power-gain normal/root attack state 440 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "low_starter",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 440: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 6) ; AI_PATCH_OLD_AI_REPEAT_FARM 440",
+                "triggerAll = !AILevel || StateNo != 440 ; AI_PATCH_OLD_AI_REPEAT_FARM 440",
+                "triggerAll = !AILevel || PrevStateNo != 440 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 440"
+              ]
+            },
+            {
+              "state": 450,
+              "heading": "[State -1, Crouching Strong Kick]",
+              "line": 1742,
+              "valueExpr": "450",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType != A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,97]) && (P2Dist y = [-33,0]) && P2StateType != A && P2StateType != L && (P2StateType = S || (P2StateType = C && P2MoveType = H)) && (ctrl || (StateNo = [100,101])) && Random < (25 * (AILevel ** 2 / 64.0)) && (StateNo = [200,499]) && !AnimTime && ctrl && MoveHit && (EnemyNear, GetHitVar(HitTime) >= 6) && Random < (250 * (AILevel ** 2 / 64.0)) && stateno = 440 && movehit",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype != a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,97]) && (p2dist y = [-33,0]) && p2statetype != a && p2statetype != l && (p2statetype = s || (p2statetype = c && p2movetype = h)) && (ctrl || (stateno = [100,101])) && random < (25 * (ailevel ** 2 / 64.0)) && (stateno = [200,499]) && !animtime && ctrl && movehit && (enemynear, gethitvar(hittime) >= 6) && random < (250 * (ailevel ** 2 / 64.0)) && stateno = 440 && movehit",
+              "reason": "old AI can call power-gain normal/root attack state 450 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "launcher",
+              "roleFamily": "launcher",
+              "powerGainSignals": [
+                "20 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 450: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 5) ; AI_PATCH_OLD_AI_REPEAT_FARM 450",
+                "triggerAll = !AILevel || StateNo != 450 ; AI_PATCH_OLD_AI_REPEAT_FARM 450",
+                "triggerAll = !AILevel || PrevStateNo != 450 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 450"
+              ]
+            },
+            {
+              "state": 600,
+              "heading": "[State -1, Jump Light Punch]",
+              "line": 1755,
+              "valueExpr": "600",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType = A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,41]) && (P2Dist y = [-56,28]) && P2StateType = S && ctrl && vel y > 0 && Random < (100 * (AIlevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype = a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,41]) && (p2dist y = [-56,28]) && p2statetype = s && ctrl && vel y > 0 && random < (100 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 600 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "air normal",
+              "roleFamily": "air_chain",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 600: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 6) ; AI_PATCH_OLD_AI_REPEAT_FARM 600",
+                "triggerAll = !AILevel || StateNo != 600 ; AI_PATCH_OLD_AI_REPEAT_FARM 600",
+                "triggerAll = !AILevel || PrevStateNo != 600 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 600"
+              ]
+            },
+            {
+              "state": 610,
+              "heading": "[State -1, Jump Medium Punch]",
+              "line": 1765,
+              "valueExpr": "610",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType = A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,42]) && (P2Dist y = [-80,50]) && P2StateType = S && ctrl && vel y > 0 && Random < (100 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype = a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,42]) && (p2dist y = [-80,50]) && p2statetype = s && ctrl && vel y > 0 && random < (100 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 610 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "air normal",
+              "roleFamily": "air_chain",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 610: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 6) ; AI_PATCH_OLD_AI_REPEAT_FARM 610",
+                "triggerAll = !AILevel || StateNo != 610 ; AI_PATCH_OLD_AI_REPEAT_FARM 610",
+                "triggerAll = !AILevel || PrevStateNo != 610 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 610"
+              ]
+            },
+            {
+              "state": 620,
+              "heading": "[State -1, Jump Strong Punch]",
+              "line": 1775,
+              "valueExpr": "620",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType = A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,45]) && (P2Dist y = [-64,50]) && P2StateType = S && ctrl && vel y > 0 && Random < (100 * (AILevel ** 2 / 64.0)) && var(4) && Random < (50 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype = a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,45]) && (p2dist y = [-64,50]) && p2statetype = s && ctrl && vel y > 0 && random < (100 * (ailevel ** 2 / 64.0)) && var(4) && random < (50 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 620 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "air normal",
+              "roleFamily": "air_chain",
+              "powerGainSignals": [
+                "20 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 620: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 7) ; AI_PATCH_OLD_AI_REPEAT_FARM 620",
+                "triggerAll = !AILevel || StateNo != 620 ; AI_PATCH_OLD_AI_REPEAT_FARM 620",
+                "triggerAll = !AILevel || PrevStateNo != 620 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 620"
+              ]
+            },
+            {
+              "state": 630,
+              "heading": "[State -1, Jump Light Kick]",
+              "line": 1786,
+              "valueExpr": "630",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType = A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,32]) && (P2Dist y = [-117,40]) && P2StateType != L && ctrl && vel y > 0 && Random < (ifElse(P2Dist x < 0, 250, 50) * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype = a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,32]) && (p2dist y = [-117,40]) && p2statetype != l && ctrl && vel y > 0 && random < (ifelse(p2dist x < 0, 250, 50) * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 630 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "air normal",
+              "roleFamily": "air_chain",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 630: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 5) ; AI_PATCH_OLD_AI_REPEAT_FARM 630",
+                "triggerAll = !AILevel || StateNo != 630 ; AI_PATCH_OLD_AI_REPEAT_FARM 630",
+                "triggerAll = !AILevel || PrevStateNo != 630 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 630"
+              ]
+            },
+            {
+              "state": 640,
+              "heading": "[State -1, Jump Medium Kick]",
+              "line": 1796,
+              "valueExpr": "640",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType = A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,79]) && (P2Dist y = [-60,40]) && P2StateType = A && ctrl && vel y <= 0 && Random < (100 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype = a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,79]) && (p2dist y = [-60,40]) && p2statetype = a && ctrl && vel y <= 0 && random < (100 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 640 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "air normal",
+              "roleFamily": "air_chain",
+              "powerGainSignals": [
+                "10 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 640: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 4) ; AI_PATCH_OLD_AI_REPEAT_FARM 640",
+                "triggerAll = !AILevel || StateNo != 640 ; AI_PATCH_OLD_AI_REPEAT_FARM 640",
+                "triggerAll = !AILevel || PrevStateNo != 640 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 640"
+              ]
+            },
+            {
+              "state": 650,
+              "heading": "[State -1, Jump Strong Kick]",
+              "line": 1806,
+              "valueExpr": "650",
+              "triggerText": "AILevel && NumEnemy && RoundState = 2 && StateType = A && !var(16) && (var(15) < 1 || var(20)) && (P2BodyDist x = [0,92]) && (P2Dist y = [-116,50]) && P2StateType = S && ctrl && Random < (100 * (AILevel ** 2 / 64.0)) && var(4) && Random < (50 * (AILevel ** 2 / 64.0))",
+              "triggerKey": "ailevel && numenemy && roundstate = 2 && statetype = a && !var(16) && (var(15) < 1 || var(20)) && (p2bodydist x = [0,92]) && (p2dist y = [-116,50]) && p2statetype = s && ctrl && random < (100 * (ailevel ** 2 / 64.0)) && var(4) && random < (50 * (ailevel ** 2 / 64.0))",
+              "reason": "old AI can call power-gain normal/root attack state 650 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+              "role": "air normal",
+              "roleFamily": "air_chain",
+              "powerGainSignals": [
+                "20 * !var(20)"
+              ],
+              "guardLines": [
+                "; AI_PATCH_OLD_AI_REPEAT_FARM 650: old AI normal/power-gain state is hit-confirm only under patched AI",
+                "triggerAll = !AILevel || MoveHit || MoveContact || (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 6) ; AI_PATCH_OLD_AI_REPEAT_FARM 650",
+                "triggerAll = !AILevel || StateNo != 650 ; AI_PATCH_OLD_AI_REPEAT_FARM 650",
+                "triggerAll = !AILevel || PrevStateNo != 650 || MoveHit || MoveContact ; AI_PATCH_OLD_AI_REPEAT_FARM 650"
+              ]
+            }
+          ],
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": null,
+          "routePreview": [
+            {
+              "id": "old_ai_repeat_farm_guard",
+              "type": "old_ai_repeat_farm_audit",
+              "source": "scan_report_original_cmd",
+              "chain": [
+                "[State -1, Sky Kick] -> 1060",
+                "[State -1, Hammer Fist] -> 1050",
+                "[State -1, Stand Light Punch] -> 200",
+                "[State -1, Stand Medium Punch] -> 210",
+                "[State -1, Stand Strong Punch] -> 220",
+                "[State -1, Stand Light Kick] -> 230",
+                "[State -1, Stand Medium Kick] -> 240",
+                "[State -1, Standing Strong Kick] -> 250",
+                "[State -1, Crouching Light Punch] -> 400",
+                "[State -1, Crouching Medium Punch] -> 410",
+                "[State -1, Crouching Strong Punch] -> 420",
+                "[State -1, Crouching Light Kick] -> 430",
+                "[State -1, Crouching Medium Kick] -> 440",
+                "[State -1, Crouching Strong Kick] -> 450",
+                "[State -1, Jump Light Punch] -> 600",
+                "[State -1, Jump Medium Punch] -> 610",
+                "[State -1, Jump Strong Punch] -> 620",
+                "[State -1, Jump Light Kick] -> 630",
+                "[State -1, Jump Medium Kick] -> 640",
+                "[State -1, Jump Strong Kick] -> 650"
+              ],
+              "condition": [
+                "old_ai_can_call_power_gain_normal_from_neutral_or_control"
+              ],
+              "policy": [
+                "convert_old_ai_power_gain_normals_to_hit_confirm_only",
+                "prevents_state_power_farm_loops"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "generatedFallback": true,
+          "resolverMode": "supplemental",
+          "status": "patched-old-ai-meter-guards",
+          "anchorUsed": null,
+          "appliedOldAiMeterGuards": [
+            {
+              "state": 1060,
+              "heading": "[State -1, Sky Kick]",
+              "line": 2953,
+              "reason": "old AI can call power-gain normal/root attack state 1060 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 1050,
+              "heading": "[State -1, Hammer Fist]",
+              "line": 2970,
+              "reason": "old AI can call power-gain normal/root attack state 1050 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 200,
+              "heading": "[State -1, Stand Light Punch]",
+              "line": 3089,
+              "reason": "old AI can call power-gain normal/root attack state 200 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 210,
+              "heading": "[State -1, Stand Medium Punch]",
+              "line": 3105,
+              "reason": "old AI can call power-gain normal/root attack state 210 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 220,
+              "heading": "[State -1, Stand Strong Punch]",
+              "line": 3123,
+              "reason": "old AI can call power-gain normal/root attack state 220 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 230,
+              "heading": "[State -1, Stand Light Kick]",
+              "line": 3140,
+              "reason": "old AI can call power-gain normal/root attack state 230 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 240,
+              "heading": "[State -1, Stand Medium Kick]",
+              "line": 3156,
+              "reason": "old AI can call power-gain normal/root attack state 240 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 250,
+              "heading": "[State -1, Standing Strong Kick]",
+              "line": 3173,
+              "reason": "old AI can call power-gain normal/root attack state 250 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 400,
+              "heading": "[State -1, Crouching Light Punch]",
+              "line": 3190,
+              "reason": "old AI can call power-gain normal/root attack state 400 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 410,
+              "heading": "[State -1, Crouching Medium Punch]",
+              "line": 3206,
+              "reason": "old AI can call power-gain normal/root attack state 410 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 420,
+              "heading": "[State -1, Crouching Strong Punch]",
+              "line": 3223,
+              "reason": "old AI can call power-gain normal/root attack state 420 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 430,
+              "heading": "[State -1, Crouching Light Kick]",
+              "line": 3240,
+              "reason": "old AI can call power-gain normal/root attack state 430 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 440,
+              "heading": "[State -1, Crouching Medium Kick]",
+              "line": 3255,
+              "reason": "old AI can call power-gain normal/root attack state 440 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 450,
+              "heading": "[State -1, Crouching Strong Kick]",
+              "line": 3271,
+              "reason": "old AI can call power-gain normal/root attack state 450 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 600,
+              "heading": "[State -1, Jump Light Punch]",
+              "line": 3288,
+              "reason": "old AI can call power-gain normal/root attack state 600 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 610,
+              "heading": "[State -1, Jump Medium Punch]",
+              "line": 3302,
+              "reason": "old AI can call power-gain normal/root attack state 610 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 620,
+              "heading": "[State -1, Jump Strong Punch]",
+              "line": 3316,
+              "reason": "old AI can call power-gain normal/root attack state 620 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 630,
+              "heading": "[State -1, Jump Light Kick]",
+              "line": 3331,
+              "reason": "old AI can call power-gain normal/root attack state 630 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 640,
+              "heading": "[State -1, Jump Medium Kick]",
+              "line": 3345,
+              "reason": "old AI can call power-gain normal/root attack state 640 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            },
+            {
+              "state": 650,
+              "heading": "[State -1, Jump Strong Kick]",
+              "line": 3359,
+              "reason": "old AI can call power-gain normal/root attack state 650 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops"
+            }
+          ],
+          "contentLines": 20,
+          "contentPreview": "[State -1, Sky Kick] state 1060: old AI can call power-gain normal/root attack state 1060 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Hammer Fist] state 1050: old AI can call power-gain normal/root attack state 1050 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Stand Light Punch] state 200: old AI can call power-gain normal/root attack state 200 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Stand Medium Punch] state 210: old AI can call power-gain normal/root attack state 210 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Stand Strong Punch] state 220: old AI can call power-gain normal/root attack state 220 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Stand Light Kick] state 230: old AI can call power-gain normal/root attack state 230 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Stand Medium Kick] state 240: old AI can call power-gain normal/root attack state 240 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Standing Strong Kick] state 250: old AI can call power-gain normal/root attack state 250 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Crouching Light Punch] state 400: old AI can call power-gain normal/root attack state 400 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Crouching Medium Punch] state 410: old AI can call power-gain normal/root attack state 410 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Crouching Strong Punch] state 420: old AI can call power-gain normal/root attack state 420 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Crouching Light Kick] state 430: old AI can call power-gain normal/root attack state 430 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Crouching Medium Kick] state 440: old AI can call power-gain normal/root attack state 440 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Crouching Strong Kick] state 450: old AI can call power-gain normal/root attack state 450 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Jump Light Punch] state 600: old AI can call power-gain normal/root attack state 600 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Jump Medium Punch] state 610: old AI can call power-gain normal/root attack state 610 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Jump Strong Punch] state 620: old AI can call power-gain normal/root attack state 620 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Jump Light Kick] state 630: old AI can call power-gain normal/root attack state 630 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Jump Medium Kick] state 640: old AI can call power-gain normal/root attack state 640 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops\n[State -1, Jump Strong Kick] state 650: old AI can call power-gain normal/root attack state 650 from neutral/control; patched AI should use hit-confirm only to avoid power-farm loops",
+          "routeTargets": []
+        }
+      ]
+    },
+    {
+      "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\System.cns",
+      "relativePath": "System.cns",
+      "operations": [
+        {
+          "id": "resolver_target_stuck_watchdog:0",
+          "moduleId": "resolver_target_stuck_watchdog",
+          "risk": "medium",
+          "fileRole": "system",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Roxy\\System.cns",
+          "mode": "upsert-marker",
+          "markerId": "rockai_bl:resolver_target_stuck_watchdog:v1",
+          "insertBefore": [
+            "[Statedef -1]",
+            "[State -1]"
+          ],
+          "insertAfter": [],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": null,
+          "routePreview": [
+            {
+              "id": "resolver_target_stuck_watchdog",
+              "type": "safety_watchdog",
+              "source": "scan_report_combo_unsafe_states",
+              "chain": [
+                "Self 800-999 -> 5120/5050 after timeout",
+                "Target 800-999/5160/5100-5199 -> 5120 after timeout"
+              ],
+              "condition": [
+                "AILevel",
+                "custom throw/get-hit state",
+                "Time > 150 for custom 800-999"
+              ],
+              "policy": [
+                "watchdog_only",
+                "late_timeout_only",
+                "no_damage_defense_or_heal_change"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "generatedFallback": true,
+          "resolverMode": "supplemental",
+          "status": "appended",
+          "anchorUsed": null,
+          "contentLines": 144,
+          "contentPreview": "; AI_PATCH_BEGIN: rockai_bl:resolver_target_stuck_watchdog:v1\n; Resolver safety watchdog for scanner-detected custom target / visual-helper risk.\n; It releases long-lived custom throw/get-hit states only after a conservative timeout.\n; This prevents missing-target custom states from freezing the patched character without interrupting normal throws early.\n[State -2, AI Patch Self NoTarget Custom State Escape Ground]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = StateType != A\ntriggerAll = Time > 180\ntriggerAll = !NumTarget\ntriggerAll = MoveType != A\ntrigger1 = 1\nvalue = 0\nctrl = 1\nignorehitpause = 1\n\n[State -2, AI Patch Self NoTarget Custom State Escape Air]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = StateType = A\ntriggerAll = Time > 180\ntriggerAll = !NumTarget\ntriggerAll = MoveType != A\ntrigger1 = 1\nvalue = 50\nctrl = 1\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom Throw Escape Ground]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = MoveType = H\ntriggerAll = Time > 150\ntriggerAll = StateType != A\ntrigger1 = 1\nvalue = 5120\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom Throw Escape Air]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = MoveType = H\ntriggerAll = Time > 150\ntriggerAll = StateType = A\ntrigger1 = 1\nvalue = 5050\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom Throw Escape Dead]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = !Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = MoveType = H\ntriggerAll = Time > 150\ntrigger1 = 1\nvalue = 5150\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom State 825 Escape Air]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = 825\ntriggerAll = Time > 150\ntriggerAll = !NumTarget || MoveType = H\ntriggerAll = StateType = A\ntrigger1 = 1\nvalue = 5050\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom State 825 Escape Hit]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = 825\ntriggerAll = Time > 150\ntriggerAll = !NumTarget || MoveType = H\ntriggerAll = StateType != A\ntriggerAll = MoveType = H\ntrigger1 = 1\nvalue = 5120\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom State 825 Escape Neutral]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = 825\ntriggerAll = Time > 150\ntriggerAll = !NumTarget\ntriggerAll = StateType != A\ntriggerAll = MoveType != H\ntrigger1 = 1\nvalue = 0\nctrl = 1\nignorehitpause = 1\n\n[State -2, AI Patch Target Custom Throw Release]\ntype = TargetState\ntriggerAll = AILevel && NumTarget && RoundState = 2\ntriggerAll = Target,Alive\ntriggerAll = Target,StateNo = [800,999]\ntriggerAll = Target,MoveType = H\ntriggerAll = Target,Time > 150\ntrigger1 = 1\nvalue = 5120\nignorehitpause = 1\n\n[State -2, AI Patch Target Stuck Release 5160]\ntype = TargetState\ntriggerAll = AILevel && NumTarget && RoundState = 2\ntriggerAll = Target,Alive\ntriggerAll = Target,StateNo = 5160\ntriggerAll = Target,Time > 90\ntriggerAll = Target,StateType = L || Target,MoveType = H\ntrigger1 = 1\nvalue = 5120\nignorehitpause = 1\n\n[State -2, AI Patch Target Stuck Release Common Lie]\ntype = TargetState\ntriggerAll = AILevel && NumTarget && RoundState = 2\ntriggerAll = Target,Alive\ntriggerAll = Target,StateNo = [5100,5199]\ntriggerAll = Target,Time > 150\ntriggerAll = Target,StateType = L || Target,MoveType = H\ntrigger1 = 1\nvalue = 5120\nignorehitpause = 1\n; AI_PATCH_END: rockai_bl:resolver_target_stuck_watchdog:v1",
+          "routeTargets": [
+            "5120",
+            "5050",
+            "5150"
+          ]
+        }
+      ]
+    }
+  ],
+  "skipped": [],
+  "conflicts": [
+    {
+      "id": "walk_back",
+      "actual": null,
+      "preferred": 21,
+      "strategy": "reuse_compatible_state",
+      "status": "needs_review",
+      "reason": "preferred state 21 does not exist and no compatible state was detected",
+      "roleHints": [],
+      "options": [
+        0,
+        10,
+        11,
+        12,
+        20,
+        40,
+        47,
+        50,
+        51,
+        52,
+        60,
+        61,
+        100,
+        101,
+        105,
+        106,
+        110,
+        111,
+        120,
+        130,
+        131,
+        132,
+        140,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        170,
+        180,
+        181,
+        182,
+        191,
+        192,
+        195,
+        200,
+        210,
+        220,
+        221,
+        222,
+        230,
+        240,
+        250,
+        400,
+        410,
+        420,
+        430,
+        440,
+        450,
+        451,
+        600,
+        610,
+        620,
+        630,
+        640,
+        650,
+        700,
+        710,
+        715,
+        730,
+        731,
+        750,
+        760,
+        761,
+        762,
+        763,
+        765,
+        766,
+        770,
+        780,
+        800,
+        805,
+        806,
+        810,
+        820,
+        821,
+        890,
+        895,
+        900
+      ]
+    }
+  ],
+  "createdAt": "2026-06-06T16:01:59.679Z"
+}

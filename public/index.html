@@ -1,0 +1,4331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ikemen AI Patcher</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7f9;
+        --surface: #ffffff;
+        --surface-2: #eef1f4;
+        --text: #111827;
+        --muted: #667085;
+        --line: #d7dce2;
+        --brand: #0f766e;
+        --brand-strong: #115e59;
+        --step: #c4320a;
+        --step-strong: #912018;
+        --danger: #b42318;
+        --warn: #b54708;
+        --ok: #027a48;
+        --info: #175cd3;
+        --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        min-height: 40px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 0 14px;
+        background: var(--surface);
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      button:hover {
+        border-color: #98a2b3;
+      }
+
+      button.primary {
+        border-color: var(--brand);
+        background: var(--brand);
+        color: #fff;
+      }
+
+      button.primary:hover {
+        background: var(--brand-strong);
+      }
+
+      button.danger {
+        border-color: #fecdca;
+        color: var(--danger);
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        min-height: 40px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 9px 11px;
+        background: var(--surface);
+        color: var(--text);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        color: #344054;
+        font-size: 13px;
+        font-weight: 650;
+      }
+
+      .shell {
+        display: grid;
+        grid-template-columns: 280px minmax(0, 1fr);
+        min-height: 100vh;
+      }
+
+      .rail {
+        border-right: 1px solid var(--line);
+        background: #0b1220;
+        color: #e5e7eb;
+        padding: 22px 18px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+      }
+
+      .brand {
+        margin-bottom: 24px;
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 23px;
+        line-height: 1.1;
+      }
+
+      .brand p {
+        margin: 8px 0 0;
+        color: #aab3c2;
+        font-size: 13px;
+      }
+
+      .step-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .step {
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+        min-height: 0;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .step:hover {
+        border-color: rgba(254, 205, 202, 0.34);
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .step:focus-visible {
+        outline: 2px solid #f97066;
+        outline-offset: 2px;
+      }
+
+      .step-dot {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        place-items: center;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #cbd5e1;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .step.done .step-dot {
+        background: var(--step-strong);
+        color: #fff;
+      }
+
+      .step.active .step-dot {
+        background: var(--step);
+        color: #fff;
+      }
+
+      .step.active,
+      .step.done {
+        border-color: rgba(254, 205, 202, 0.34);
+      }
+
+      .step-title {
+        font-weight: 750;
+      }
+
+      .step-sub {
+        margin-top: 2px;
+        color: #aab3c2;
+        font-size: 12px;
+      }
+
+      .content {
+        padding: 24px;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: start;
+        margin-bottom: 18px;
+      }
+
+      .topbar h2 {
+        margin: 0;
+        font-size: 28px;
+      }
+
+      .topbar p {
+        margin: 6px 0 0;
+        color: var(--muted);
+      }
+
+      .rail-status {
+        margin-top: auto;
+        flex: 0 0 auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #cbd5e1;
+        font-size: 13px;
+        min-width: 0;
+        max-height: 180px;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .rail-status strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #fff;
+        font-size: 12px;
+      }
+
+      .rail-status span {
+        display: block;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        line-height: 1.45;
+        white-space: normal;
+      }
+
+      .rail-about {
+        margin-top: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.04);
+        color: #cbd5e1;
+      }
+
+      .rail-about summary {
+        min-height: 44px;
+        padding: 12px 14px;
+        cursor: pointer;
+        color: #fff;
+        font-weight: 750;
+      }
+
+      .rail-about-body {
+        display: grid;
+        gap: 8px;
+        padding: 0 14px 14px;
+        font-size: 13px;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+      }
+
+      .rail-about-body a {
+        color: #93c5fd;
+      }
+
+      .rail-about-body img {
+        width: 100%;
+        max-height: 180px;
+        object-fit: contain;
+        border-radius: 6px;
+        background: #fff;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 330px;
+        gap: 16px;
+        align-items: start;
+      }
+
+      .grid > * {
+        min-width: 0;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .panel-head h3 {
+        margin: 0;
+        font-size: 17px;
+      }
+
+      .panel-body {
+        padding: 18px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+      }
+
+      .air-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .control-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-top: 14px;
+      }
+
+      .advanced-options {
+        margin-top: 8px;
+      }
+
+      .advanced-options summary {
+        cursor: pointer;
+        color: #344054;
+        font-size: 13px;
+        font-weight: 650;
+      }
+
+      .advanced-options .advanced-body {
+        margin-top: 10px;
+      }
+
+      .field-note {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .scan-details {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .scan-details.router-preview {
+        border-color: #fbbf24;
+        background: #fffbeb;
+      }
+
+      .scan-details.router-preview summary {
+        color: #7c2d12;
+      }
+
+      .scan-details.router-preview .table-wrap {
+        background: #fffaf0;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
+      .scan-details.router-preview table {
+        min-width: 1680px;
+        table-layout: fixed;
+      }
+
+      .scan-details.router-preview th:nth-child(1),
+      .scan-details.router-preview td:nth-child(1) {
+        width: 230px;
+      }
+
+      .scan-details.router-preview th:nth-child(2),
+      .scan-details.router-preview td:nth-child(2) {
+        width: 160px;
+      }
+
+      .scan-details.router-preview th:nth-child(6),
+      .scan-details.router-preview td:nth-child(6) {
+        width: 210px;
+      }
+
+      .scan-details.router-preview th:nth-child(7),
+      .scan-details.router-preview td:nth-child(7) {
+        width: 230px;
+      }
+
+      .scan-details.router-preview th:nth-child(9),
+      .scan-details.router-preview td:nth-child(9) {
+        width: 300px;
+      }
+
+      .scan-details.router-preview th:nth-child(10),
+      .scan-details.router-preview td:nth-child(10) {
+        width: 300px;
+      }
+
+      .scan-details.router-preview tr.generated-route-child-row td {
+        background: #fff7ed;
+        border-top: 1px dashed #fed7aa;
+      }
+
+      .scan-details.router-preview tr.generated-route-child-row td:first-child {
+        padding-left: 28px;
+      }
+
+      .scan-details.router-preview tr.router-group-row td {
+        padding: 8px 12px;
+        background: #fef3c7;
+        color: #7c2d12;
+        font-size: 12px;
+        font-weight: 850;
+        text-transform: uppercase;
+      }
+
+      .route-chain {
+        display: grid;
+        gap: 4px;
+      }
+
+      .route-chain details {
+        color: #475467;
+        font-size: 12px;
+      }
+
+      .route-chain summary {
+        min-height: 0;
+        padding: 0;
+        color: #7c2d12;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .patched-state-list {
+        display: grid;
+        gap: 6px;
+      }
+
+      .patched-state-line {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .transition-arrow {
+        color: #667085;
+        font-size: 12px;
+      }
+
+      .state-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #075985;
+        font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+        font-size: 12px;
+      }
+
+      .gate-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #ecfdf3;
+        color: #067647;
+        font-size: 12px;
+      }
+
+      .brain-intent {
+        margin-top: 8px;
+        color: #667085;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .scan-details summary {
+        min-height: 42px;
+        padding: 11px 12px;
+        cursor: pointer;
+        color: #344054;
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      .scan-details .table-wrap {
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+        border-radius: 0 0 8px 8px;
+      }
+
+      .scan-details .detail-body {
+        display: grid;
+        gap: 10px;
+        padding: 0 12px 12px;
+      }
+
+      .readiness-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .readiness-strip.current-scan {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .readiness-strip.patch-preview {
+        grid-template-columns: 1fr;
+      }
+
+      .readiness-section {
+        display: grid;
+        gap: 8px;
+      }
+
+      .readiness-heading {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: baseline;
+        color: #344054;
+        font-size: 12px;
+      }
+
+      .readiness-heading strong {
+        font-size: 13px;
+      }
+
+      .readiness-heading span {
+        color: var(--muted);
+      }
+
+      .readiness-item {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px;
+        background: var(--surface-2);
+      }
+
+      .readiness-item strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 12px;
+        color: #344054;
+      }
+
+      .readiness-item span {
+        color: var(--muted);
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+
+      .readiness-item .readiness-meta {
+        display: grid;
+        gap: 2px;
+        margin-top: 8px;
+        color: #475467;
+        font-size: 12px;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+      }
+
+      .health-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .brain-description {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: var(--surface-2);
+      }
+
+      .brain-description h4 {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .brain-description p {
+        margin: 0;
+        color: #475467;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .brain-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .brain-meta-item {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 9px;
+        background: var(--surface);
+      }
+
+      .brain-meta-item strong {
+        display: block;
+        margin-bottom: 3px;
+        font-size: 12px;
+      }
+
+      .mini-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .compat-card {
+        margin-top: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #f8fafc;
+      }
+
+      .compat-card summary {
+        min-height: 42px;
+        padding: 11px 12px;
+        cursor: pointer;
+        color: #344054;
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      .compat-body {
+        display: grid;
+        gap: 10px;
+        padding: 0 12px 12px;
+      }
+
+      .compat-guide {
+        margin: 0;
+        color: #475467;
+        font-size: 12px;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+      }
+
+      .scan-report {
+        margin-top: 16px;
+      }
+
+      .compact-table table {
+        min-width: 0;
+      }
+
+      .value-list {
+        max-width: 100%;
+        color: #344054;
+        line-height: 1.45;
+        word-break: break-word;
+      }
+
+      .state-token {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        margin-right: 8px;
+        margin-bottom: 4px;
+        white-space: nowrap;
+      }
+
+      .state-token.powered {
+        color: #154dee;
+        font-weight: 400;
+      }
+
+      .power-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 18px;
+        border-radius: 999px;
+        padding: 0 6px;
+        background: #fef3f2;
+        color: var(--danger);
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .power-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 8px 10px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .report-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .report-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 6px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-2);
+      }
+
+      .report-tab,
+      .router-filter {
+        min-height: 36px;
+        border: 0;
+        background: transparent;
+        color: #344054;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .report-tab.active,
+      .router-filter.active {
+        background: var(--surface);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+      }
+
+      .report-tab-panel {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .router-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        padding: 10px 12px;
+        border-bottom: 1px solid #fde68a;
+        background: #fff7ed;
+      }
+
+      .router-toolbar-label {
+        color: #7c2d12;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .route-role-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: var(--surface);
+      }
+
+      .metric-value {
+        font-size: 24px;
+        font-weight: 850;
+      }
+
+      .metric-status {
+        display: inline-block;
+        margin-left: 6px;
+        font-size: 12px;
+        font-weight: 750;
+        vertical-align: middle;
+      }
+
+      .metric-status.ok {
+        color: var(--ok);
+      }
+
+      .metric-status.warn {
+        color: var(--warn);
+      }
+
+      .metric-label {
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .rewrite-plan-table {
+        max-height: 320px;
+        background: #fffdf3;
+      }
+
+      .rewrite-plan-table table {
+        min-width: 1080px;
+      }
+
+      table {
+        width: 100%;
+        min-width: 720px;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      th,
+      td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: var(--surface-2);
+        color: #344054;
+        font-size: 12px;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        border-radius: 999px;
+        padding: 2px 9px;
+        background: var(--surface-2);
+        color: #344054;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .tag.warn {
+        background: #fffaeb;
+        color: var(--warn);
+      }
+
+      .tag.danger {
+        background: #fef3f2;
+        color: var(--danger);
+      }
+
+      .tag.ok {
+        background: #ecfdf3;
+        color: var(--ok);
+      }
+
+      .tag.info {
+        background: #eff8ff;
+        color: var(--info);
+      }
+
+      .side-stack {
+        display: grid;
+        gap: 16px;
+        align-content: start;
+      }
+
+      .list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .file-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .file-grid .full {
+        grid-column: 1 / -1;
+      }
+
+      .list-item {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px;
+        background: var(--surface);
+      }
+
+      .list-item strong {
+        display: block;
+        font-size: 13px;
+      }
+
+      .list-item span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 6px;
+        padding: 6px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-2);
+      }
+
+      .tab {
+        min-height: 34px;
+        border: 0;
+        background: transparent;
+      }
+
+      .tab.active {
+        background: var(--surface);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+      }
+
+      pre {
+        min-height: 360px;
+        max-height: 580px;
+        overflow: auto;
+        margin: 0;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #101828;
+        color: #e4e7ec;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .empty {
+        padding: 16px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: rgba(15, 23, 42, 0.46);
+      }
+
+      .modal {
+        width: min(920px, 100%);
+        max-height: min(820px, calc(100vh - 48px));
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+      }
+
+      .modal-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .modal-head h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .modal-body {
+        display: grid;
+        gap: 14px;
+        padding: 16px 18px 18px;
+      }
+
+      .solution-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .solution-card {
+        display: grid;
+        gap: 8px;
+        align-content: start;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: var(--surface);
+      }
+
+      .solution-card strong {
+        font-size: 14px;
+      }
+
+      .solution-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .module-picker {
+        display: grid;
+        gap: 8px;
+        max-height: 290px;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px;
+      }
+
+      .module-check {
+        display: grid;
+        grid-template-columns: 22px minmax(0, 1fr) auto;
+        gap: 8px;
+        align-items: start;
+        padding: 9px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .module-check.blocked {
+        background: #fffbfa;
+      }
+
+      .module-check.partial {
+        background: #fffaeb;
+      }
+
+      .module-check input {
+        min-height: 0;
+        width: auto;
+        margin-top: 3px;
+      }
+
+      .module-check small {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+      }
+
+      .rewrite-actions {
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .rewrite-actions .field-note {
+        max-width: 620px;
+      }
+
+      .modal-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+
+      @media (max-width: 1500px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .side-stack {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 980px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+
+        .rail {
+          border-right: 0;
+          position: static;
+          height: auto;
+          overflow: visible;
+        }
+
+        .metrics {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .air-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .brain-meta-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .readiness-strip,
+        .readiness-strip.current-scan,
+        .readiness-strip.patch-preview,
+        .health-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .file-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .file-grid .full {
+          grid-column: auto;
+        }
+
+        .side-stack {
+          grid-template-columns: 1fr;
+        }
+
+        .solution-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .content {
+          padding: 16px;
+        }
+
+        .metrics {
+          grid-template-columns: 1fr;
+        }
+
+        .readiness-strip,
+        .readiness-strip.current-scan,
+        .readiness-strip.patch-preview,
+        .health-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .air-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="rail">
+        <div class="brand">
+          <h1>Ikemen AI Patcher</h1>
+          <p>Scanner, brain resolver, marker patcher.</p>
+        </div>
+        <div class="step-list">
+          <button id="stepScan" class="step active" type="button" title="Scan character files from the pasted folder path.">
+            <div class="step-dot">1</div>
+            <div>
+              <div class="step-title">Scan</div>
+              <div class="step-sub">Character files</div>
+            </div>
+          </button>
+          <button id="stepBrain" class="step" type="button" title="Choose a brain .md file to load.">
+            <div class="step-dot">2</div>
+            <div>
+              <div class="step-title">Brain</div>
+              <div class="step-sub">Load strategy</div>
+            </div>
+          </button>
+          <button id="stepResolve" class="step" type="button" title="Resolve brain variables, states, and ranges for this character.">
+            <div class="step-dot">3</div>
+            <div>
+              <div class="step-title">Resolve</div>
+              <div class="step-sub">Vars, states, ranges</div>
+            </div>
+          </button>
+          <button id="stepPreview" class="step" type="button" title="Preview file changes before writing anything.">
+            <div class="step-dot">4</div>
+            <div>
+              <div class="step-title">Preview Diff</div>
+              <div class="step-sub">Diff before write</div>
+            </div>
+          </button>
+          <button id="stepApply" class="step" type="button" title="Apply the previewed patch after creating a backup.">
+            <div class="step-dot">5</div>
+            <div>
+              <div class="step-title">Apply</div>
+              <div class="step-sub">Backup and patch</div>
+            </div>
+          </button>
+          <details class="rail-about" title="Project information, creator credit, donation link, and contact.">
+            <summary>About</summary>
+            <div class="rail-about-body">
+              <div>Ikemen AI Patcher</div>
+              <div>version : June - 6 -2026</div>
+              <div>Idea by Cuocsong8x channel, made by Codex</div>
+              <a href="https://www.youtube.com/@cuocsong8x" target="_blank" rel="noreferrer">https://www.youtube.com/@cuocsong8x</a>
+              <div>DONATE HERE</div>
+              <a href="https://www.paypal.com/paypalme/huytoken" target="_blank" rel="noreferrer">https://www.paypal.com/paypalme/huytoken</a>
+              <img src="assets/paypal-huytoken.jpg" alt="Paypal huytoken donation QR" />
+              <div>My discord is haoca5043</div>
+            </div>
+          </details>
+        </div>
+        <div id="status" class="rail-status">
+          <strong>Status</strong>
+          <span>Ready</span>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="topbar">
+          <div>
+            <h2>Patch Workspace</h2>
+            <p>Resolve conflicts before applying a brain to a new character.</p>
+          </div>
+        </div>
+
+        <section class="metrics">
+          <div class="metric">
+            <div id="metricVars" class="metric-value">-</div>
+            <div class="metric-label">Free vars</div>
+          </div>
+          <div class="metric">
+            <div id="metricFVars" class="metric-value">-</div>
+            <div class="metric-label">Free fvars</div>
+          </div>
+          <div class="metric">
+            <div id="metricConflicts" class="metric-value">-</div>
+            <div class="metric-label">Review items</div>
+          </div>
+          <div class="metric">
+            <div id="metricModules" class="metric-value">-</div>
+            <div class="metric-label">Modules</div>
+          </div>
+        </section>
+
+        <div class="grid">
+          <section class="panel">
+            <div class="panel-head">
+              <h3>Control</h3>
+              <span id="characterName" class="tag">No character</span>
+            </div>
+            <div class="panel-body">
+              <div class="form-grid">
+                <div>
+                  <label for="characterPath">Step 1: paste path of Character Folder</label>
+                  <input id="characterPath" value="E:\x1\Ikemen_Nighty\chars\Heavy D!" />
+                </div>
+                <details class="advanced-options">
+                  <summary>Advanced: module filter</summary>
+                  <div class="advanced-body">
+                    <label for="selectedModules">Patch only these modules</label>
+                    <input id="selectedModules" placeholder="Optional: module_id_1, module_id_2" />
+                    <p class="field-note">Leave empty for normal use. This field is used by Preview and Apply to patch only selected brain modules.</p>
+                    <label for="resolverMode">Resolver generated combo mode</label>
+                    <select id="resolverMode" title="Controls where resolver-generated combo pool is inserted relative to brain modules.">
+                      <option value="supplemental" selected>Supplemental - after brain routers</option>
+                      <option value="assist">Assist only - only non-duplicate gaps</option>
+                      <option value="aggressive">Aggressive - earlier boss route layer</option>
+                    </select>
+                    <p class="field-note">Supplemental is safest. Assist only fills gaps. Aggressive can change route priority and should be reviewed in Preview Diff.</p>
+                  </div>
+                </details>
+              </div>
+              <div class="control-meta">
+                <input id="brainFile" type="file" accept=".md,text/markdown,text/plain" hidden />
+                <span id="brainTag" class="tag">No brain</span>
+                <span class="tag info">Use left workflow menu</span>
+              </div>
+              <details class="compat-card" title="Use when Ikemen reports command does not exist because a character uses Japanese, Chinese, or corrupted command names. It previews and applies safe ASCII command aliases across CMD/CNS/ST files.">
+                <summary>Command Encoding Fix</summary>
+                <div class="compat-body">
+                  <p class="compat-guide">Scan -> Command ASCII Preview -> Apply ASCII Commands -> Scan again -> Load Brain -> Resolve -> Preview Diff -> Apply Patch</p>
+                  <div class="mini-actions">
+                    <button id="commandAsciiPreviewBtn" type="button" title="Preview a compatibility patch that renames non-ASCII command names to safe ASCII aliases and updates every command reference.">Command ASCII Preview</button>
+                    <button id="commandAsciiApplyBtn" type="button" class="danger" title="Create a backup, then rename non-ASCII command names to safe ASCII aliases across CMD/CNS/ST files. Use this when Ikemen reports command does not exist because of language encoding.">Apply ASCII Commands</button>
+                  </div>
+                </div>
+              </details>
+              <div id="brainDescription" class="brain-description" hidden></div>
+              <div id="scanReport" class="scan-report">
+                <div class="empty">Scan report will appear here after step 1.</div>
+              </div>
+            </div>
+          </section>
+
+          <aside class="side-stack">
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Files</h3>
+              </div>
+              <div class="panel-body">
+                <div id="fileList" class="list">
+                  <div class="empty">Scan a character to see files.</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Patch Safety</h3>
+              </div>
+              <div class="panel-body">
+                <div id="safetyList" class="list">
+                  <div class="list-item">
+                    <strong>Marker based</strong>
+                    <span>Existing AI_PATCH blocks are replaced instead of duplicated.</span>
+                  </div>
+                  <div class="list-item">
+                    <strong>Backup first</strong>
+                    <span>Apply writes a timestamped backup before changing files.</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </aside>
+        </div>
+
+        <section class="panel" style="margin-top: 16px">
+          <div class="panel-head">
+            <h3>Resolve Summary</h3>
+            <div class="tabs">
+              <button class="tab active" data-view="conflicts">Conflicts</button>
+              <button class="tab" data-view="modules">Modules</button>
+              <button class="tab" data-view="preview">Preview</button>
+              <button class="tab" data-view="air">AIR</button>
+              <button class="tab" data-view="raw">Raw</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="conflictsView"></div>
+            <div id="modulesView" hidden></div>
+            <div id="previewView" hidden></div>
+            <div id="airView" hidden></div>
+            <pre id="rawView" hidden>Ready.</pre>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="conflictModal" class="modal-backdrop" hidden>
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="conflictModalTitle">
+        <div class="modal-head">
+          <h3 id="conflictModalTitle">Apply Conflict Resolution</h3>
+          <button id="conflictCloseBtn" type="button" title="Close this dialog without applying a patch.">Close</button>
+        </div>
+        <div class="modal-body">
+          <div id="conflictSummary"></div>
+          <div id="conflictMessage"></div>
+          <div class="solution-grid">
+            <div class="solution-card">
+              <strong>Safe Lite Patch</strong>
+              <p>Apply only modules that already resolved cleanly. Missing-var features are skipped, so the patch is safer but smaller.</p>
+              <button id="safeLiteBtn" type="button" class="primary" title="Automatically apply only modules with no unresolved placeholders. Modules that need missing variables will be skipped.">Safe Lite Patch</button>
+            </div>
+            <div class="solution-card">
+              <strong>Manual Pick</strong>
+              <p>Choose which modules to keep. Blocked modules stay disabled until their missing variables are resolved.</p>
+              <button id="manualPickBtn" type="button" title="Show the module checklist so you can choose the modules to apply. Blocked modules remain visible with their missing variables.">Manual Pick</button>
+            </div>
+            <div class="solution-card">
+              <strong>Replace Old AI</strong>
+              <p>Preview old AI cleanup first. Only marker-protected AI_PATCH blocks can be removed automatically.</p>
+              <button id="replaceOldAiBtn" type="button" class="danger" title="High-risk path: scan old AI candidates. Only marker-protected AI_PATCH blocks can be auto-removed; heuristic blocks stay preview-only.">Replace Old AI</button>
+            </div>
+            <div class="solution-card">
+              <strong>Graph + Var Migrate</strong>
+              <p>Use State Dependency Graph and Var Ownership Map to plan old AI quarantine, safe variable reuse, then re-resolve the brain.</p>
+              <button id="graphMigrateBtn" type="button" class="primary" title="Review graph blockers, high-risk variables, and reusable old AI variables before attempting a full brain migration.">Graph + Var Migrate</button>
+            </div>
+          </div>
+          <div id="manualModuleArea" hidden>
+            <label>Manual module selection</label>
+            <div id="manualModuleList" class="module-picker"></div>
+            <div class="modal-actions">
+              <button id="applyManualBtn" type="button" class="primary" title="Apply the checked modules that do not have unresolved placeholders.">Apply Checked Modules</button>
+            </div>
+          </div>
+          <div id="replaceOldAiArea" hidden>
+            <div class="list-item">
+              <strong>Replace Old AI requires a cleanup preview</strong>
+              <span>This mode must first identify AI-only blocks, old AI vars, and marker ranges that can be removed without touching gameplay code. No files were changed.</span>
+            </div>
+            <div class="modal-actions">
+              <button id="applyCleanupBtn" type="button" class="danger" hidden title="Remove only marker-protected old AI blocks after creating a backup. Heuristic blocks are preview-only.">Remove Marker AI Blocks</button>
+            </div>
+          </div>
+          <div id="graphMigrateArea" hidden>
+            <div class="list-item">
+              <strong>Graph + Var Migrate requires a fresh scan</strong>
+              <span>This mode uses State Dependency Graph and Var Ownership Map to decide whether old AI variables can be reused safely. No files were changed.</span>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button id="conflictCancelBtn" type="button" title="Cancel conflict handling and return to the workspace.">Cancel</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const els = {
+        output: document.getElementById("rawView"),
+        status: document.getElementById("status"),
+        characterPath: document.getElementById("characterPath"),
+        selectedModules: document.getElementById("selectedModules"),
+        resolverMode: document.getElementById("resolverMode"),
+        brainFile: document.getElementById("brainFile"),
+        brainTag: document.getElementById("brainTag"),
+        brainDescription: document.getElementById("brainDescription"),
+        conflictModal: document.getElementById("conflictModal"),
+        conflictCloseBtn: document.getElementById("conflictCloseBtn"),
+        conflictCancelBtn: document.getElementById("conflictCancelBtn"),
+        conflictSummary: document.getElementById("conflictSummary"),
+        conflictMessage: document.getElementById("conflictMessage"),
+        safeLiteBtn: document.getElementById("safeLiteBtn"),
+        manualPickBtn: document.getElementById("manualPickBtn"),
+        replaceOldAiBtn: document.getElementById("replaceOldAiBtn"),
+        graphMigrateBtn: document.getElementById("graphMigrateBtn"),
+        manualModuleArea: document.getElementById("manualModuleArea"),
+        manualModuleList: document.getElementById("manualModuleList"),
+        applyManualBtn: document.getElementById("applyManualBtn"),
+        replaceOldAiArea: document.getElementById("replaceOldAiArea"),
+        graphMigrateArea: document.getElementById("graphMigrateArea"),
+        applyCleanupBtn: document.getElementById("applyCleanupBtn"),
+        metricVars: document.getElementById("metricVars"),
+        metricFVars: document.getElementById("metricFVars"),
+        metricConflicts: document.getElementById("metricConflicts"),
+        metricModules: document.getElementById("metricModules"),
+        characterName: document.getElementById("characterName"),
+        scanReport: document.getElementById("scanReport"),
+        fileList: document.getElementById("fileList"),
+        safetyList: document.getElementById("safetyList"),
+        conflictsView: document.getElementById("conflictsView"),
+        modulesView: document.getElementById("modulesView"),
+        previewView: document.getElementById("previewView"),
+        airView: document.getElementById("airView"),
+        commandAsciiPreviewBtn: document.getElementById("commandAsciiPreviewBtn"),
+        commandAsciiApplyBtn: document.getElementById("commandAsciiApplyBtn"),
+      };
+
+      const steps = {
+        scan: document.getElementById("stepScan"),
+        brain: document.getElementById("stepBrain"),
+        resolve: document.getElementById("stepResolve"),
+        preview: document.getElementById("stepPreview"),
+        apply: document.getElementById("stepApply"),
+      };
+
+      let profile = null;
+      let brain = null;
+      let selectedBrainName = "Brain_Boxer_BL.md";
+      let plan = null;
+      let lastPreview = null;
+      let lastApplyBlock = null;
+      let lastCleanupPreview = null;
+      let lastRewritePreview = null;
+      let approvedVarPool = [];
+      let activeReportTab = "patch";
+      let activeRouterFilter = "all";
+      let airScan = null;
+      let lastAirPreview = null;
+      let airForm = {
+        preset: "fix_whiff_forward",
+        simpleNotes: "",
+        actionId: "1420",
+        frameIndex: "5",
+        clsnType: "Clsn1",
+        boxIndex: "0",
+        intent: "fix_whiff",
+        dx1: "0",
+        dy1: "0",
+        dx2: "20",
+        dy2: "0",
+      };
+
+      function setStatus(text, tone = "") {
+        els.status.querySelector("span").textContent = text;
+        els.status.style.borderColor = tone === "danger" ? "rgba(254, 205, 202, 0.72)" : tone === "ok" ? "rgba(117, 224, 167, 0.54)" : "var(--line)";
+        els.status.querySelector("span").style.color = tone === "danger" ? "#fecdca" : tone === "ok" ? "#abefc6" : "#cbd5e1";
+      }
+
+      function setStep(name, state) {
+        steps[name].classList.remove("active", "done");
+        if (state) steps[name].classList.add(state);
+      }
+
+      function showRaw(value) {
+        els.output.textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2);
+      }
+
+      function tag(text, cls = "") {
+        return `<span class="tag ${cls}">${escapeHtml(text)}</span>`;
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "\"": "&quot;",
+          "'": "&#039;",
+        }[char]));
+      }
+
+      async function postJson(url, body) {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          const error = new Error(data.error || response.statusText);
+          error.payload = data;
+          throw error;
+        }
+        return data;
+      }
+
+      function setLoadedBrain(nextBrain, fileName) {
+        brain = nextBrain;
+        selectedBrainName = fileName || nextBrain?.path?.split(/[\\/]/).pop() || selectedBrainName;
+        const meta = nextBrain?.frontmatter || {};
+        els.brainTag.textContent = meta.name ? `${meta.name}` : selectedBrainName;
+        els.brainTag.className = "tag info";
+        renderBrainDescription();
+      }
+
+      function cleanMetaText(value) {
+        return String(value || "").replace(/\s+/g, " ").trim();
+      }
+
+      function renderBrainDescription() {
+        if (!brain) {
+          els.brainDescription.hidden = true;
+          els.brainDescription.innerHTML = "";
+          return;
+        }
+        const meta = brain.frontmatter || {};
+        const varCount = brain.variables?.length || 0;
+        const fvarCount = brain.fvariables?.length || 0;
+        const style = cleanMetaText(meta.ai_style || meta.description || "No style description provided.");
+        const strengths = cleanMetaText(meta.ai_strengths || "No strengths listed.");
+        const weaknesses = cleanMetaText(meta.ai_weaknesses || "No weaknesses listed.");
+        const comboRoutes = cleanMetaText(meta.combo_routes || "No combo routes listed.");
+        els.brainDescription.innerHTML = `
+          <div>
+            <h4>${escapeHtml(meta.name || selectedBrainName)}</h4>
+            <p>${escapeHtml(cleanMetaText(meta.description || ""))}</p>
+          </div>
+          <div class="brain-meta-grid">
+            <div class="brain-meta-item">
+              <strong>Variables</strong>
+              <p>${escapeHtml(varCount)} var, ${escapeHtml(fvarCount)} fvar</p>
+            </div>
+            <div class="brain-meta-item">
+              <strong>AI style</strong>
+              <p>${escapeHtml(style)}</p>
+            </div>
+            <div class="brain-meta-item">
+              <strong>Strengths</strong>
+              <p>${escapeHtml(strengths)}</p>
+            </div>
+            <div class="brain-meta-item">
+              <strong>Weaknesses</strong>
+              <p>${escapeHtml(weaknesses)}</p>
+            </div>
+            <div class="brain-meta-item" style="grid-column: 1 / -1">
+              <strong>Combo routes</strong>
+              <p>${escapeHtml(comboRoutes)}</p>
+            </div>
+          </div>
+        `;
+        els.brainDescription.hidden = false;
+      }
+
+      function patchBody() {
+        const selected = els.selectedModules.value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+        return {
+          characterPath: els.characterPath.value,
+          profile,
+          brain,
+          brainName: selectedBrainName,
+          approvedVarPool,
+          resolverMode: els.resolverMode.value,
+          selectedModules: selected.length ? selected : undefined,
+        };
+      }
+
+      function selectedModuleIdsFromInput() {
+        return els.selectedModules.value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+
+      function moduleBlockMap(blockPayload = lastApplyBlock) {
+        const map = new Map();
+        for (const item of blockPayload?.modules || []) {
+          map.set(item.id, item.unresolvedPlaceholders || []);
+        }
+        return map;
+      }
+
+      function cleanModuleIds(blockPayload = lastApplyBlock) {
+        const blocked = moduleBlockMap(blockPayload);
+        const modules = (blockPayload?.plan?.modules || plan?.modules || []);
+        return modules
+          .filter((module) => module.templates?.length)
+          .filter((module) => !blocked.has(module.id))
+          .map((module) => module.id);
+      }
+
+      function closeConflictModal() {
+        els.conflictModal.hidden = true;
+      }
+
+      function renderConflictModal(payload) {
+        lastApplyBlock = payload;
+        const conflicts = payload?.conflicts || [];
+        const blocked = moduleBlockMap(payload);
+        const modules = payload?.plan?.modules || plan?.modules || [];
+        const safeIds = cleanModuleIds(payload);
+        const safeSet = new Set(safeIds);
+        const patchableModules = modules.filter((module) => module.templates?.length);
+        const partialCount = patchableModules.filter((module) => {
+          const dependency = module.target?.insert_after_module;
+          return safeSet.has(module.id) && dependency && modules.some((item) => item.id === dependency) && !safeSet.has(dependency);
+        }).length;
+        els.conflictSummary.innerHTML = `
+          <div class="list-item">
+            <strong>${escapeHtml(conflicts.length)} unresolved variable conflicts</strong>
+            <span>${escapeHtml(safeIds.length)} modules have no missing placeholders and can be applied now. ${escapeHtml(partialCount)} of them are partial because their preferred dependency is skipped. ${escapeHtml(blocked.size)} modules still need missing variables or cleanup.</span>
+          </div>
+        `;
+        els.conflictMessage.innerHTML = "";
+        els.safeLiteBtn.disabled = safeIds.length === 0;
+        els.safeLiteBtn.textContent = safeIds.length ? "Safe Lite Patch" : "No Safe Lite Modules";
+        els.safeLiteBtn.title = safeIds.length
+          ? `Apply modules with no unresolved placeholders: ${safeIds.join(", ")}. Dependency warnings are allowed in Safe Lite.`
+          : "No modules without missing placeholders are available.";
+        els.manualModuleArea.hidden = true;
+        els.replaceOldAiArea.hidden = true;
+        els.graphMigrateArea.hidden = true;
+        els.applyCleanupBtn.hidden = true;
+        els.manualModuleList.innerHTML = patchableModules
+          .map((module) => {
+            const missing = blocked.get(module.id) || [];
+            const dependency = module.target?.insert_after_module;
+            const dependencyPartial = dependency && modules.some((item) => item.id === dependency) && !safeSet.has(dependency);
+            const isBlocked = missing.length > 0;
+            const detail = missing.length
+              ? `Missing: ${missing.map(escapeHtml).join(", ")}`
+              : dependencyPartial
+                ? `Partial: preferred dependency skipped (${escapeHtml(dependency)}). It can still be applied by anchor fallback.`
+                : "Ready to apply";
+            const stateClass = isBlocked ? "blocked" : dependencyPartial ? "partial" : "";
+            const statusTag = isBlocked ? tag("blocked", "danger") : dependencyPartial ? tag("partial", "warn") : tag("ready", "ok");
+            return `
+              <label class="module-check ${stateClass}">
+                <input type="checkbox" value="${escapeHtml(module.id)}" ${isBlocked ? "disabled" : "checked"} />
+                <span>
+                  <strong>${escapeHtml(module.id)}</strong>
+                  <small>${detail}</small>
+                </span>
+                ${statusTag}
+              </label>
+            `;
+          }).join("") || `<div class="empty">No patchable modules found. This brain needs variable cleanup before it can patch this character.</div>`;
+        els.conflictModal.hidden = false;
+      }
+
+      async function applySelectedModules(moduleIds, label) {
+        if (!moduleIds.length) {
+          setStatus("No clean modules selected", "danger");
+          return;
+        }
+        const previousValue = els.selectedModules.value;
+        els.selectedModules.value = moduleIds.join(", ");
+        try {
+          setStatus(`${label}...`);
+          const result = await postJson("/api/apply-patch", patchBody());
+          showRaw(result);
+          setStep("apply", "done");
+          closeConflictModal();
+          renderAll();
+          setStatus(`Patch applied: backup ${result.report.backupId}`, "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          const conflicts = error.payload?.conflicts || [];
+          if (conflicts.length) {
+            renderConflictModal(error.payload);
+            setStatus(`Apply blocked: ${conflicts.length} unresolved conflicts`, "danger");
+          } else {
+            setStatus("Apply blocked", "danger");
+          }
+        } finally {
+          els.selectedModules.value = previousValue;
+        }
+      }
+
+      function airPatchBody() {
+        syncAirFormFromDom();
+        return {
+          characterPath: els.characterPath.value,
+          profile,
+          patch: {
+            actionId: airForm.actionId,
+            frameIndex: airForm.frameIndex,
+            clsnType: airForm.clsnType,
+            boxIndex: airForm.boxIndex,
+            intent: airForm.intent,
+            delta: {
+              x1: airForm.dx1,
+              y1: airForm.dy1,
+              x2: airForm.dx2,
+              y2: airForm.dy2,
+            },
+            expectedBefore: lastAirPreview?.file?.change?.before || undefined,
+            simplePreset: airForm.preset,
+            simpleNotes: airForm.simpleNotes,
+          },
+        };
+      }
+
+      function syncAirFormFromDom() {
+        const value = (id, fallback) => document.getElementById(id)?.value ?? fallback;
+        airForm = {
+          preset: value("airPreset", airForm.preset),
+          simpleNotes: value("airSimpleNotes", airForm.simpleNotes),
+          actionId: value("airActionId", airForm.actionId),
+          frameIndex: value("airFrameIndex", airForm.frameIndex),
+          clsnType: value("airClsnType", airForm.clsnType),
+          boxIndex: value("airBoxIndex", airForm.boxIndex),
+          intent: value("airIntent", airForm.intent),
+          dx1: value("airDx1", airForm.dx1),
+          dy1: value("airDy1", airForm.dy1),
+          dx2: value("airDx2", airForm.dx2),
+          dy2: value("airDy2", airForm.dy2),
+        };
+      }
+
+      function resetCharacterDerivedState() {
+        plan = null;
+        lastPreview = null;
+        lastRewritePreview = null;
+        approvedVarPool = [];
+        airScan = null;
+        lastAirPreview = null;
+        setStep("scan", "active");
+        setStep("brain", "");
+        setStep("resolve", "");
+        setStep("preview", "");
+        setStep("apply", "");
+      }
+
+      function renderFiles() {
+        if (!profile) {
+          els.fileList.className = "list";
+          els.fileList.innerHTML = `<div class="empty">Scan a character to see files.</div>`;
+          return;
+        }
+        const files = [
+          ["DEF", profile.files.def, ""],
+          ["CMD", profile.files.cmd, ""],
+          ["AIR", profile.files.air, ""],
+          ["CNS", (profile.files.cns || []).join(", "), ""],
+          ["ST", (profile.files.st || []).join(", "), "full"],
+        ];
+        els.fileList.className = "file-grid";
+        els.fileList.innerHTML = files
+          .filter(([, value]) => value)
+          .map(([label, value, cls]) => `<div class="list-item ${cls}"><strong>${label}</strong><span>${escapeHtml(value)}</span></div>`)
+          .join("");
+      }
+
+      function renderMetrics() {
+        const freeVars = profile?.vars?.free?.length ?? null;
+        const freeFVars = profile?.fvars?.free?.length ?? null;
+        const neededVars = brain?.variables?.length ?? null;
+        const neededFVars = brain?.fvariables?.length ?? null;
+        const varStatus = profile && brain
+          ? freeVars >= neededVars
+            ? `<span class="metric-status ok">- ok. enough var</span>`
+            : `<span class="metric-status warn">- Not enough variables? Just do it because the system has a solution.</span>`
+          : "";
+        const fvarStatus = profile && brain
+          ? freeFVars >= neededFVars
+            ? `<span class="metric-status ok">- ok. enough fvar</span>`
+            : `<span class="metric-status warn">- Not enough fvariables? Resolver can remap, skip, or apply a lite patch.</span>`
+          : "";
+        els.metricVars.innerHTML = profile ? `${escapeHtml(freeVars)}${varStatus}` : "-";
+        els.metricFVars.innerHTML = profile ? `${escapeHtml(freeFVars)}${fvarStatus}` : "-";
+        els.metricConflicts.textContent = plan ? plan.conflicts.length : "-";
+        els.metricModules.textContent = plan ? plan.modules.length : "-";
+        els.characterName.textContent = profile ? profile.name : "No character";
+      }
+
+      function formatNumbers(values) {
+        return values?.length ? values.join(", ") : "none";
+      }
+
+      function renderStateTokens(values) {
+        const costs = profile?.states?.powerCosts || {};
+        return values?.length ? values.map((state) => {
+          const cost = costs[state];
+          const badge = cost?.bucket ? ` <span class="power-badge">${escapeHtml(cost.bucket)}</span>` : "";
+          const cls = cost?.bucket ? "state-token powered" : "state-token";
+          return `<span class="${cls}">${escapeHtml(state)}${badge}</span>`;
+        }).join("") : "none";
+      }
+
+      function renderReachList(reach) {
+        return reach?.length
+          ? reach.map((item) => `A${item.action}: X ${item.minX}..${item.maxX}, Y ${item.minY}..${item.maxY}`).join("; ")
+          : "no AIR reach";
+      }
+
+      function planStateRows() {
+        return plan?.resolved?.states || [];
+      }
+
+      function stateExists(state) {
+        return state !== null && state !== undefined && profile?.states?.all?.includes(Number(state));
+      }
+
+      function powerInfo(state) {
+        return profile?.states?.powerCosts?.[state] || profile?.states?.powerCosts?.[String(state)] || null;
+      }
+
+      function resolverReport() {
+        return plan?.resolverReport || null;
+      }
+
+      function resolverStateRows() {
+        const rows = resolverReport()?.stateMappings || [];
+        return rows.length ? rows : planStateRows();
+      }
+
+      function scanComboState(state) {
+        const numeric = Number(state);
+        if (!Number.isFinite(numeric)) return null;
+        return (profile?.comboScan?.states || []).find((entry) => entry.state === numeric) || null;
+      }
+
+      function resolvedState(id) {
+        return planStateRows().find((item) => item.id === id) || null;
+      }
+
+      function stateCellValue(id) {
+        const item = resolvedState(id);
+        if (!item) return "Resolve brain first";
+        return item.actual !== null && item.actual !== undefined ? `${item.actual}` : "not resolved";
+      }
+
+      function brainExpectationSummary() {
+        if (!brain) return "Load brain first";
+        return `${brain.variables?.length || 0} var, ${brain.fvariables?.length || 0} fvar, ${brain.states?.length || 0} state aliases`;
+      }
+
+      function renderReadinessPanel() {
+        const readiness = profile?.patchReadiness || {};
+        const parry = readiness.parry || {};
+        const runtimeTone = readiness.runtimeBridge ? "ok" : "warn";
+        const superTone = readiness.superCandidateCount ? "ok" : "danger";
+        const parryTone = parry.stand && parry.crouch && parry.air ? "ok" : "warn";
+        const orderOps = (lastPreview?.files || [])
+          .flatMap((file) => (file.operations || []).map((op, index) => ({ file: file.relativePath, index: index + 1, ...op })))
+          .filter((op) => /runtime|meter|combo|cashout|parry|route/i.test(op.moduleId || ""));
+        const orderTone = orderOps.some((op) => op.moduleId?.includes("runtime_bridge") && /inserted-after-anchor|inserted-before-anchor|replaced-marker/.test(op.status || "")) ? "ok" : readiness.runtimeBridge ? "ok" : "warn";
+        const orderLabel = !lastPreview ? "needs preview" : orderTone === "ok" ? "preview ready" : "review order";
+        const orderRows = orderOps.slice(0, 18).map((op) => `
+          <tr>
+            <td>${escapeHtml(op.index)}</td>
+            <td><strong>${escapeHtml(op.moduleId || "-")}</strong></td>
+            <td>${escapeHtml(op.file || "-")}</td>
+            <td>${tag(op.status || "-", /appended/.test(op.status || "") ? "warn" : "ok")}</td>
+            <td>${escapeHtml(op.anchorUsed || "-")}</td>
+          </tr>
+        `).join("");
+        return `
+          <details class="scan-details">
+            <summary>AI Patch Readiness</summary>
+            <div class="detail-body">
+              <div class="readiness-section">
+                <div class="readiness-heading"><strong>Current character scan</strong><span>Changes after Scan reads different character code or after Apply writes code and you scan again.</span></div>
+                <div class="readiness-strip current-scan">
+                  <div class="readiness-item">
+                    <strong>Runtime bridge</strong>${tag(readiness.runtimeBridge ? "found" : "missing", runtimeTone)}<br><span>${escapeHtml(readiness.aiVariable || "not scanned")}</span>
+                    <div class="readiness-meta">
+                      <div>Brain expects: ${escapeHtml(brain ? "AILevel -> var bridge" : "load brain first")}</div>
+                      <div>Character has: ${escapeHtml(readiness.runtimeBridge ? "bridge already in CMD" : "no bridge detected")}</div>
+                    </div>
+                  </div>
+                  <div class="readiness-item">
+                    <strong>Parry mapping</strong>${tag(parryTone === "ok" ? "ready" : "review", parryTone)}<br><span>S ${escapeHtml(parry.stand || "-")} / C ${escapeHtml(parry.crouch || "-")} / A ${escapeHtml(parry.air || "-")}</span>
+                    <div class="readiness-meta">
+                      <div>Brain expects: S ${escapeHtml(stateCellValue("stand_parry"))} / C ${escapeHtml(stateCellValue("crouch_parry"))} / A ${escapeHtml(stateCellValue("air_parry"))}</div>
+                      <div>Character has: scanner candidates 6080/1300/760, 6081/1310/761, 6082/1320/762</div>
+                    </div>
+                  </div>
+                  <div class="readiness-item">
+                    <strong>Meter routes</strong>${tag(`${readiness.superCandidateCount || 0} super`, superTone)}<br><span>${escapeHtml(readiness.exCandidateCount || 0)} EX candidate(s)</span>
+                    <div class="readiness-meta">
+                      <div>Brain expects: close ${escapeHtml(stateCellValue("close_super"))}, projectile ${escapeHtml(stateCellValue("projectile_super_start"))}, hyper ${escapeHtml(stateCellValue("rush_hyper"))}</div>
+                      <div>Character has: ${escapeHtml(readiness.superCandidateCount || 0)} state(s) at 1000+ power, ${escapeHtml(readiness.exCandidateCount || 0)} at 500 power</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="readiness-section">
+                <div class="readiness-heading"><strong>Patch preview</strong><span>Changes only after Resolve and Preview Diff build the actual insert order.</span></div>
+                <div class="readiness-strip patch-preview">
+                  <div class="readiness-item">
+                    <strong>Patch order</strong>${tag(orderLabel, orderTone)}<br><span>Runtime bridge should appear before meter/combo blocks.</span>
+                    <div class="readiness-meta">
+                      <div>Brain expects: ${escapeHtml(brainExpectationSummary())}</div>
+                      <div>Preview has: ${escapeHtml(orderOps.length)} routed operation(s)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table-wrap compact-table">
+                <table>
+                  <thead><tr><th>#</th><th>Module</th><th>File</th><th>Status</th><th>Anchor</th></tr></thead>
+                  <tbody>${orderRows || `<tr><td colspan="5">Run Preview Diff to inspect module order before Apply.</td></tr>`}</tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderResolvedCombatMappingPanel() {
+        const rows = resolverStateRows()
+          .filter((item) => /parry|super|hyper|special|anti_air|projectile|rush|launcher|low|guard|roll|charge|zero/i.test(item.id || ""))
+          .map((item) => {
+            const actual = item.actual ?? "";
+            const exists = stateExists(actual);
+            const power = powerInfo(actual);
+            const scan = scanComboState(actual);
+            const tone = exists ? (item.strategy === "scan_inferred_compatible" ? "info" : "ok") : "danger";
+            const role = item.scannedRole || scan?.role || item.roleFamily || "-";
+            const tags = (item.roleTags || item.roleHints || scan?.roleTags || []).slice(0, 5).join(", ");
+            const score = item.score !== null && item.score !== undefined ? item.score : "-";
+            const reason = item.reason || scan?.roleReasons?.slice(0, 2).join("; ") || "-";
+            return `
+              <tr>
+                <td><strong>${escapeHtml(item.id)}</strong></td>
+                <td>${escapeHtml(item.preferred ?? "-")}</td>
+                <td>${escapeHtml(actual || "not resolved")}</td>
+                <td>${tag(exists ? "yes" : "no", exists ? "ok" : "danger")}</td>
+                <td>${escapeHtml(role)}</td>
+                <td>${escapeHtml(tags || "-")}</td>
+                <td>${escapeHtml(power?.bucket || "-")}</td>
+                <td>${tag(item.strategy || item.status || "-", tone)}</td>
+                <td>${escapeHtml(score)}</td>
+                <td><div class="value-list">${escapeHtml(reason)}</div></td>
+              </tr>
+            `;
+          }).join("");
+        return `
+          <details class="scan-details">
+            <summary>Resolved Combat Mapping (${escapeHtml(resolverStateRows().length || 0)})</summary>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Alias</th><th>Preferred</th><th>Actual</th><th>Exists</th><th>Role</th><th>Tags</th><th>Power</th><th>Strategy</th><th>Score</th><th>Reason</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="10">Load and resolve a brain to see final combat mapping.</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderResolverRoleReportPanel() {
+        const report = resolverReport();
+        if (!report) {
+          return `
+            <details class="scan-details">
+              <summary>Resolver Role Report</summary>
+              <div class="empty">Resolve a brain to see scanner role and resolver scoring reasons.</div>
+            </details>
+          `;
+        }
+        const roleEntries = Object.entries(report.roleCounts || {}).sort((a, b) => b[1] - a[1]);
+        const meterEntries = Object.entries(report.meterReliabilityCounts || {}).sort((a, b) => b[1] - a[1]);
+        const adapter = report.styleAdapter || plan?.styleAdapter || null;
+        const roleCells = roleEntries.slice(0, 8).map(([role, count]) => `
+          <div class="readiness-item"><strong>${escapeHtml(role)}</strong>${tag(count, "info")}<br><span>Scanned role family.</span></div>
+        `).join("");
+        const meterCells = meterEntries.slice(0, 6).map(([kind, count]) => {
+          const tone = kind === "close_confirm" || kind === "projectile" ? "ok" : kind === "unsafe_raw" ? "danger" : "warn";
+          return `<div class="readiness-item"><strong>${escapeHtml(kind)}</strong>${tag(count, tone)}<br><span>Meter reliability class.</span></div>`;
+        }).join("");
+        const adapterRows = (adapter?.mappings || []).map((item) => `
+          <tr>
+            <td><strong>${escapeHtml(item.alias || "-")}</strong></td>
+            <td>${escapeHtml(item.state ?? "-")}</td>
+            <td>${escapeHtml(item.moveName || item.commandName || "-")}<br><span class="field-note">${escapeHtml(item.input || "")}</span></td>
+            <td>${tag(item.confidence || "-", item.confidence === "high" ? "ok" : item.confidence === "medium" ? "warn" : "info")}</td>
+            <td>${escapeHtml(item.reuseLimit ?? "-")}</td>
+            <td><div class="value-list">${escapeHtml(item.reason || "-")}</div></td>
+          </tr>
+        `).join("");
+        const safe = report.safeStateMappings || 0;
+        const review = report.reviewStateMappings || 0;
+        const rows = (report.stateMappings || [])
+          .filter((item) => item.strategy === "scan_inferred_compatible" || item.status === "needs_review" || (item.score !== null && item.score !== undefined))
+          .slice(0, 36)
+          .map((item) => {
+            const statusTone = item.status === "needs_review" ? "warn" : item.status === "resolved" ? "ok" : "info";
+            return `
+              <tr>
+                <td><strong>${escapeHtml(item.id)}</strong><br><span class="field-note">preferred ${escapeHtml(item.preferred ?? "-")}</span></td>
+                <td>${escapeHtml(item.actual ?? "not resolved")}</td>
+                <td>${tag(item.status || "-", statusTone)}<br><span class="field-note">${escapeHtml(item.strategy || "-")}</span></td>
+                <td>${escapeHtml(item.score ?? "-")}</td>
+                <td><div class="value-list">${escapeHtml((item.roleHints || []).join(", ") || "-")}</div></td>
+                <td><div class="value-list">${escapeHtml((item.roleTags || []).slice(0, 8).join(", ") || item.roleFamily || "-")}</div></td>
+                <td><div class="value-list">${escapeHtml(item.reason || "-")}</div></td>
+              </tr>
+            `;
+          }).join("");
+        const recRows = (report.recommendations || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+        return `
+          <details class="scan-details">
+            <summary>Resolver Role Report ${tag(`${safe} safe`, safe ? "ok" : "warn")} ${tag(`${review} review`, review ? "warn" : "ok")}</summary>
+            <div class="detail-body">
+              <div class="health-grid">
+                <div class="readiness-item"><strong>Route edges</strong>${tag(report.routeCandidates || 0, report.routeCandidates ? "ok" : "warn")}<br><span>Cancel/contact edges from scanner.</span></div>
+                <div class="readiness-item"><strong>Scan inferred</strong>${tag(report.scanInferredCount || 0, report.scanInferredCount ? "info" : "ok")}<br><span>Aliases mapped by resolver scoring.</span></div>
+                <div class="readiness-item"><strong>Safe Lite</strong>${tag(report.safeLite?.decision || "-", report.safeLite?.decision === "blocked" ? "danger" : report.safeLite?.decision === "lite-fit" ? "warn" : "ok")}<br><span>${escapeHtml(report.safeLite?.summary || "")}</span></div>
+                <div class="readiness-item"><strong>Style adapter</strong>${tag(adapter ? `${Math.round((adapter.coverage || 0) * 100)}%` : "off", adapter?.mode === "active" ? "ok" : adapter ? "warn" : "info")}<br><span>${escapeHtml(adapter ? `${adapter.id || "adapter"} ${adapter.mode || ""}` : "No brain style adapter active.")}</span></div>
+                ${meterCells}
+                ${roleCells}
+              </div>
+              ${recRows ? `<ul class="field-note">${recRows}</ul>` : ""}
+            </div>
+            ${adapter ? `
+              <div class="table-wrap compact-table">
+                <table>
+                  <thead><tr><th>Alias</th><th>State</th><th>Move</th><th>Confidence</th><th>Reuse</th><th>Reason</th></tr></thead>
+                  <tbody>${adapterRows || `<tr><td colspan="6">No style mappings generated.</td></tr>`}</tbody>
+                </table>
+              </div>
+            ` : ""}
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Alias</th><th>Actual</th><th>Status</th><th>Score</th><th>Role hints</th><th>Scanned tags</th><th>Reason</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="7">No inferred or review mappings. Preferred combat states were kept.</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderMeterRoutePanel() {
+        const candidates = profile?.patchReadiness?.meterCandidates || [];
+        const reliabilityTone = (kind) => {
+          if (kind === "close_confirm" || kind === "projectile") return "ok";
+          if (kind === "grab" || kind === "self_buff" || kind === "install") return "warn";
+          return "danger";
+        };
+        const rows = candidates.map((item) => {
+          const reliability = item.meterReliability || {};
+          const timing = item.timing || reliability.timing || {};
+          const warnings = (reliability.warnings || []).join("; ");
+          return `
+            <tr>
+              <td><strong>${escapeHtml(item.state)}</strong></td>
+              <td>${tag(item.bucket || item.cost || "-", item.cost >= 1000 ? "danger" : "warn")}</td>
+              <td>${escapeHtml(item.role || "-")}<br><span class="field-note">${escapeHtml(item.delivery || "-")}</span></td>
+              <td>${tag(reliability.classification || "unscored", reliabilityTone(reliability.classification))}<br><span class="field-note">${escapeHtml(reliability.recommendedUse || "-")}</span></td>
+              <td>${escapeHtml(reliability.confidence ?? "-")}</td>
+              <td>${escapeHtml([
+                timing.startup ? `startup ${timing.startup}` : "",
+                timing.activeEnd ? `active ${timing.activeEnd}` : "",
+                timing.recovery !== null && timing.recovery !== undefined ? `recovery ${timing.recovery}` : "",
+              ].filter(Boolean).join(", ") || "-")}</td>
+              <td>${tag(item.hasHitDef ? "yes" : "review", item.hasHitDef ? "ok" : "warn")}</td>
+              <td><div class="value-list">${escapeHtml(renderReachList(item.reach || []))}</div></td>
+              <td><div class="value-list">${escapeHtml(warnings || (reliability.reasons || []).join("; ") || "-")}</div></td>
+            </tr>
+          `;
+        }).join("");
+        return `
+          <details class="scan-details">
+            <summary>Meter Route Candidates (${escapeHtml(candidates.length)})</summary>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>State</th><th>Power</th><th>Role</th><th>Reliability</th><th>Conf.</th><th>Timing</th><th>HitDef</th><th>Reach</th><th>Reason / warning</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="9">No meter route candidates found.</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function fallbackComboHealth() {
+        const states = profile?.comboScan?.states || [];
+        const routeCandidates = profile?.comboScan?.routeCandidates || [];
+        const powerCosts = profile?.states?.powerCosts || {};
+        const hasRole = (pattern) => states.some((item) => pattern.test(item.role || ""));
+        const countRole = (pattern) => states.filter((item) => pattern.test(item.role || "")).length;
+        const hasMeter = (minCost) => Object.values(powerCosts).some((item) => item.cost >= minCost);
+        const meterCount = (minCost) => Object.values(powerCosts).filter((item) => item.cost >= minCost).length;
+        const normalEdges = routeCandidates.filter((edge) => /normal|low starter/i.test(edge.fromRole || "") && /normal|low starter|launcher/i.test(edge.toRole || ""));
+        const specialEdge = routeCandidates.some((edge) => /normal|low starter|launcher/i.test(edge.fromRole || "") && /special/i.test(edge.toRole || ""));
+        const superEdge = routeCandidates.some((edge) => /special|normal|launcher/i.test(edge.fromRole || "") && /super/i.test(edge.toRole || ""));
+        const item = (id, ok, weak, detail) => ({ id, status: ok ? "ok" : weak ? "weak" : "missing", detail });
+        const starterCount = countRole(/low starter|normal/);
+        const specialCount = countRole(/special/);
+        const airCount = countRole(/air normal/);
+        const launcherCount = countRole(/launcher/);
+        return [
+          item("Starter", starterCount > 0, false, starterCount ? `${starterCount} normal/low starter candidate(s)` : "no normal or low starter HitDef scanned"),
+          item("Normal chain", normalEdges.length > 0, hasRole(/normal|low starter/), normalEdges.length ? `${normalEdges.length} confirmed normal-chain edge(s)` : `${routeCandidates.length} total edge(s); no normal-chain edge confirmed`),
+          item("Special bridge", specialEdge, specialCount > 0, specialEdge ? "confirmed edge to special" : specialCount ? `${specialCount} special candidate(s), but no confirmed starter -> special edge` : "no special candidate with HitDef scanned"),
+          item("Super cashout", superEdge, hasMeter(1000), superEdge ? "confirmed edge to super" : hasMeter(1000) ? `${meterCount(1000)} meter state(s), but no confirmed route into super` : "no 1000+ power state scanned"),
+          item("Air follow-up", airCount > 0 && launcherCount > 0, airCount > 0 || launcherCount > 0, airCount && launcherCount ? `${airCount} air normal(s) and ${launcherCount} launcher(s) scanned` : airCount ? `${airCount} air normal(s), but no launcher route evidence` : launcherCount ? `${launcherCount} launcher(s), but no air normal follow-up evidence` : "no air route evidence"),
+        ];
+      }
+
+      function renderComboHealthPanel() {
+        const health = profile?.patchReadiness?.comboHealth?.length ? profile.patchReadiness.comboHealth : fallbackComboHealth();
+        const cells = health.map((item) => {
+          const tone = item.status === "ok" ? "ok" : item.status === "weak" ? "warn" : "danger";
+          return `<div class="readiness-item"><strong>${escapeHtml(item.id)}</strong>${tag(item.status, tone)}<br><span>${escapeHtml(item.detail || "")}</span></div>`;
+        }).join("");
+        return `
+          <details class="scan-details">
+            <summary>Combo Route Health</summary>
+            <div class="detail-body">
+              <div class="health-grid">${cells}</div>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderLiteFitPanel() {
+        const lite = plan?.liteFit;
+        if (!lite) {
+          return `
+            <details class="scan-details">
+              <summary>Lite Fit Plan</summary>
+              <div class="empty">Load Brain and Resolve to see Lite Fit decisions.</div>
+            </details>
+          `;
+        }
+        const summary = lite.summary || {};
+        const decisionTone = lite.decision === "blocked" ? "danger" : lite.decision === "lite-fit" ? "warn" : "ok";
+        const rows = (lite.modules || []).map((item) => {
+          const tone = item.mode === "blocked" ? "danger" : item.mode === "fallback" || item.mode === "lite" || item.mode === "skip" ? "warn" : "ok";
+          return `
+            <tr>
+              <td><strong>${escapeHtml(item.moduleId)}</strong><br><span class="field-note">${escapeHtml(item.tier || "-")}</span></td>
+              <td>${tag(item.mode || "-", tone)}</td>
+              <td><div class="value-list">${escapeHtml((item.missingRequired || []).join(", ") || "-")}</div></td>
+              <td><div class="value-list">${escapeHtml((item.missingOptional || []).join(", ") || "-")}</div></td>
+              <td>${escapeHtml(item.fallbackMode || "-")}<br><span class="field-note">${escapeHtml(item.fallbackTrigger || "")}</span></td>
+              <td>${escapeHtml(item.reason || "")}</td>
+            </tr>
+          `;
+        }).join("");
+        return `
+          <details class="scan-details">
+            <summary>Lite Fit Plan ${tag(lite.decision || "-", decisionTone)}</summary>
+            <div class="detail-body">
+              <div class="health-grid">
+                <div class="readiness-item"><strong>Full</strong>${tag(summary.full || 0, "ok")}<br><span>Modules that can apply normally.</span></div>
+                <div class="readiness-item"><strong>Lite/Fallback</strong>${tag((summary.lite || 0) + (summary.fallback || 0), (summary.lite || summary.fallback) ? "warn" : "ok")}<br><span>${escapeHtml(summary.skip || 0)} skipped optional module(s)</span></div>
+                <div class="readiness-item"><strong>Blocked</strong>${tag(summary.blocked || 0, summary.blocked ? "danger" : "ok")}<br><span>Core modules still missing requirements.</span></div>
+                <div class="readiness-item"><strong>Boss profiles</strong>${tag(Object.keys(lite.bossProfiles || {}).length, "info")}<br><span>${escapeHtml(Object.keys(lite.bossProfiles || {}).join(", ") || "-")}</span></div>
+              </div>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Module</th><th>Decision</th><th>Missing required</th><th>Missing optional</th><th>Fallback</th><th>Reason</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="6">No Lite Fit metadata found in this brain.</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function compactRouteChain(chain) {
+        const values = (chain || []).filter((value) => value !== null && value !== undefined && value !== "not resolved");
+        if (!values.length) return { start: "-", end: "-", short: "-", full: "-", steps: 0 };
+        const labels = values.map((value) => String(value));
+        if (labels.length <= 6) {
+          return { start: labels[0], end: labels[labels.length - 1], short: labels.join(" -> "), full: labels.join(" -> "), steps: labels.length };
+        }
+        return {
+          start: labels[0],
+          end: labels[labels.length - 1],
+          short: `${labels.slice(0, 3).join(" -> ")} -> ... -> ${labels[labels.length - 1]}`,
+          full: labels.join(" -> "),
+          steps: labels.length,
+        };
+      }
+
+      function statePowerCost(state) {
+        const numeric = Number(state);
+        if (!Number.isFinite(numeric)) return null;
+        const costs = profile?.states?.powerCosts || {};
+        return costs[numeric]?.cost ?? costs[String(numeric)]?.cost ?? null;
+      }
+
+      function maxPowerValue() {
+        const values = [
+          profile?.constants?.data?.power,
+          profile?.constants?.power,
+          profile?.data?.power,
+          3000,
+        ].map(Number).filter(Number.isFinite);
+        return values[0] || 3000;
+      }
+
+      function meterOptionSummary(chain) {
+        const values = (chain || []).filter((value) => value !== null && value !== undefined && value !== "not resolved");
+        if (!values.length) return { start: "-", end: "-", short: "-", full: "-", steps: 0, totalCost: 0, impossible: false, choiceMode: true };
+        const labels = values.map((value) => {
+          const cost = statePowerCost(value);
+          return cost ? `${value} (${cost})` : String(value);
+        });
+        const numericCosts = values.map((value) => statePowerCost(value) || 0);
+        const totalCost = numericCosts.reduce((sum, cost) => sum + cost, 0);
+        const cap = maxPowerValue();
+        const impossible = numericCosts.filter(Boolean).length > 1 && totalCost > cap;
+        const short = labels.length <= 4 ? labels.join(" / ") : `${labels.slice(0, 3).join(" / ")} / ...`;
+        return {
+          start: "option",
+          end: "cost-gated",
+          short,
+          full: labels.join(" / "),
+          steps: labels.length,
+          totalCost,
+          maxPower: cap,
+          impossible,
+          choiceMode: true,
+        };
+      }
+
+      function comboStateInfo(state) {
+        const numeric = Number(state);
+        if (!Number.isFinite(numeric)) return null;
+        return (profile?.comboScan?.states || []).find((item) => item.state === numeric) || null;
+      }
+
+      function reachForStateInfo(info) {
+        return info?.effectiveReach?.length ? info.effectiveReach : info?.reach || [];
+      }
+
+      function stateEvidenceLine(state) {
+        const info = comboStateInfo(state);
+        if (!info) return `${state}: not scanned`;
+        const reach = reachForStateInfo(info);
+        const reachText = renderReachList(reach);
+        const helper = info.helperStates?.length ? ` helper ${info.helperStates.join("/")}` : "";
+        const hit = info.hitSummary || info.effectiveHitSummary || (info.hasEffectiveHit ? "helper HitDef" : "no HitDef");
+        return `${state}: ${info.role || "unknown"}; ${hit}${reachText ? `; ${reachText}` : ""}${helper}`;
+      }
+
+      function edgeEvidenceForChain(chain) {
+        const numericChain = (chain || []).map((value) => Number(value)).filter((value) => Number.isFinite(value));
+        const edges = profile?.comboScan?.routeCandidates || [];
+        const exact = [];
+        const missing = [];
+        for (let index = 0; index < numericChain.length - 1; index += 1) {
+          const from = numericChain[index];
+          const to = numericChain[index + 1];
+          const found = edges.find((edge) => Number(edge.from) === from && Number(edge.to) === to);
+          if (found) exact.push(`${from}->${to} ${found.kind || ""}`.trim());
+          else missing.push(`${from}->${to}`);
+        }
+        return { exact, missing, totalPairs: Math.max(0, numericChain.length - 1) };
+      }
+
+      function routeEvidenceSummary(chain) {
+        const values = (chain || []).filter((value) => value !== null && value !== undefined && value !== "not resolved");
+        if (!values.length) return "No route targets resolved.";
+        const edges = edgeEvidenceForChain(values);
+        const states = values.slice(0, 6).map(stateEvidenceLine);
+        const more = values.length > 6 ? `; ${values.length - 6} more state(s)` : "";
+        const edgeText = edges.totalPairs
+          ? `CMD edges ${edges.exact.length}/${edges.totalPairs}${edges.exact.length ? ` (${edges.exact.slice(0, 4).join(", ")})` : ""}`
+          : "Single-state route";
+        const missingText = edges.missing.length ? `; missing edge ${edges.missing.slice(0, 4).join(", ")}` : "";
+        return `${edgeText}${missingText}. ${states.join(" | ")}${more}`;
+      }
+
+      function meterOptionEvidenceSummary(chain) {
+        const values = (chain || []).filter((value) => value !== null && value !== undefined && value !== "not resolved");
+        if (!values.length) return "No meter options resolved.";
+        const states = values.slice(0, 8).map((value) => {
+          const cost = statePowerCost(value);
+          return `${stateEvidenceLine(value)}${cost ? `; cost ${cost}` : ""}`;
+        });
+        const more = values.length > 8 ? `; ${values.length - 8} more option(s)` : "";
+        return `Exclusive options, each must pass its own Power gate. ${states.join(" | ")}${more}`;
+      }
+
+      function patchedStateRowsFromContent(content) {
+        const rows = [];
+        const text = String(content || "");
+        const blocks = text.split(/(?=^\s*\[State\b)/gim);
+        for (const block of blocks) {
+          if (!/^\s*type\s*=\s*ChangeState\b/im.test(block)) continue;
+          const valueLine = block.match(/^\s*value\s*=\s*(.+?)\s*(?:;.*)?$/im);
+          if (!valueLine) continue;
+          const targets = routeTargetsFromExpression(valueLine[1]).filter(Boolean);
+          const gates = [...block.matchAll(/^\s*trigger(?:all|\d+)?\s*=\s*.*?\bPower\s*>=\s*(\d+)/gim)]
+            .map((match) => Number(match[1]))
+            .filter(Number.isFinite);
+          const gate = gates.length ? Math.max(...gates) : null;
+          const title = block.match(/^\s*\[State\s+-?\d+\s*,\s*([^\]]+)\]/im)?.[1]?.trim() || "ChangeState";
+          for (const target of targets) {
+            const cost = statePowerCost(target);
+            rows.push({ state: target, gate, cost, title });
+          }
+        }
+        const seen = new Set();
+        return rows.filter((row) => {
+          const key = `${row.state}:${row.gate ?? ""}:${row.title}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+      }
+
+      function stateSourcesFromBlock(block) {
+        const sources = [];
+        for (const match of block.matchAll(/\bStateNo\s*=\s*\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]/gim)) {
+          sources.push(`[${match[1]},${match[2]}]`);
+        }
+        for (const match of block.matchAll(/\bStateNo\s*=\s*(-?\d+)\b/gim)) {
+          sources.push(match[1]);
+        }
+        return [...new Set(sources)];
+      }
+
+      function patchedTransitionRowsFromContent(content) {
+        const rows = [];
+        const text = String(content || "");
+        const blocks = text.split(/(?=^\s*\[State\b)/gim);
+        for (const block of blocks) {
+          if (!/^\s*type\s*=\s*ChangeState\b/im.test(block)) continue;
+          const valueLine = block.match(/^\s*value\s*=\s*(.+?)\s*(?:;.*)?$/im);
+          if (!valueLine) continue;
+          const targets = routeTargetsFromExpression(valueLine[1]).filter(Boolean);
+          if (!targets.length) continue;
+          const sources = stateSourcesFromBlock(block);
+          const gates = [...block.matchAll(/^\s*trigger(?:all|\d+)?\s*=\s*.*?\bPower\s*>=\s*(\d+)/gim)]
+            .map((match) => Number(match[1]))
+            .filter(Number.isFinite);
+          const gate = gates.length ? Math.max(...gates) : null;
+          const title = block.match(/^\s*\[State\s+-?\d+\s*,\s*([^\]]+)\]/im)?.[1]?.trim() || "ChangeState";
+          for (const target of targets) {
+            const cost = statePowerCost(target);
+            rows.push({
+              from: sources.length ? sources.join(", ") : "control/contact",
+              to: target,
+              gate,
+              cost,
+              title,
+            });
+          }
+        }
+        const seen = new Set();
+        return rows.filter((row) => {
+          const key = `${row.from}:${row.to}:${row.gate ?? ""}:${row.title}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+      }
+
+      function renderPatchedStates(row) {
+        const states = row.patchedStates || [];
+        if (!states.length) return `<span class="field-note">No direct ChangeState target in rendered patch.</span>`;
+        const maxVisible = row.isMeterChoice ? 8 : 6;
+        const visible = states.slice(0, maxVisible);
+        const body = visible.map((item) => {
+          const gateText = item.gate !== null && item.gate !== undefined
+            ? `Power >= ${item.gate}`
+            : item.cost
+              ? `needs gate ${item.cost}`
+              : "no meter gate";
+          return `
+            <div class="patched-state-line" title="${escapeHtml(item.title || "")}">
+              <span class="state-pill">${escapeHtml(item.state)}</span>
+              <span class="gate-pill">${escapeHtml(gateText)}</span>
+            </div>
+          `;
+        }).join("");
+        const more = states.length > visible.length ? `<div class="field-note">${states.length - visible.length} more patched state(s)</div>` : "";
+        return `<div class="patched-state-list">${body}${more}</div>`;
+      }
+
+      function renderPatchedTransitions(row) {
+        const generatedRoutes = row.generatedResolverPool?.comboRoutes || [];
+        if (row.isGeneratedPool && generatedRoutes.length) {
+          const body = generatedRoutes.map((route) => `
+            <div class="patched-state-line" title="${escapeHtml((route.tags || []).join(", "))}">
+              <span class="state-pill">${escapeHtml(route.label || route.id || "generated route")}</span>
+              <span class="transition-arrow">:</span>
+              <span class="state-pill route-chain-pill">${escapeHtml(route.edge || "-")}</span>
+            </div>
+          `).join("");
+          return `<div class="patched-state-list generated-route-list">${body}</div>`;
+        }
+        const transitions = row.patchedTransitions || [];
+        if (!transitions.length) return renderPatchedStates(row);
+        const maxVisible = row.isMeterChoice ? 8 : 10;
+        const visible = transitions.slice(0, maxVisible);
+        const body = visible.map((item) => {
+          const gateText = item.gate !== null && item.gate !== undefined
+            ? `Power >= ${item.gate}`
+            : item.cost
+              ? `needs gate ${item.cost}`
+              : "no meter gate";
+          return `
+            <div class="patched-state-line" title="${escapeHtml(item.title || "")}">
+              <span class="state-pill">${escapeHtml(item.from)}</span>
+              <span class="transition-arrow">-></span>
+              <span class="state-pill">${escapeHtml(item.to)}</span>
+              <span class="gate-pill">${escapeHtml(gateText)}</span>
+            </div>
+          `;
+        }).join("");
+        const more = transitions.length > visible.length ? `<div class="field-note">${transitions.length - visible.length} more patched transition(s)</div>` : "";
+        return `<div class="patched-state-list">${body}${more}</div>`;
+      }
+
+      function renderBrainResolvedIntent(row) {
+        if (row.isGeneratedPool && row.generatedResolverPool?.comboRoutes?.length) {
+          const free = row.generatedResolverPool.freeSpecialStates?.length ? `Free specials: ${row.generatedResolverPool.freeSpecialStates.join(", ")}` : "";
+          const meter = row.generatedResolverPool.meterStates?.length ? `Meter states: ${row.generatedResolverPool.meterStates.join(", ")}` : "";
+          return `
+            <details class="brain-intent">
+              <summary>Resolver-generated pool</summary>
+              <div class="value-list">${escapeHtml([free, meter].filter(Boolean).join(" | ") || "Generated from current scan report.")}</div>
+              <div class="field-note">Route list above is the actual generated combo plan. Each transition is still gated by source state, hit confirm, range, and power.</div>
+            </details>
+          `;
+        }
+        if (!row.metadataTargets?.length) return `<span class="field-note">No brain route metadata; targets came from rendered patch code.</span>`;
+        const summary = row.isMeterChoice ? meterOptionSummary(row.metadataTargets) : compactRouteChain(row.metadataTargets);
+        const archetypes = (row.routePreview || []).flatMap((entry) => Array.isArray(entry.archetypes) ? entry.archetypes : []);
+        const costly = row.metadataTargets.map((value) => statePowerCost(value) || 0).filter(Boolean);
+        const totalCost = costly.reduce((sum, value) => sum + value, 0);
+        const intentLooksLikeChoices = row.isMeterChoice || (costly.length > 1 && totalCost > maxPowerValue());
+        const label = row.isGeneratedPool
+          ? "Resolver-generated pool"
+          : intentLooksLikeChoices ? "Brain-resolved intent/options" : "Brain-resolved chain";
+        const note = intentLooksLikeChoices
+          ? `<div class="field-note">Intent metadata only. Use patched transitions above for the actual code path.</div>`
+          : row.isGeneratedPool
+            ? `<div class="field-note">Generated from scan report limits: max 4 meter states, max 4 free specials, max 5 combo archetype routes.</div>`
+          : "";
+        return `
+          <details class="brain-intent">
+            <summary>${escapeHtml(label)}</summary>
+            <div class="value-list">${escapeHtml(summary.full)}</div>
+            ${archetypes.length ? `<div class="value-list">${escapeHtml(archetypes.join(" | "))}</div>` : ""}
+            ${note}
+          </details>
+        `;
+      }
+
+      function resolvedStateValue(id) {
+        const value = resolvedState(id)?.actual;
+        return value !== null && value !== undefined ? value : null;
+      }
+
+      function cleanRouteToken(value) {
+        const text = String(value || "").trim();
+        if (!text) return null;
+        const numeric = text.match(/-?\d+/);
+        if (numeric && /^-?\d+$/.test(text)) return numeric[0];
+        return text
+          .replace(/\s+/g, " ")
+          .replace(/\bIfElse\b/ig, "if")
+          .replace(/\bPower\b/ig, "Power")
+          .slice(0, 70);
+      }
+
+      function extractRouteTargetsFromContent(content) {
+        const targets = [];
+        const text = String(content || "");
+        const trimExtraClosers = (value) => {
+          let output = String(value || "").trim();
+          const count = (pattern) => (output.match(pattern) || []).length;
+          while (output.endsWith(")") && count(/\)/g) > count(/\(/g)) {
+            output = output.slice(0, -1).trim();
+          }
+          return output;
+        };
+        for (const match of text.matchAll(/^\s*value\s*=\s*(.+)$/gim)) {
+          const raw = trimExtraClosers(match[1].split(";")[0]);
+          if (!raw) continue;
+          targets.push(...routeTargetsFromExpression(raw));
+        }
+        for (const line of text.split(/\r?\n/)) {
+          const assignIndex = line.indexOf(":=");
+          if (assignIndex < 0) continue;
+          const raw = trimExtraClosers(line.slice(assignIndex + 2).split(";")[0]);
+          if (!raw) continue;
+          targets.push(...routeTargetsFromExpression(raw));
+        }
+        return [...new Set(targets.filter(Boolean))];
+      }
+
+      function splitTopLevelArgs(text) {
+        const args = [];
+        let depth = 0;
+        let start = 0;
+        const source = String(text || "");
+        for (let index = 0; index < source.length; index += 1) {
+          const char = source[index];
+          if (char === "(") depth += 1;
+          if (char === ")") depth = Math.max(0, depth - 1);
+          if (char === "," && depth === 0) {
+            args.push(source.slice(start, index).trim());
+            start = index + 1;
+          }
+        }
+        args.push(source.slice(start).trim());
+        return args.filter(Boolean);
+      }
+
+      function routeTargetsFromExpression(expression) {
+        const raw = String(expression || "").trim();
+        if (!raw) return [];
+        const ifElse = raw.match(/^IfElse\s*\(([\s\S]*)\)$/i);
+        if (ifElse) {
+          const args = splitTopLevelArgs(ifElse[1]);
+          if (args.length >= 3) {
+            return [
+              ...routeTargetsFromExpression(args[1]),
+              ...routeTargetsFromExpression(args[2]),
+            ];
+          }
+        }
+        if (/\bvar\s*\(/i.test(raw)) return [cleanRouteToken(raw)];
+        const exactNumber = raw.match(/^-?\d+$/);
+        if (exactNumber) return Math.abs(Number(exactNumber[0])) >= 100 ? [exactNumber[0]] : [];
+        const likelyStates = [...raw.matchAll(/\b-?\d+\b/g)]
+          .map((item) => item[0])
+          .filter((value) => Math.abs(Number(value)) >= 100);
+        return likelyStates.length ? likelyStates : [cleanRouteToken(raw)];
+      }
+
+      function normalizeRouteTargets(rawTargets) {
+        const targets = [];
+        for (const rawValue of rawTargets || []) {
+          const raw = String(rawValue || "").split(";")[0].trim();
+          if (!raw) continue;
+          targets.push(...routeTargetsFromExpression(raw));
+        }
+        return [...new Set(targets.filter(Boolean))];
+      }
+
+      function resolveRoutePreviewToken(token) {
+        const text = String(token || "").trim();
+        if (!text) return null;
+        const resolved = resolvedStateValue(text);
+        if (resolved !== null && resolved !== undefined) return String(resolved);
+        const variable = (plan?.resolved?.variables || []).find((item) => item.id === text);
+        if (variable?.actual) return variable.actual;
+        const fvariable = (plan?.resolved?.fvariables || []).find((item) => item.id === text);
+        if (fvariable?.actual) return fvariable.actual;
+        return text.replace(/^state\./, "").replace(/^var\./, "");
+      }
+
+      function routePreviewTargets(routePreview) {
+        const entries = Array.isArray(routePreview) ? routePreview : [];
+        const targets = [];
+        for (const entry of entries) {
+          const chain = Array.isArray(entry.chain) ? entry.chain : [];
+          for (const token of chain) {
+            const resolved = resolveRoutePreviewToken(token);
+            if (resolved) targets.push(resolved);
+          }
+        }
+        return [...new Set(targets)];
+      }
+
+      function routePreviewType(routePreview, fallbackType) {
+        const type = Array.isArray(routePreview) ? routePreview.find((entry) => entry.type)?.type : null;
+        return type ? String(type).replace(/_/g, " ") : fallbackType;
+      }
+
+      function routePreviewCondition(routePreview, fallbackCondition) {
+        const entries = Array.isArray(routePreview) ? routePreview : [];
+        const conditions = entries.flatMap((entry) => Array.isArray(entry.condition) ? entry.condition : []);
+        return conditions.length ? conditions.map((item) => String(item).replace(/_/g, " ")).join(", ") : fallbackCondition;
+      }
+
+      function routeTypeForModule(moduleId, contentTargets = []) {
+        const id = String(moduleId || "").toLowerCase();
+        if (/resolver_generated_combo_pool/.test(id)) return "generated combo pool";
+        if (/air/.test(id)) return "air follow-up";
+        if (/defensive|guard|parry|roll/.test(id)) return "defensive route";
+        if (/executor/.test(id)) return "dynamic route executor";
+        if (/cashout|meter|super|hyper|level3/.test(id) || contentTargets.some((value) => Number(value) >= 2000)) return "super cashout";
+        if (/combo|ground|route/.test(id)) return "ground route";
+        return "router support";
+      }
+
+      function routeConditionForModule(moduleId, routeType) {
+        const id = String(moduleId || "").toLowerCase();
+        if (/defensive|guard|parry|roll/.test(id)) return "Enemy attack/projectile, guard distance, close-range safety";
+        if (/executor/.test(id)) return "Executes dynamic route variable after selector validates state type and contact";
+        if (/cashout|meter/.test(id)) return "Power gate, hit-confirm/contact, distance and grounded target checks";
+        if (/air/.test(id)) return "Air state, route timer/selector, enemy airborne or anti-air window";
+        if (/combo|ground|route/.test(id)) return "AI enabled, MoveHit/MoveContact, scanner-resolved ranges";
+        return `${routeType} support conditions from rendered module`;
+      }
+
+      function fallbackRouteTargets(moduleId) {
+        const id = String(moduleId || "").toLowerCase();
+        if (/defensive|guard|parry|roll/.test(id)) return [resolvedStateValue("roll_forward"), resolvedStateValue("roll_back")];
+        if (/air/.test(id)) return [resolvedStateValue("air_light"), resolvedStateValue("air_medium"), resolvedStateValue("air_strong")].filter((value) => value !== null);
+        if (/cashout|meter/.test(id)) return [resolvedStateValue("close_super"), resolvedStateValue("close_super_max"), resolvedStateValue("rush_super"), resolvedStateValue("rush_super_max"), resolvedStateValue("level3_super"), resolvedStateValue("rush_hyper")];
+        if (/ground/.test(id)) return [resolvedStateValue("light_low"), resolvedStateValue("medium_low"), resolvedStateValue("launcher_low"), resolvedStateValue("projectile_light"), resolvedStateValue("ex_projectile"), resolvedStateValue("rush_special"), resolvedStateValue("anti_air_special")];
+        if (/executor/.test(id)) return [resolvedStateValue("power_charge"), resolvedStateValue("roll_back")];
+        if (/combo|route/.test(id)) return [resolvedStateValue("light_low"), resolvedStateValue("medium_low"), resolvedStateValue("rush_special"), resolvedStateValue("anti_air_special"), resolvedStateValue("close_super")];
+        return [];
+      }
+
+      function routerPatchRole(opOrRow, routeType = "") {
+        const id = String(opOrRow?.moduleId || "").toLowerCase();
+        const type = String(routeType || opOrRow?.routeType || "").toLowerCase();
+        if (opOrRow?.isGeneratedRouteChild) return "display route";
+        if (/watchdog|guard|old_ai|stuck|range_guard|farm_guard/.test(id)) return "safety guard";
+        if (/resolver_generated_combo_pool/.test(id)) return "patch operation";
+        if (/runtime|sensor|defense|approach/.test(id)) return "core module";
+        if (/cashout|meter|super|hyper/.test(id) || /meter|super|hyper/.test(type)) return "meter module";
+        if (/air/.test(id) || /air/.test(type)) return "air module";
+        return "patch operation";
+      }
+
+      function routerPatchRoleTone(role) {
+        if (role === "display route") return "info";
+        if (role === "safety guard") return "ok";
+        if (role === "meter module") return "warn";
+        if (role === "core module") return "info";
+        return "warn";
+      }
+
+      function routerRouteTags(row) {
+        const tags = [];
+        const text = `${row.moduleId || ""} ${row.routeType || ""} ${row.condition || ""} ${row.generatedRoute?.source || ""} ${(row.generatedRoute?.tags || []).join(" ")}`.toLowerCase();
+        if (/crouch|low/.test(text)) tags.push("LOW START");
+        if (/style_adapter|style adapter|wolverine style/.test(text)) tags.push("STYLE ADAPTER");
+        if (/meter|cashout|super|hyper|power/.test(text)) tags.push("METER");
+        if (/guard|watchdog|old_ai|anti-loop|anti loop|stuck/.test(text)) tags.push("SAFE GUARDED");
+        if (/air/.test(text)) tags.push("AIR");
+        if (/3000|high cost|level3/.test(text)) tags.push("HIGH COST");
+        return [...new Set(tags)];
+      }
+
+      function routerRowMatchesFilter(row) {
+        const filter = activeRouterFilter || "all";
+        if (filter === "all") return true;
+        const text = `${row.moduleId || ""} ${row.routeType || ""} ${row.patchRole || ""} ${row.condition || ""} ${(row.routeTags || []).join(" ")}`.toLowerCase();
+        if (filter === "combos") return /combo|route|style|low start/.test(text) && !/safety guard/.test(text);
+        if (filter === "meter") return /meter|cashout|super|hyper|power/.test(text);
+        if (filter === "low") return /low|crouch/.test(text);
+        if (filter === "safety") return /safety guard|guard|watchdog|old_ai|stuck/.test(text);
+        if (filter === "blocked") return /blocked|review|danger/.test(`${row.status || ""} ${row.statusTone || ""}`.toLowerCase());
+        return true;
+      }
+
+      function routerGroupLabel(row) {
+        if (row.isGeneratedRouteChild) return "Generated Routes";
+        if (row.patchRole === "safety guard") return "Safety Guards";
+        if (row.patchRole === "core module") return "Core Modules";
+        if (row.patchRole === "meter module") return "Meter Modules";
+        if (row.isGeneratedPool) return "Generated Route Pool";
+        return "Patch Operations";
+      }
+
+      function comboRouterPreviewRows() {
+        const operations = (lastPreview?.files || [])
+          .flatMap((file) => (file.operations || []).map((op) => ({ file: file.relativePath, ...op })))
+          .filter((op) => /combo|route|cashout|meter|executor|air_route/i.test(op.moduleId || ""));
+        const operationRows = operations.map((op) => {
+          const metadataTargets = routePreviewTargets(op.routePreview);
+          const renderedTargets = op.routeTargets?.length
+            ? normalizeRouteTargets(op.routeTargets)
+            : extractRouteTargetsFromContent(op.contentPreview || "");
+          const patchedStates = patchedStateRowsFromContent(op.contentPreview || "");
+          const patchedTransitions = patchedTransitionRowsFromContent(op.contentPreview || "");
+          const generatedResolverPool = op.generatedResolverPool || null;
+          const routeTargets = metadataTargets.length ? metadataTargets : renderedTargets.length ? renderedTargets : fallbackRouteTargets(op.moduleId);
+          const routeType = routePreviewType(op.routePreview, routeTypeForModule(op.moduleId, routeTargets));
+          const isGeneratedPool = /resolver_generated_combo_pool/.test(String(op.moduleId || "").toLowerCase());
+          const isMeterChoice = /meter|cashout|super|hyper/.test(routeType) || /meter|cashout|super|hyper/.test(String(op.moduleId || "").toLowerCase());
+          const chain = isMeterChoice ? meterOptionSummary(routeTargets) : compactRouteChain(routeTargets);
+          const evidence = isMeterChoice ? meterOptionEvidenceSummary(routeTargets) : routeEvidenceSummary(routeTargets);
+          const blocked = op.unresolvedPlaceholders?.length;
+          const appended = /appended/.test(op.status || "");
+          const reason = blocked
+            ? `Missing: ${op.unresolvedPlaceholders.join(", ")}`
+            : metadataTargets.length
+              ? isGeneratedPool
+                ? "Resolver-generated from current scan report; visible before Apply"
+                : "Brain route metadata resolved through current character aliases; check Character evidence for scanner support"
+              : renderedTargets.length
+                ? "Targets read from rendered Preview Diff module"
+                : "Fallback route summary; rendered module has dynamic target or no direct value line in preview";
+          const row = {
+            moduleId: op.moduleId || "-",
+            routeType,
+            start: isGeneratedPool ? "scan" : chain.start,
+            end: isGeneratedPool ? "pool" : chain.end,
+            chain,
+            condition: routePreviewCondition(op.routePreview, routeConditionForModule(op.moduleId, routeType)),
+            status: blocked ? "blocked" : appended ? "will patch, fallback anchor" : "will patch",
+            statusTone: blocked ? "danger" : appended ? "warn" : "ok",
+            evidence,
+            reason: chain.impossible
+              ? `${reason}; shown as exclusive options, not a sequential chain. Sequential total ${chain.totalCost}/${chain.maxPower} would be impossible.`
+              : isMeterChoice
+                ? `${reason}; shown as exclusive meter options, not a sequential chain.`
+                : reason,
+            file: op.file || "-",
+            generatedFallback: !!op.generatedFallback,
+            isMeterChoice,
+            isGeneratedPool,
+            metadataTargets,
+            patchedStates,
+            patchedTransitions,
+            routePreview: op.routePreview || [],
+            generatedResolverPool,
+          };
+          row.patchRole = routerPatchRole(row, routeType);
+          row.routeTags = routerRouteTags(row);
+          return row;
+        });
+        return operationRows.flatMap((row) => {
+          if (!row.isGeneratedPool) return [row];
+          const childRows = generatedComboRouteChildRows(row);
+          return [row, ...childRows];
+        });
+      }
+
+      function shouldShowGeneratedComboRouteChild(route) {
+        const source = String(route?.source || "");
+        const text = `${route?.id || ""} ${route?.label || ""} ${(route?.tags || []).join(" ")}`;
+        return /style_crouch_low_confirm_adapter/i.test(source)
+          || /crouch_low_confirm|Crouch Low Confirm/i.test(text);
+      }
+
+      function generatedComboRouteChildRows(parentRow) {
+        const routes = (parentRow.generatedResolverPool?.comboRoutes || []).filter(shouldShowGeneratedComboRouteChild);
+        return routes.map((route) => {
+          const edge = String(route.edge || "");
+          const parts = edge.split("->").map((item) => item.trim()).filter(Boolean);
+          const start = parts[0] || parentRow.start;
+          const end = parts[parts.length - 1] || parentRow.end;
+          const tags = Array.isArray(route.tags) ? route.tags : [];
+          const aliases = route.styleAdapter?.aliases?.length ? route.styleAdapter.aliases.join(", ") : "";
+          return {
+            ...parentRow,
+            moduleId: route.label || route.id || "Generated combo route",
+            routeType: "generated route",
+            start,
+            end,
+            chain: {
+              start,
+              end,
+              full: edge || "-",
+              totalCost: 0,
+              maxPower: maxPowerValue(),
+              impossible: false,
+            },
+            condition: [
+              "inherits resolver_generated_combo_pool gates",
+              "MoveHit/MoveContact",
+              "scanned x/y window",
+              "anti-loop cooldown",
+              tags.length ? tags.join(", ") : "",
+            ].filter(Boolean).join(", "),
+            status: parentRow.status,
+            statusTone: parentRow.statusTone,
+            evidence: aliases ? `style adapter aliases: ${aliases}` : (route.source || "generated route"),
+            reason: `Display-only child row. Actual ChangeState code is patched inside resolver_generated_combo_pool. source=${route.source || "scan_report"}`,
+            isGeneratedPool: false,
+            isGeneratedRouteChild: true,
+            parentModuleId: parentRow.moduleId,
+            generatedRoute: route,
+            generatedResolverPool: null,
+            metadataTargets: parts,
+            patchedStates: [],
+            patchedTransitions: [],
+            routePreview: [],
+            patchRole: "display route",
+            routeTags: routerRouteTags({
+              moduleId: route.label || route.id || "",
+              routeType: "generated route",
+              condition: tags.join(" "),
+              generatedRoute: route,
+            }),
+          };
+        });
+      }
+
+      function renderComboRouterPatchPreviewPanel() {
+        const allRows = comboRouterPreviewRows();
+        const operationCount = allRows.filter((row) => !row.isGeneratedRouteChild).length;
+        const childCount = allRows.length - operationCount;
+        const rows = allRows.filter(routerRowMatchesFilter);
+        const filterButton = (id, label) => `<button type="button" class="router-filter ${activeRouterFilter === id ? "active" : ""}" data-router-filter="${escapeHtml(id)}">${escapeHtml(label)}</button>`;
+        let currentGroup = "";
+        const body = rows.map((row) => {
+          const group = routerGroupLabel(row);
+          const groupRow = group !== currentGroup
+            ? `<tr class="router-group-row"><td colspan="10">${escapeHtml(group)}</td></tr>`
+            : "";
+          currentGroup = group;
+          return `${groupRow}
+          <tr${row.isGeneratedRouteChild ? ` class="generated-route-child-row"` : ""}>
+            <td>${row.isGeneratedRouteChild ? `<span class="field-note">child route</span><br>` : ""}<strong>${escapeHtml(row.moduleId)}</strong>${row.generatedFallback && !row.isGeneratedRouteChild ? `<br>${tag("generated fallback", "warn")}` : ""}<br><span class="field-note">${escapeHtml(row.isGeneratedRouteChild ? `inside ${row.parentModuleId}` : row.file)}</span></td>
+            <td>${tag(row.patchRole || "patch operation", routerPatchRoleTone(row.patchRole))}<div class="route-role-stack" style="margin-top:6px">${(row.routeTags || []).map((item) => tag(item, item === "METER" || item === "HIGH COST" ? "warn" : item === "SAFE GUARDED" ? "ok" : "info")).join("")}</div></td>
+            <td>${escapeHtml(row.routeType)}</td>
+            <td>${escapeHtml(row.start)}</td>
+            <td>${escapeHtml(row.end)}</td>
+            <td>
+              <div class="route-chain">
+                ${renderPatchedTransitions(row)}
+                ${renderBrainResolvedIntent(row)}
+                ${row.isMeterChoice ? `<div class="field-note">Exclusive choices. The AI selects one ChangeState per trigger; costs are not added together.</div>` : ""}
+              </div>
+            </td>
+            <td><div class="value-list">${escapeHtml(row.condition)}</div></td>
+            <td>${tag(row.status, row.statusTone)}</td>
+            <td><div class="value-list">${escapeHtml(row.evidence)}</div></td>
+            <td><div class="value-list">${escapeHtml(row.reason)}</div>${row.generatedRoute ? `
+              <details class="brain-intent">
+                <summary>Why this route exists</summary>
+                <div class="value-list">${escapeHtml([
+                  `source: ${row.generatedRoute.source || "scan_report"}`,
+                  row.generatedRoute.styleAdapter?.id ? `adapter: ${row.generatedRoute.styleAdapter.id}` : "",
+                  row.generatedRoute.styleAdapter?.aliases?.length ? `aliases: ${row.generatedRoute.styleAdapter.aliases.join(", ")}` : "",
+                  row.generatedRoute.tags?.length ? `tags: ${row.generatedRoute.tags.join(", ")}` : "",
+                ].filter(Boolean).join(" | "))}</div>
+              </details>
+            ` : ""}</td>
+          </tr>
+        `;
+        }).join("");
+        return `
+          <details class="scan-details router-preview">
+            <summary>Combo Router Patch Preview ${lastPreview ? `${tag(`${operationCount} router operation(s)`, operationCount ? "warn" : "info")} ${childCount ? tag(`${childCount} route row(s)`, "info") : ""}` : tag("needs Preview Diff", "warn")}</summary>
+            <div class="router-toolbar">
+              <span class="router-toolbar-label">Filter</span>
+              ${filterButton("all", "All")}
+              ${filterButton("combos", "Combos")}
+              ${filterButton("meter", "Meter")}
+              ${filterButton("low", "Low starter")}
+              ${filterButton("safety", "Safety guards")}
+              ${filterButton("blocked", "Blocked/Review")}
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Router module</th><th>Patch role</th><th>Route type</th><th>Start</th><th>End</th><th>Patched transitions / Brain intent</th><th>Condition</th><th>Apply status</th><th>Character evidence</th><th>Reason</th></tr></thead>
+                <tbody>${body || `<tr><td colspan="10">${lastPreview ? "No combo router module matches this filter." : "Run Preview Diff to see exact combo router modules before Apply."}</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderRiskBlockersPanel() {
+        const mapping = planStateRows();
+        const missingActual = mapping.filter((item) => item.actual !== null && item.actual !== undefined && !stateExists(item.actual));
+        const remappedPreferred = mapping.filter((item) => item.preferred !== null && item.preferred !== undefined && item.actual !== null && item.actual !== undefined && Number(item.preferred) !== Number(item.actual) && !stateExists(item.preferred) && stateExists(item.actual));
+        const reviewItems = (plan?.conflicts || []).filter((item) => item.status === "needs_review" || item.status === "conflict");
+        const runtimeMissing = profile?.patchReadiness && !profile.patchReadiness.runtimeBridge;
+        const rows = [
+          ...missingActual.map((item) => ({ item: item.id, severity: "blocker", detail: `Actual state ${item.actual} does not exist.` })),
+          ...remappedPreferred.map((item) => ({ item: item.id, severity: "review", detail: `Preferred state ${item.preferred} is missing, mapped to scanned state ${item.actual}.` })),
+          ...reviewItems.map((item) => ({ item: item.id, severity: item.status === "conflict" ? "blocker" : "review", detail: item.reason || item.strategy || "Needs review." })),
+          ...(runtimeMissing ? [{ item: "runtime_bridge", severity: "review", detail: "No runtime AILevel bridge detected before patch preview." }] : []),
+        ].map((item) => `
+          <tr>
+            <td><strong>${escapeHtml(item.item)}</strong></td>
+            <td>${tag(item.severity, item.severity === "blocker" ? "danger" : "warn")}</td>
+            <td>${escapeHtml(item.detail)}</td>
+          </tr>
+        `).join("");
+        return `
+          <details class="scan-details">
+            <summary>Risk & Blockers (${escapeHtml(missingActual.length + remappedPreferred.length + reviewItems.length + (runtimeMissing ? 1 : 0))})</summary>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Item</th><th>Severity</th><th>Meaning</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="3">No scan-level blockers detected.</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderPatchOrderPanel() {
+        const rows = (lastPreview?.files || [])
+          .flatMap((file) => (file.operations || []).map((op, index) => ({ file: file.relativePath, index: index + 1, ...op })))
+          .filter((op) => /runtime|meter|combo|cashout|parry|route/i.test(op.moduleId || ""))
+          .map((op) => `
+            <tr>
+              <td>${escapeHtml(op.index)}</td>
+              <td><strong>${escapeHtml(op.moduleId || "-")}</strong></td>
+              <td>${escapeHtml(op.file || "-")}</td>
+              <td>${tag(op.status || "-", /appended/.test(op.status || "") ? "warn" : "ok")}</td>
+              <td>${escapeHtml(op.anchorUsed || "-")}</td>
+            </tr>
+          `).join("");
+        return `
+          <details class="scan-details">
+            <summary>Patch Order Preview</summary>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>#</th><th>Module</th><th>File</th><th>Status</th><th>Anchor</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="5">Run Preview Diff to inspect module order before Apply.</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderComboScanTables() {
+        const combo = profile?.comboScan || {};
+        const usefulStates = (combo.states || [])
+          .filter((item) => item.hitDefs?.length || item.role !== "utility")
+          .slice(0, 36);
+        const routeRows = (combo.routeCandidates || []).slice(0, 40);
+        const stateRows = usefulStates.map((item) => `
+          <tr>
+            <td><strong>${escapeHtml(item.state)}</strong><br>${tag(item.role, item.role.includes("launcher") ? "warn" : item.role === "super" ? "danger" : "info")}</td>
+            <td><div class="value-list">${escapeHtml(item.hitSummary || item.effectiveHitSummary || (item.hasEffectiveHit ? "helper HitDef" : "no HitDef"))}</div></td>
+            <td><div class="value-list">${escapeHtml(renderReachList(item.effectiveReach?.length ? item.effectiveReach : item.reach))}${item.helperStates?.length ? `<br><span class="field-note">helper ${escapeHtml(item.helperStates.join(", "))}</span>` : ""}</div></td>
+            <td><div class="value-list">${escapeHtml((item.cancels || []).map((cancel) => cancel.targetExpr).filter(Boolean).join(", ") || "none")}</div></td>
+          </tr>
+        `).join("");
+        const edgeRows = routeRows.map((edge) => `
+          <tr>
+            <td><strong>${escapeHtml(edge.from)} -> ${escapeHtml(edge.to)}</strong><br>${tag(edge.kind, edge.confidence === "high" ? "ok" : "warn")}</td>
+            <td>${escapeHtml(edge.fromRole)} -> ${escapeHtml(edge.toRole)}</td>
+            <td><div class="value-list">${escapeHtml(edge.triggers || "no trigger summary")}</div></td>
+          </tr>
+        `).join("");
+
+        return `
+          <details class="scan-details">
+            <summary>Combo candidates (${escapeHtml(usefulStates.length)})</summary>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Combo candidate</th>
+                    <th>HitDef / stun</th>
+                    <th>AIR reach</th>
+                    <th>Cancel targets</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${stateRows || `<tr><td colspan="4">No combo candidates found.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+          </details>
+          <details class="scan-details">
+            <summary>Cancel edges (${escapeHtml(routeRows.length)})</summary>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cancel edge</th>
+                    <th>Route role</th>
+                    <th>Trigger summary</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${edgeRows || `<tr><td colspan="3">No hit-confirm/contact cancel edges found.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderInferredMovelistPanel() {
+        const inferred = profile?.inferredMovelist || {};
+        const moves = inferred.moves || [];
+        const source = inferred.source || {};
+        const rows = moves.slice(0, 60).map((move) => {
+          const timing = [
+            move.timing?.startup ? `startup ${move.timing.startup}` : "",
+            move.timing?.activeEnd ? `activeEnd ${move.timing.activeEnd}` : "",
+            move.timing?.recovery !== null && move.timing?.recovery !== undefined ? `recovery ${move.timing.recovery}` : "",
+          ].filter(Boolean).join(", ") || "-";
+          const cancel = (move.cancels || [])
+            .filter((item) => item.moveHit || item.moveContact)
+            .slice(0, 4)
+            .map((item) => `${item.moveHit ? "MoveHit" : "MoveContact"}->${item.targetExpr || item.target}`)
+            .join(", ");
+          const helper = (move.helperOwners || []).slice(0, 3).map((item) => `${item.ownerState}->${item.helperState}`).join(", ");
+          return `
+            <tr>
+              <td><strong>${escapeHtml(move.moveName || move.commandName || "-")}</strong><br><span class="field-note">${escapeHtml(move.commandName || "-")}</span></td>
+              <td><div class="value-list">${escapeHtml(move.input || "-")}</div></td>
+              <td>${escapeHtml(move.state ?? "-")}</td>
+              <td>${escapeHtml(move.roleFamily || move.role || "-")}<br><span class="field-note">${escapeHtml((move.roleTags || []).slice(0, 5).join(", ") || "-")}</span></td>
+              <td><div class="value-list">${escapeHtml(move.hitSummary || "-")}</div></td>
+              <td>${escapeHtml(timing)}<br><span class="field-note">${escapeHtml(move.timing?.source || "")}</span></td>
+              <td><div class="value-list">${escapeHtml([cancel, helper ? `helper ${helper}` : ""].filter(Boolean).join(" | ") || "-")}</div></td>
+            </tr>
+          `;
+        }).join("");
+        return `
+          <details class="scan-details">
+            <summary>Inferred Movelist (${escapeHtml(moves.length)})</summary>
+            <div class="detail-body">
+              <div class="health-grid">
+                <div class="readiness-item"><strong>Commands</strong>${tag(source.commandDefinitions || 0, "info")}<br><span>Parsed from CMD [Command] blocks.</span></div>
+                <div class="readiness-item"><strong>CMD mappings</strong>${tag(source.cmdMappings || 0, source.cmdMappings ? "ok" : "warn")}<br><span>command trigger -> ChangeState target.</span></div>
+                <div class="readiness-item"><strong>Movelist hints</strong>${tag(source.movelistHints || 0, source.movelistHints ? "ok" : "warn")}<br><span>Names/sections read from Movelist.txt.</span></div>
+                <div class="readiness-item"><strong>Write file</strong><button id="writeMovelistBtn" type="button" title="Append or update the AI_PATCH_INFERRED_MOVELIST block in the character folder Movelist.txt after creating a backup.">Write Movelist.txt</button><br><span>Writes to this character's Movelist.txt with backup.</span></div>
+              </div>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Move</th><th>Input</th><th>State</th><th>Role</th><th>Hit</th><th>Timing</th><th>Cancel / Helper</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="7">No command-to-attack moves inferred from CMD.</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderStateDependencyGraphPanel() {
+        const graph = profile?.stateDependencyGraph || {};
+        const edges = graph.edges || [];
+        const summary = graph.summary || {};
+        const rows = edges.slice(0, 80).map((edge) => {
+          const tone = edge.safety === "player-safe" || edge.safety === "helper-spawn" ? "ok"
+            : edge.safety === "helper-only" || edge.safety === "missing" ? "danger"
+              : "warn";
+          return `
+            <tr>
+              <td><strong>${escapeHtml(edge.from ?? "-")}</strong></td>
+              <td>${escapeHtml(edge.edgeType || "-")}</td>
+              <td><strong>${escapeHtml(edge.to ?? "-")}</strong></td>
+              <td>${tag(edge.safety || "review", tone)}<br><span class="field-note">${escapeHtml(edge.confidence || "-")}</span></td>
+              <td><div class="value-list">${escapeHtml(edge.trigger || edge.note || "-")}</div></td>
+              <td>${escapeHtml(edge.sourceFile || "-")}${edge.line ? `:${escapeHtml(edge.line)}` : ""}</td>
+            </tr>
+          `;
+        }).join("");
+        return `
+          <details class="scan-details">
+            <summary>State Dependency Graph (${escapeHtml(summary.totalEdges || edges.length || 0)})</summary>
+            <div class="detail-body">
+              <div class="health-grid">
+                <div class="readiness-item"><strong>Player-safe</strong>${tag(summary.playerSafeEdges || 0, "ok")}<br><span>Direct ChangeState/SelfState edges that look callable.</span></div>
+                <div class="readiness-item"><strong>Helper edges</strong>${tag(summary.helperEdges || 0, "info")}<br><span>Owner states spawning helper states.</span></div>
+                <div class="readiness-item"><strong>Helper-only targets</strong>${tag(summary.helperOnlyTargets || 0, summary.helperOnlyTargets ? "danger" : "ok")}<br><span>Unsafe direct targets for injected AI.</span></div>
+                <div class="readiness-item"><strong>Missing targets</strong>${tag(summary.missingTargets || 0, summary.missingTargets ? "danger" : "ok")}<br><span>Edges pointing to states not found in scan.</span></div>
+              </div>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>From</th><th>Edge</th><th>To</th><th>Safety</th><th>Trigger / note</th><th>Source</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="6">No state dependency edges found.</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderVarOwnershipPanel() {
+        const ownership = profile?.varOwnershipMap || {};
+        const entries = ownership.entries || [];
+        const summary = ownership.summary || {};
+        const rows = entries.slice(0, 120).map((item) => {
+          const tone = item.risk === "high" ? "danger" : item.owner === "AI" ? "ok" : "warn";
+          const contexts = [
+            item.comments?.length ? `comment: ${item.comments.slice(0, 2).join("; ")}` : "",
+            item.writeContexts?.length ? `write: ${item.writeContexts.slice(0, 2).join("; ")}` : "",
+            item.resetContexts?.length ? `reset: ${item.resetContexts.slice(0, 2).join("; ")}` : "",
+          ].filter(Boolean).join(" | ");
+          return `
+            <tr>
+              <td><strong>${escapeHtml(item.kind)}(${escapeHtml(item.number)})</strong></td>
+              <td>${tag(item.owner || "unknown", tone)}</td>
+              <td>${escapeHtml(item.reads || 0)} / ${escapeHtml(item.writes || 0)} / ${escapeHtml(item.resets || 0)}</td>
+              <td>${tag(item.reusable || "review", item.reusable === "yes-if-replacing-old-ai" ? "ok" : item.reusable === "no" ? "danger" : "warn")}</td>
+              <td><div class="value-list">${escapeHtml((item.states || []).join(", ") || "-")}</div></td>
+              <td><div class="value-list">${escapeHtml(contexts || (item.files || []).join(", ") || "-")}</div></td>
+            </tr>
+          `;
+        }).join("");
+        return `
+          <details class="scan-details">
+            <summary>Var Ownership Map (${escapeHtml(summary.total || entries.length || 0)})</summary>
+            <div class="detail-body">
+              <div class="health-grid">
+                <div class="readiness-item"><strong>AI-owned</strong>${tag(summary.aiOwned || 0, "ok")}<br><span>Likely old AI variables.</span></div>
+                <div class="readiness-item"><strong>Reusable</strong>${tag(summary.reusable || 0, summary.reusable ? "ok" : "warn")}<br><span>Can be reused after old AI replacement.</span></div>
+                <div class="readiness-item"><strong>High risk</strong>${tag(summary.highRisk || 0, summary.highRisk ? "danger" : "ok")}<br><span>Gameplay/helper/core variables.</span></div>
+                <div class="readiness-item"><strong>Unknown</strong>${tag(summary.unknown || 0, summary.unknown ? "warn" : "ok")}<br><span>Needs manual review before reuse.</span></div>
+              </div>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Var</th><th>Owner</th><th>R/W/Reset</th><th>Reusable</th><th>States</th><th>Evidence</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="6">No var/fvar usage found.</td></tr>`}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }
+
+      function renderScanReport() {
+        if (!profile) {
+          els.scanReport.innerHTML = `<div class="empty">Scan report will appear here after step 1.</div>`;
+          return;
+        }
+
+        const stateGroups = profile.states.groups || {};
+        const groupRows = Object.entries(stateGroups)
+          .filter(([, values]) => Array.isArray(values) && values.length)
+          .map(([group, values]) => `
+            <tr>
+              <td><strong>${escapeHtml(group)}</strong></td>
+              <td><div class="value-list">${renderStateTokens(values)}</div></td>
+            </tr>
+          `).join("");
+
+        const variableUsagePanel = `
+          <div class="table-wrap compact-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kind</th>
+                  <th>Used active</th>
+                  <th>Documented only</th>
+                  <th>Hard free</th>
+                  <th>Soft free</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>var</strong></td>
+                  <td><div class="value-list">${escapeHtml(formatNumbers(profile.vars.usedActive || profile.vars.used))}</div></td>
+                  <td><div class="value-list">${escapeHtml(formatNumbers(profile.vars.documentedOnly || []))}</div></td>
+                  <td><div class="value-list">${escapeHtml(formatNumbers(profile.vars.free))}</div></td>
+                  <td><div class="value-list">${escapeHtml(formatNumbers(profile.vars.softFree || profile.vars.free))}</div></td>
+                </tr>
+                <tr>
+                  <td><strong>fvar</strong></td>
+                  <td><div class="value-list">${escapeHtml(formatNumbers(profile.fvars.usedActive || profile.fvars.used))}</div></td>
+                  <td><div class="value-list">${escapeHtml(formatNumbers(profile.fvars.documentedOnly || []))}</div></td>
+                  <td><div class="value-list">${escapeHtml(formatNumbers(profile.fvars.free))}</div></td>
+                  <td><div class="value-list">${escapeHtml(formatNumbers(profile.fvars.softFree || profile.fvars.free))}</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+        const commandsPanel = `
+          <details class="scan-details">
+            <summary>Commands (${escapeHtml(profile.commands?.count || 0)})</summary>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Available command names</th></tr></thead>
+                <tbody><tr><td><div class="value-list">${escapeHtml(formatNumbers(profile.commands?.available || []))}</div></td></tr></tbody>
+              </table>
+            </div>
+          </details>
+        `;
+        const stateGroupsPanel = `
+          <div class="table-wrap compact-table">
+            <div class="power-legend">
+              <span>Power cost:</span>
+              <span class="power-badge">500</span>
+              <span class="power-badge">1000</span>
+              <span class="power-badge">2000</span>
+              <span class="power-badge">3000</span>
+              <span class="power-badge">3000+</span>
+            </div>
+            <table>
+              <thead><tr><th>State group</th><th>States</th></tr></thead>
+              <tbody>${groupRows || `<tr><td colspan="2">No grouped states found.</td></tr>`}</tbody>
+            </table>
+          </div>
+        `;
+        const reportTab = (id, label) => `<button type="button" class="report-tab ${activeReportTab === id ? "active" : ""}" data-report-tab="${escapeHtml(id)}">${escapeHtml(label)}</button>`;
+        const panel = (id, html) => `<section class="report-tab-panel" data-report-panel="${escapeHtml(id)}" ${activeReportTab === id ? "" : "hidden"}>${html}</section>`;
+        els.scanReport.innerHTML = `
+          <div class="report-grid">
+            <div class="report-tabs" role="tablist" aria-label="Patch report sections">
+              ${reportTab("patch", "Patch Plan")}
+              ${reportTab("resolver", "Resolver & Scan")}
+              ${reportTab("diagnostics", "Diagnostics")}
+            </div>
+            ${panel("patch", `
+              ${renderReadinessPanel()}
+              ${renderComboRouterPatchPreviewPanel()}
+              ${renderRiskBlockersPanel()}
+              ${renderMeterRoutePanel()}
+              ${renderComboHealthPanel()}
+            `)}
+            ${panel("resolver", `
+              ${renderResolvedCombatMappingPanel()}
+              ${renderResolverRoleReportPanel()}
+              ${renderInferredMovelistPanel()}
+              ${renderComboScanTables()}
+              ${commandsPanel}
+            `)}
+            ${panel("diagnostics", `
+              ${renderLiteFitPanel()}
+              ${renderStateDependencyGraphPanel()}
+              ${renderVarOwnershipPanel()}
+              ${variableUsagePanel}
+              ${stateGroupsPanel}
+            `)}
+          </div>
+        `;
+        bindReportTabs();
+        bindRouterFilters();
+        document.getElementById("writeMovelistBtn")?.addEventListener("click", runWriteInferredMovelist);
+      }
+
+      function renderConflicts() {
+        const conflicts = plan?.conflicts || [];
+        if (!conflicts.length) {
+          els.conflictsView.innerHTML = `<div class="empty">No conflicts. This brain can be previewed safely.</div>`;
+          return;
+        }
+        const rows = conflicts.map((item) => {
+          const kind = item.id?.includes("_") ? "alias/slot" : "mapping";
+          const statusClass = item.status === "conflict" ? "danger" : "warn";
+          const actual = item.actual ?? "not resolved";
+          const reason = item.reason || (item.status === "needs_review" ? "State alias needs manual validation on this character." : "No compatible slot was resolved.");
+          return `
+            <tr>
+              <td><strong>${escapeHtml(item.id)}</strong><br>${tag(kind, "info")}</td>
+              <td>${escapeHtml(item.preferred)}</td>
+              <td>${escapeHtml(actual)}</td>
+              <td>${tag(item.status, statusClass)}</td>
+              <td>${escapeHtml(item.strategy)}</td>
+              <td>${escapeHtml(reason)}</td>
+            </tr>
+          `;
+        }).join("");
+        els.conflictsView.innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Preferred</th>
+                  <th>Resolved</th>
+                  <th>Status</th>
+                  <th>Strategy</th>
+                  <th>Meaning / next action</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      function renderModules() {
+        const modules = plan?.modules || [];
+        if (!modules.length) {
+          els.modulesView.innerHTML = `<div class="empty">Resolve a brain to see modules.</div>`;
+          return;
+        }
+        const liteByModule = new Map((plan?.liteFit?.modules || []).map((item) => [item.moduleId, item]));
+        const rows = modules.map((module) => {
+          const lite = liteByModule.get(module.id);
+          const liteTone = lite?.mode === "blocked" ? "danger" : ["fallback", "lite", "skip"].includes(lite?.mode) ? "warn" : "ok";
+          return `
+          <tr>
+            <td><strong>${escapeHtml(module.id)}</strong><br>${lite ? tag(lite.mode, liteTone) : ""}</td>
+            <td>${tag(module.risk || "unknown", module.risk === "low" ? "ok" : "warn")}</td>
+            <td>${escapeHtml(module.target?.file || "no target")}</td>
+            <td>${escapeHtml(module.templates?.length ? "patch" : "review-only")}</td>
+            <td>${escapeHtml(module.unresolvedPlaceholders?.length || 0)}</td>
+          </tr>
+        `;
+        }).join("");
+        els.modulesView.innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Module</th>
+                  <th>Risk</th>
+                  <th>File</th>
+                  <th>Mode</th>
+                  <th>Unresolved placeholders</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      function renderPreview() {
+        if (!lastPreview) {
+          els.previewView.innerHTML = `<div class="empty">Run Preview Diff to see target files and marker operations.</div>`;
+          return;
+        }
+        const fileRows = lastPreview.files.map((file) => `
+          <tr>
+            <td><strong>${escapeHtml(file.relativePath)}</strong></td>
+            <td>${tag(file.changed ? "changed" : "same", file.changed ? "warn" : "ok")}</td>
+            <td>${escapeHtml(file.operations.length)}</td>
+          </tr>
+        `).join("");
+        const blockers = lastPreview.blockingConflicts?.length
+          ? `<div style="margin-bottom: 12px">${tag(`${lastPreview.blockingConflicts.length} apply blockers`, "danger")}</div>`
+          : `<div style="margin-bottom: 12px">${tag("No apply blockers", "ok")}</div>`;
+        els.previewView.innerHTML = `
+          ${blockers}
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>File</th>
+                  <th>Status</th>
+                  <th>Operations</th>
+                </tr>
+              </thead>
+              <tbody>${fileRows}</tbody>
+            </table>
+          </div>
+          <pre style="margin-top: 12px">${escapeHtml(lastPreview.diffText || "No text changes.")}</pre>
+        `;
+      }
+
+      function renderAir() {
+        const candidates = airScan ? Object.values(airScan.stateActionMap || {})
+          .flatMap((entry) => (entry.actions || []).map((action) => ({ state: entry.state, ...action })))
+          .slice(0, 80) : [];
+        const candidateRows = candidates.map((item) => {
+          const action = airScan.airActions?.[item.action];
+          return `
+            <tr>
+              <td>${escapeHtml(item.state)}</td>
+              <td>${escapeHtml(item.action)}</td>
+              <td>${escapeHtml(item.kind)}</td>
+              <td>${escapeHtml(action?.frameCount ?? "-")}</td>
+              <td>${escapeHtml(action?.clsn1Count ?? "-")}</td>
+              <td>${escapeHtml(action?.reach ? `${action.reach.minX},${action.reach.minY},${action.reach.maxX},${action.reach.maxY}` : "-")}</td>
+            </tr>
+          `;
+        }).join("");
+
+        const previewHtml = lastAirPreview ? `
+          <div style="margin-top: 12px">
+            ${tag(lastAirPreview.file.changed ? "AIR change ready" : "No AIR change", lastAirPreview.file.changed ? "warn" : "ok")}
+            <pre style="margin-top: 12px">${escapeHtml(lastAirPreview.diffText)}</pre>
+          </div>
+        ` : "";
+
+        els.airView.innerHTML = `
+          <div class="form-grid">
+            <div>
+              <label for="airPreset">Simple fix type</label>
+              <select id="airPreset">
+                <option value="fix_whiff_forward" ${airForm.preset === "fix_whiff_forward" ? "selected" : ""}>Attack misses in front: extend red hitbox forward</option>
+                <option value="fix_whiff_high" ${airForm.preset === "fix_whiff_high" ? "selected" : ""}>Attack passes too high: lower red hitbox</option>
+                <option value="fix_whiff_low" ${airForm.preset === "fix_whiff_low" ? "selected" : ""}>Attack passes too low: raise red hitbox</option>
+                <option value="air_followup_align" ${airForm.preset === "air_followup_align" ? "selected" : ""}>Air follow-up drops: expand vertical hit window</option>
+                <option value="custom" ${airForm.preset === "custom" ? "selected" : ""}>Custom technical edit</option>
+              </select>
+            </div>
+            <div>
+              <label for="airSimpleNotes">Plain note</label>
+              <input id="airSimpleNotes" value="${escapeHtml(airForm.simpleNotes)}" placeholder="Example: state 1400/action 1420 misses close grounded opponent" />
+            </div>
+            <div class="air-grid">
+              <div>
+                <label for="airActionId">Action id</label>
+                <input id="airActionId" value="${escapeHtml(airForm.actionId)}" />
+              </div>
+              <div>
+                <label for="airFrameIndex">Frame index</label>
+                <input id="airFrameIndex" value="${escapeHtml(airForm.frameIndex)}" />
+              </div>
+              <div>
+                <label for="airClsnType">Clsn type</label>
+                <input id="airClsnType" value="${escapeHtml(airForm.clsnType)}" />
+              </div>
+              <div>
+                <label for="airBoxIndex">Box index</label>
+                <input id="airBoxIndex" value="${escapeHtml(airForm.boxIndex)}" />
+              </div>
+            </div>
+            <div>
+              <label for="airIntent">Intent</label>
+              <input id="airIntent" value="${escapeHtml(airForm.intent)}" />
+            </div>
+            <div class="air-grid">
+              <div>
+                <label for="airDx1">Delta x1</label>
+                <input id="airDx1" value="${escapeHtml(airForm.dx1)}" />
+              </div>
+              <div>
+                <label for="airDy1">Delta y1</label>
+                <input id="airDy1" value="${escapeHtml(airForm.dy1)}" />
+              </div>
+              <div>
+                <label for="airDx2">Delta x2</label>
+                <input id="airDx2" value="${escapeHtml(airForm.dx2)}" />
+              </div>
+              <div>
+                <label for="airDy2">Delta y2</label>
+                <input id="airDy2" value="${escapeHtml(airForm.dy2)}" />
+              </div>
+            </div>
+            <div class="mini-actions">
+              <button id="airPresetBtn">Use Simple Fix</button>
+              <button id="airScanBtn">AIR Scan</button>
+              <button id="airPreviewBtn">AIR Preview</button>
+              <button id="airApplyBtn" class="danger">AIR Apply</button>
+            </div>
+          </div>
+          <div style="margin-top: 14px" class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>State</th>
+                  <th>Action</th>
+                  <th>Source</th>
+                  <th>Frames</th>
+                  <th>Clsn1 boxes</th>
+                  <th>Reach</th>
+                </tr>
+              </thead>
+              <tbody>${candidateRows || `<tr><td colspan="6">Run AIR Scan to inspect state/action candidates.</td></tr>`}</tbody>
+            </table>
+          </div>
+          ${previewHtml}
+        `;
+
+        document.getElementById("airPresetBtn").addEventListener("click", applyAirPreset);
+        document.getElementById("airScanBtn").addEventListener("click", runAirScan);
+        document.getElementById("airPreviewBtn").addEventListener("click", runAirPreview);
+        document.getElementById("airApplyBtn").addEventListener("click", runAirApply);
+      }
+
+      function renderAll() {
+        renderMetrics();
+        renderScanReport();
+        renderFiles();
+        renderConflicts();
+        renderModules();
+        renderPreview();
+        renderAir();
+      }
+
+      function bindReportTabs() {
+        document.querySelectorAll("[data-report-tab]").forEach((button) => {
+          button.addEventListener("click", () => {
+            activeReportTab = button.dataset.reportTab || "patch";
+            document.querySelectorAll("[data-report-tab]").forEach((tab) => {
+              tab.classList.toggle("active", tab === button);
+            });
+            document.querySelectorAll("[data-report-panel]").forEach((panel) => {
+              panel.hidden = panel.dataset.reportPanel !== activeReportTab;
+            });
+          });
+        });
+      }
+
+      function bindRouterFilters() {
+        document.querySelectorAll("[data-router-filter]").forEach((button) => {
+          button.addEventListener("click", () => {
+            activeRouterFilter = button.dataset.routerFilter || "all";
+            renderScanReport();
+          });
+        });
+      }
+
+      document.querySelectorAll(".tab").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab === button));
+          ["conflicts", "modules", "preview", "air", "raw"].forEach((view) => {
+            document.getElementById(`${view}View`).hidden = view !== button.dataset.view;
+          });
+        });
+      });
+
+      async function runAirScan() {
+        try {
+          setStatus("Scanning AIR...");
+          lastAirPreview = null;
+          airScan = await postJson("/api/air-scan", {
+            characterPath: els.characterPath.value,
+          });
+          showRaw(airScan);
+          renderAir();
+          setStatus("AIR scan complete", "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("AIR scan failed", "danger");
+        }
+      }
+
+      function applyAirPreset() {
+        syncAirFormFromDom();
+        const preset = document.getElementById("airPreset")?.value || "custom";
+        const presets = {
+          fix_whiff_forward: { clsnType: "Clsn1", dx1: 0, dy1: 0, dx2: 20, dy2: 0, intent: "fix_whiff_forward" },
+          fix_whiff_high: { clsnType: "Clsn1", dx1: 0, dy1: 0, dx2: 0, dy2: 12, intent: "fix_whiff_high" },
+          fix_whiff_low: { clsnType: "Clsn1", dx1: 0, dy1: -12, dx2: 0, dy2: 0, intent: "fix_whiff_low" },
+          air_followup_align: { clsnType: "Clsn1", dx1: 0, dy1: -12, dx2: 12, dy2: 12, intent: "air_followup_align" },
+          custom: null,
+        };
+        const config = presets[preset];
+        if (!config) {
+          setStatus("Custom AIR edit selected", "");
+          return;
+        }
+        airForm = {
+          ...airForm,
+          preset,
+          clsnType: config.clsnType,
+          intent: config.intent,
+          dx1: String(config.dx1),
+          dy1: String(config.dy1),
+          dx2: String(config.dx2),
+          dy2: String(config.dy2),
+        };
+        lastAirPreview = null;
+        renderAir();
+        setStatus("Simple AIR fix applied to inputs", "ok");
+      }
+
+      async function runAirPreview() {
+        try {
+          setStatus("Previewing AIR...");
+          lastAirPreview = await postJson("/api/air-preview", airPatchBody());
+          showRaw(lastAirPreview);
+          renderAir();
+          setStatus("AIR preview complete", "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("AIR preview failed", "danger");
+        }
+      }
+
+      async function runAirApply() {
+        try {
+          const ok = confirm("AIR Apply will edit the AIR file after creating a backup. Continue?");
+          if (!ok) return;
+          setStatus("Applying AIR patch...");
+          const result = await postJson("/api/air-apply", airPatchBody());
+          showRaw(result);
+          setStatus(`AIR patch applied: backup ${result.report.backupId}`, "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("AIR apply failed", "danger");
+        }
+      }
+
+      async function runScanStep() {
+        try {
+          setStatus("Scanning...");
+          resetCharacterDerivedState();
+          profile = await postJson("/api/scan", { characterPath: els.characterPath.value });
+          showRaw(profile);
+          setStep("scan", "done");
+          setStep("brain", "active");
+          renderAll();
+          setStatus("Scan complete", "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Scan failed", "danger");
+        }
+      }
+
+      function runBrainStep() {
+        els.brainFile.value = "";
+        els.brainFile.click();
+      }
+
+      els.brainFile.addEventListener("change", async () => {
+        const file = els.brainFile.files?.[0];
+        if (!file) return;
+        try {
+          setStatus(`Loading ${file.name}...`);
+          const text = await file.text();
+          const nextBrain = await postJson("/api/parse-brain", {
+            fileName: file.name,
+            text,
+          });
+          setLoadedBrain(nextBrain, file.name);
+          plan = null;
+          lastPreview = null;
+          showRaw(nextBrain);
+          setStep("brain", "done");
+          setStep("resolve", "active");
+          renderAll();
+          setStatus(`Brain loaded: ${nextBrain.frontmatter?.name || file.name}`, "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Brain load failed", "danger");
+        }
+      });
+
+      async function runResolveStep() {
+        try {
+          setStatus("Resolving...");
+          plan = await postJson("/api/resolve-plan", {
+            characterPath: els.characterPath.value,
+            profile,
+            brain,
+            brainName: selectedBrainName,
+            approvedVarPool,
+          });
+          showRaw(plan);
+          setStep("resolve", "done");
+          setStep("preview", "active");
+          renderAll();
+          setStatus(`Resolve complete: ${plan.conflicts.length} review items`, plan.conflicts.length ? "danger" : "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Resolve failed", "danger");
+        }
+      }
+
+      async function runPreviewStep() {
+        try {
+          setStatus("Building preview...");
+          lastPreview = await postJson("/api/preview-diff", patchBody());
+          showRaw(lastPreview);
+          setStep("preview", "done");
+          setStep("apply", "active");
+          renderAll();
+          setStatus(`Preview complete: ${lastPreview.operations.length} operations`, "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Preview failed", "danger");
+        }
+      }
+
+      async function runApplyStep() {
+        try {
+          const ok = confirm("Apply patch will write character files after creating a backup. Continue?");
+          if (!ok) return;
+          setStatus("Applying patch...");
+          const result = await postJson("/api/apply-patch", patchBody());
+          showRaw(result);
+          setStep("apply", "done");
+          setStatus(`Patch applied: backup ${result.report.backupId}`, "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          const conflicts = error.payload?.conflicts || [];
+          if (conflicts.length) {
+            renderConflictModal(error.payload);
+            setStatus(`Apply blocked: ${conflicts.length} unresolved conflicts`, "danger");
+          } else {
+            setStatus("Apply blocked", "danger");
+          }
+        }
+      }
+
+      async function runCommandAsciiPreview() {
+        try {
+          setStatus("Previewing command ASCII aliases...");
+          const result = await postJson("/api/command-ascii-preview", {
+            characterPath: els.characterPath.value,
+            profile,
+          });
+          showRaw(result);
+          const statusType = result.commandIssues?.length ? "danger" : "ok";
+          setStatus(`Command ASCII preview: ${result.aliases.length} aliases, ${result.files.filter((file) => file.changed).length} files`, statusType);
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Command ASCII preview failed", "danger");
+        }
+      }
+
+      async function runCommandAsciiApply() {
+        try {
+          const ok = confirm("Apply ASCII Commands will create a backup, rename non-ASCII command names to safe ASCII aliases, and update command references in CMD/CNS/ST files. Continue?");
+          if (!ok) return;
+          setStatus("Applying command ASCII aliases...");
+          const result = await postJson("/api/command-ascii-apply", {
+            characterPath: els.characterPath.value,
+            profile,
+          });
+          showRaw(result);
+          profile = await postJson("/api/scan", { characterPath: els.characterPath.value });
+          renderAll();
+          setStatus(`Command ASCII patch applied: backup ${result.report.backupId}`, "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Command ASCII apply failed", "danger");
+        }
+      }
+
+      async function runWriteInferredMovelist() {
+        try {
+          const ok = confirm(`Write inferred Movelist.txt will create a backup, then append/update the AI_PATCH_INFERRED_MOVELIST block in this character folder:\n${els.characterPath.value}\\Movelist.txt\n\nContinue?`);
+          if (!ok) return;
+          setStatus("Writing inferred Movelist.txt...");
+          const result = await postJson("/api/write-inferred-movelist", {
+            characterPath: els.characterPath.value,
+            profile,
+          });
+          showRaw(result);
+          profile = await postJson("/api/scan", { characterPath: els.characterPath.value });
+          renderAll();
+          setStatus(result.changed ? `Movelist written to ${result.relativePath || "Movelist.txt"}: backup ${result.backupId}` : `Movelist already current: ${result.movelistPath || "Movelist.txt"}`, "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Movelist write failed", "danger");
+        }
+      }
+
+      steps.scan.addEventListener("click", runScanStep);
+      steps.brain.addEventListener("click", runBrainStep);
+      steps.resolve.addEventListener("click", runResolveStep);
+      steps.preview.addEventListener("click", runPreviewStep);
+      steps.apply.addEventListener("click", runApplyStep);
+      els.commandAsciiPreviewBtn.addEventListener("click", runCommandAsciiPreview);
+      els.commandAsciiApplyBtn.addEventListener("click", runCommandAsciiApply);
+
+      els.conflictCloseBtn.addEventListener("click", closeConflictModal);
+      els.conflictCancelBtn.addEventListener("click", closeConflictModal);
+
+      els.conflictModal.addEventListener("click", (event) => {
+        if (event.target === els.conflictModal) closeConflictModal();
+      });
+
+      els.safeLiteBtn.addEventListener("click", async () => {
+        const safeIds = cleanModuleIds(lastApplyBlock);
+        if (!safeIds.length) {
+          els.conflictMessage.innerHTML = `
+            <div class="list-item">
+              <strong>No Safe Lite modules available</strong>
+              <span>Every patchable module still contains unresolved placeholders. Use Manual Pick to inspect the missing variables, or Replace Old AI to plan cleanup.</span>
+            </div>
+          `;
+          setStatus("Safe Lite unavailable for this brain/character", "danger");
+          return;
+        }
+        const ok = confirm(`Safe Lite Patch will apply ${safeIds.length} modules without missing placeholders and skip blocked features. Some modules may use fallback anchors if their preferred dependency is skipped. Continue?`);
+        if (!ok) return;
+        await applySelectedModules(safeIds, "Applying Safe Lite Patch");
+      });
+
+      els.manualPickBtn.addEventListener("click", () => {
+        els.manualModuleArea.hidden = false;
+        els.replaceOldAiArea.hidden = true;
+        els.graphMigrateArea.hidden = true;
+        els.conflictMessage.innerHTML = `
+          <div class="list-item">
+            <strong>Manual Pick opened</strong>
+            <span>Checked modules have no missing placeholders. Yellow partial modules are allowed, but may be inserted by fallback anchor because their preferred dependency is skipped. Disabled modules still need variables.</span>
+          </div>
+        `;
+        setStatus("Manual Pick: choose clean modules to apply");
+      });
+
+      function renderGraphMigratePlan(cleanupPreview = null) {
+        const varSummary = profile?.varOwnershipMap?.summary || {};
+        const vars = profile?.varOwnershipMap?.entries || [];
+        const graphSummary = profile?.stateDependencyGraph?.summary || {};
+        const aiVars = vars.filter((item) => item.owner === "AI" && item.reusable === "yes-if-replacing-old-ai");
+        const highRisk = vars.filter((item) => item.risk === "high");
+        const unknown = vars.filter((item) => item.owner === "unknown");
+        const conflicts = lastApplyBlock?.conflicts || [];
+        const varConflicts = conflicts.filter((item) => item.status === "conflict" && /no free slots|auto_remap|manual_choose/i.test(`${item.reason || ""} ${item.strategy || ""}`));
+        const stateReviewConflicts = conflicts.filter((item) => item.status === "needs_review" && !/^rock_/.test(item.id || ""));
+        const missingVarNames = [...new Set(varConflicts.map((item) => item.id).filter(Boolean))];
+        const reusableTotal = Number(varSummary.reusable || 0) + Number(profile?.vars?.free?.length || 0);
+        const enoughAfterAiReuse = reusableTotal >= missingVarNames.length;
+        const graphBlockerCount = Number(graphSummary.helperOnlyTargets || 0) + Number(graphSummary.missingTargets || 0);
+        const canPatchNow = conflicts.length === 0 && !graphBlockerCount;
+        const releasedAfterCleanup = Number(cleanupPreview?.releasePlan?.summary?.reusableAfterQuarantine || 0);
+        const canMigrateAfterCleanup = conflicts.length > 0 && (reusableTotal + releasedAfterCleanup) >= missingVarNames.length && !stateReviewConflicts.length;
+        const statusTone = graphSummary.helperOnlyTargets || graphSummary.missingTargets ? "warn" : "ok";
+        const decision = canPatchNow ? "ready" : canMigrateAfterCleanup ? "migrate first" : "blocked";
+        const decisionTone = canPatchNow ? "ok" : canMigrateAfterCleanup ? "warn" : "danger";
+        const rewriteHtml = renderFullRewritePreview(lastRewritePreview);
+
+        els.graphMigrateArea.innerHTML = `
+          <div class="list-item">
+            <strong>Graph + Var Migrate plan</strong>
+            <span>This is a migration preview. It does not write files. Use it before Replace Old AI when the brain needs more variables than the character has free.</span>
+          </div>
+          <div class="health-grid">
+            <div class="readiness-item"><strong>Reusable AI vars</strong>${tag(aiVars.length, aiVars.length ? "ok" : "warn")}<br><span>${escapeHtml(aiVars.map((item) => `${item.kind}(${item.number})`).join(", ") || "none detected")}</span></div>
+            <div class="readiness-item"><strong>Missing brain vars</strong>${tag(missingVarNames.length, enoughAfterAiReuse ? "ok" : "danger")}<br><span>${escapeHtml(missingVarNames.slice(0, 8).join(", ") || "none")}</span></div>
+            <div class="readiness-item"><strong>Graph blockers</strong>${tag((graphSummary.helperOnlyTargets || 0) + (graphSummary.missingTargets || 0), statusTone)}<br><span>${escapeHtml(graphSummary.helperOnlyTargets || 0)} helper-only, ${escapeHtml(graphSummary.missingTargets || 0)} missing target(s)</span></div>
+            <div class="readiness-item"><strong>High-risk vars</strong>${tag(highRisk.length, highRisk.length ? "danger" : "ok")}<br><span>${escapeHtml(unknown.length)} unknown var(s) still need review</span></div>
+            <div class="readiness-item"><strong>Approved pool</strong>${tag(approvedVarPool.length, approvedVarPool.length ? "ok" : "warn")}<br><span>${escapeHtml(approvedVarPool.map((item) => `${item.kind}(${item.number})->${item.approvedFor || "any"}`).join(", ") || "none")}</span></div>
+            <div class="readiness-item"><strong>Release after quarantine</strong>${tag(releasedAfterCleanup, releasedAfterCleanup ? "ok" : "warn")}<br><span>${escapeHtml(cleanupPreview ? `${cleanupPreview.quarantineEligibleCount || 0} block(s) scanned` : "Run pipeline/cleanup preview to calculate")}</span></div>
+          </div>
+          <div class="table-wrap compact-table">
+            <table>
+              <thead><tr><th>Decision</th><th>Meaning</th></tr></thead>
+              <tbody>
+                <tr><td>${tag(decision, decisionTone)}</td><td>${escapeHtml(canPatchNow ? "No conflicts or graph blockers remain. Apply can proceed through the normal Preview Diff path." : canMigrateAfterCleanup ? "Free vars plus reusable AI-owned vars may cover this brain only after old AI quarantine and rescan." : "Do not full patch yet. Resolve variable conflicts, optional state aliases, or graph blockers first.")}</td></tr>
+                <tr><td>${tag("do first", "warn")}</td><td>Run Replace Old AI quarantine, then Scan again, Resolve again, Preview Diff again. Do not reuse high-risk gameplay/core vars.</td></tr>
+                <tr><td>${tag("state review", stateReviewConflicts.length ? "danger" : "ok")}</td><td>${escapeHtml(stateReviewConflicts.map((item) => item.id).join(", ") || "No optional state alias review blockers.")}</td></tr>
+                <tr><td>${tag("do not touch", "danger")}</td><td>${escapeHtml(highRisk.slice(0, 12).map((item) => `${item.kind}(${item.number})`).join(", ") || "No high-risk vars detected.")}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-actions rewrite-actions">
+            <span class="field-note">Full rewrite preview checks brain variables against free slots, reusable old AI slots, cross-file ownership, and state graph blockers across CMD/CNS/ST.</span>
+            <button id="previewFullRewriteBtn" type="button" title="Build a cross-file variable rewrite plan without writing files.">Full Rewrite Preview</button>
+            <button id="runGraphMigrateBtn" type="button" class="primary" ${canPatchNow ? "disabled" : ""} title="Quarantine old AI blocks, rescan, resolve the selected brain, and rebuild Preview Diff. It will stop if conflicts remain.">Run Migrate Pipeline</button>
+          </div>
+          ${rewriteHtml}
+        `;
+        document.getElementById("previewFullRewriteBtn")?.addEventListener("click", previewFullRewritePlan);
+        document.getElementById("runGraphMigrateBtn")?.addEventListener("click", runGraphMigratePipeline);
+        document.getElementById("approveSelectedVarsBtn")?.addEventListener("click", approveSelectedVarsFromRewrite);
+        document.getElementById("clearApprovedVarsBtn")?.addEventListener("click", clearApprovedVars);
+        document.getElementById("applyApprovedPreviewBtn")?.addEventListener("click", applyApprovedPreview);
+      }
+
+      function renderFullRewritePreview(preview) {
+        if (!preview?.rewritePlan) {
+          return `
+            <div class="list-item">
+              <strong>Full AI variable rewrite</strong>
+              <span>Not previewed yet. Use this before a deeper migration when normal free variables are not enough.</span>
+            </div>
+          `;
+        }
+        const rewrite = preview.rewritePlan;
+        const summary = rewrite.summary || {};
+        const decisionTone = rewrite.decision === "blocked" ? "danger" : rewrite.decision === "needs manual approval" ? "warn" : "ok";
+        const rows = (rewrite.rows || []).map((row) => {
+          const statusTone = row.status === "blocked" ? "danger" : row.status === "review" ? "warn" : "ok";
+          const rewriteTarget = row.mappedTo ?? (row.reviewCandidate !== undefined && row.reviewCandidate !== null ? `review ${row.reviewCandidate}` : "-");
+          const touched = [
+            ...(row.filesTouched || []).slice(0, 3),
+            (row.filesTouched || []).length > 3 ? `+${(row.filesTouched || []).length - 3} file(s)` : "",
+          ].filter(Boolean).join(", ");
+          return `
+            <tr>
+              <td><strong>${escapeHtml(row.kind)}.${escapeHtml(row.id)}</strong><br><span class="field-note">preferred ${escapeHtml(row.preferred ?? "-")}</span></td>
+              <td>${escapeHtml(row.current ?? "-")}</td>
+              <td>${escapeHtml(rewriteTarget)}</td>
+              <td>${tag(row.status || "-", statusTone)}<br><span class="field-note">${escapeHtml(row.source || "-")}</span></td>
+              <td>${escapeHtml(touched || "new patch only")}<br><span class="field-note">${escapeHtml((row.statesTouched || []).slice(0, 8).join(", ") || "no state owner")}</span></td>
+              <td>${escapeHtml(row.reason || "")}</td>
+            </tr>
+          `;
+        }).join("");
+        const locked = (rewrite.lockedVars || []).slice(0, 14).map((item) => `${item.kind}(${item.number})`).join(", ") || "none";
+        const actions = (rewrite.nextActions || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+        const approvedPreviewReady = approvedVarPool.length > 0 && lastPreview && !(lastPreview.blockingConflicts || []).length;
+        const approvedPreviewBlockers = lastPreview ? (lastPreview.blockingConflicts || []).length : null;
+        const approvalRows = (rewrite.rows || [])
+          .filter((row) => row.status === "blocked" && row.reviewCandidate !== undefined && row.reviewCandidate !== null)
+          .map((row) => {
+            const key = `${row.kind}:${row.reviewCandidate}:${row.id}`;
+            return `
+              <label class="module-check partial">
+                <input type="checkbox" class="approval-check" value="${escapeHtml(key)}" />
+                <span>
+                  <strong>${escapeHtml(row.kind)}(${escapeHtml(row.reviewCandidate)}) -> ${escapeHtml(row.id)}</strong>
+                  <small>${escapeHtml((row.filesTouched || []).slice(0, 3).join(", ") || "unknown owner")} ${escapeHtml((row.statesTouched || []).length ? `| states ${(row.statesTouched || []).slice(0, 8).join(", ")}` : "")}</small>
+                  <small>${escapeHtml(row.reason || "")}</small>
+                </span>
+                ${tag("review", "warn")}
+              </label>
+            `;
+          }).join("");
+        const approvedRows = approvedVarPool.map((item) => `
+          <div class="module-check">
+            <span></span>
+            <span><strong>${escapeHtml(item.kind)}(${escapeHtml(item.number)}) -> ${escapeHtml(item.approvedFor || "any")}</strong><small>${escapeHtml(item.reason || "approved by user")}</small></span>
+            ${tag("approved", "ok")}
+          </div>
+        `).join("");
+        return `
+          <details class="scan-details" open>
+            <summary>Full AI Variable Rewrite ${tag(rewrite.decision || "-", decisionTone)}</summary>
+            <div class="health-grid">
+              <div class="readiness-item"><strong>Ready mappings</strong>${tag(summary.ready || 0, summary.ready ? "ok" : "warn")}<br><span>${escapeHtml(summary.migrate || 0)} need quarantine reuse</span></div>
+              <div class="readiness-item"><strong>Blocked</strong>${tag(summary.blocked || 0, summary.blocked ? "danger" : "ok")}<br><span>${escapeHtml(summary.review || 0)} need manual approval</span></div>
+              <div class="readiness-item"><strong>Cross-file touch</strong>${tag(summary.filesTouched || 0, "info")}<br><span>${escapeHtml(summary.statesTouched || 0)} state owner(s)</span></div>
+              <div class="readiness-item"><strong>Locked vars</strong>${tag(summary.highRiskVars || 0, summary.highRiskVars ? "danger" : "ok")}<br><span>${escapeHtml(locked)}</span></div>
+            </div>
+            <div class="table-wrap compact-table rewrite-plan-table">
+              <table>
+                <thead><tr><th>Brain variable</th><th>Current</th><th>Rewrite to</th><th>Status</th><th>Files / states</th><th>Reason</th></tr></thead>
+                <tbody>${rows || `<tr><td colspan="6">No brain variables found.</td></tr>`}</tbody>
+              </table>
+            </div>
+            <div class="list-item">
+              <strong>Next action</strong>
+              <span><ul>${actions || "<li>No extra action required.</li>"}</ul></span>
+            </div>
+            <details class="scan-details" ${approvalRows || approvedRows ? "open" : ""}>
+              <summary>Approved Var Pool ${tag(approvedVarPool.length, approvedVarPool.length ? "ok" : "warn")}</summary>
+              <p class="field-note">Only approve review variables after checking files/states. Approved slots are used by Resolve and Preview Diff, then written as AI_PATCH ownership comments when Apply runs.</p>
+              <div class="module-picker">${approvalRows || `<div class="empty">No blocked review candidates in this rewrite preview.</div>`}</div>
+              ${approvedRows ? `<div class="module-picker approved-pool-list">${approvedRows}</div>` : ""}
+              <div class="modal-actions">
+                <button id="approveSelectedVarsBtn" type="button" class="primary" ${approvalRows ? "" : "disabled"} title="Add checked review variables to the approved pool, then re-resolve and rebuild Preview Diff.">Approve Selected Vars</button>
+                <button id="clearApprovedVarsBtn" type="button" ${approvedVarPool.length ? "" : "disabled"} title="Clear the approved variable pool for this page session.">Clear Approved Pool</button>
+                <button id="applyApprovedPreviewBtn" type="button" class="primary" ${approvedPreviewReady ? "" : "disabled"} title="Apply the current approved Preview Diff after creating a backup. This uses the approved variable pool and writes ownership markers.">Apply Approved Preview</button>
+              </div>
+              <p class="field-note">${escapeHtml(approvedPreviewReady ? "Approved Preview Diff is clean and can be applied." : approvedPreviewBlockers === null ? "Approve vars first, then rebuild Preview Diff before Apply." : `${approvedPreviewBlockers} blocker(s) remain in Preview Diff.`)}</p>
+            </details>
+          </details>
+        `;
+      }
+
+      async function approveSelectedVarsFromRewrite() {
+        const checks = [...els.graphMigrateArea.querySelectorAll(".approval-check:checked")];
+        if (!checks.length) {
+          setStatus("No review vars selected for approval", "danger");
+          return;
+        }
+        const rows = lastRewritePreview?.rewritePlan?.rows || [];
+        const existing = new Set(approvedVarPool.map((item) => `${item.kind}:${item.number}:${item.approvedFor || ""}`));
+        for (const check of checks) {
+          const [kind, numberText, id] = check.value.split(":");
+          const row = rows.find((item) => item.kind === kind && String(item.reviewCandidate) === numberText && item.id === id);
+          const entry = {
+            kind,
+            number: Number(numberText),
+            approvedFor: id,
+            risk: "review",
+            source: "manual",
+            reason: row?.reason || "approved by user in Full Rewrite Preview",
+          };
+          const key = `${entry.kind}:${entry.number}:${entry.approvedFor}`;
+          if (!existing.has(key)) {
+            approvedVarPool.push(entry);
+            existing.add(key);
+          }
+        }
+        await rerunAfterVarApproval("Approved var pool updated");
+      }
+
+      async function clearApprovedVars() {
+        approvedVarPool = [];
+        await rerunAfterVarApproval("Approved var pool cleared");
+      }
+
+      async function rerunAfterVarApproval(statusText) {
+        try {
+          setStatus(`${statusText}: resolving...`);
+          plan = await postJson("/api/resolve-plan", patchBody());
+          lastRewritePreview = await postJson("/api/preview-full-ai-rewrite", {
+            characterPath: els.characterPath.value,
+            profile,
+            brain,
+            plan,
+            cleanupPreview: lastCleanupPreview,
+            approvedVarPool,
+          });
+          lastPreview = await postJson("/api/preview-diff", patchBody());
+          renderAll();
+          renderGraphMigratePlan(lastCleanupPreview);
+          showRaw({ mode: "approved_var_pool", approvedVarPool, plan, preview: lastPreview, rewrite: lastRewritePreview });
+          const blockers = lastPreview.blockingConflicts?.length || 0;
+          setStatus(blockers ? `${statusText}: ${blockers} blocker(s) remain` : `${statusText}: Preview Diff ready`, blockers ? "danger" : "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Approved var pool resolve failed", "danger");
+        }
+      }
+
+      async function applyApprovedPreview() {
+        if (!approvedVarPool.length) {
+          setStatus("No approved variables to apply", "danger");
+          return;
+        }
+        const blockers = lastPreview?.blockingConflicts || [];
+        if (!lastPreview || blockers.length) {
+          setStatus(lastPreview ? `Approved preview still has ${blockers.length} blocker(s)` : "Preview Diff is required before Apply", "danger");
+          return;
+        }
+        const ok = confirm(`Apply approved Preview Diff with ${approvedVarPool.length} approved variable(s) after creating a backup?`);
+        if (!ok) return;
+        try {
+          setStatus("Applying approved preview...");
+          const result = await postJson("/api/apply-patch", patchBody());
+          showRaw({ mode: "apply_approved_preview", approvedVarPool, result });
+          setStep("apply", "done");
+          closeConflictModal();
+          setStatus(`Approved patch applied: backup ${result.report.backupId}`, "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          const conflicts = error.payload?.conflicts || [];
+          if (conflicts.length) {
+            renderConflictModal(error.payload);
+            setStatus(`Approved apply blocked: ${conflicts.length} unresolved conflicts`, "danger");
+          } else {
+            setStatus("Approved apply blocked", "danger");
+          }
+        }
+      }
+
+      async function previewFullRewritePlan() {
+        try {
+          setStatus("Full rewrite: building preview...");
+          const cleanupPreview = lastCleanupPreview || await postJson("/api/preview-ai-cleanup", { characterPath: els.characterPath.value, profile });
+          lastCleanupPreview = cleanupPreview;
+          lastRewritePreview = await postJson("/api/preview-full-ai-rewrite", {
+            characterPath: els.characterPath.value,
+            profile,
+            brain,
+            plan,
+            cleanupPreview,
+            approvedVarPool,
+          });
+          renderGraphMigratePlan(lastCleanupPreview);
+          showRaw({ mode: "full_ai_variable_rewrite_preview", rewrite: lastRewritePreview });
+          const blocked = lastRewritePreview.rewritePlan?.summary?.blocked || 0;
+          setStatus(blocked ? `Full rewrite preview blocked: ${blocked} variable(s)` : "Full rewrite preview ready", blocked ? "danger" : "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Full rewrite preview failed", "danger");
+        }
+      }
+
+      els.graphMigrateBtn.addEventListener("click", () => {
+        els.manualModuleArea.hidden = true;
+        els.replaceOldAiArea.hidden = true;
+        els.graphMigrateArea.hidden = false;
+        els.conflictMessage.innerHTML = `
+          <div class="list-item">
+            <strong>Graph + Var Migrate selected</strong>
+            <span>Review reusable AI-owned vars and graph blockers before deciding whether full brain migration is safe.</span>
+          </div>
+        `;
+        renderGraphMigratePlan(lastCleanupPreview);
+        showRaw({
+          mode: "graph_var_migrate",
+          stateDependencyGraph: profile?.stateDependencyGraph,
+          varOwnershipMap: profile?.varOwnershipMap,
+          conflicts: lastApplyBlock?.conflicts || [],
+        });
+        setStatus("Graph + Var Migrate: review reuse plan");
+      });
+
+      async function runGraphMigratePipeline() {
+        const ok = confirm("Run migration pipeline now? This may quarantine high-confidence old AI blocks with a backup, then rescan, resolve, and rebuild Preview Diff. It will not Apply the final brain patch.");
+        if (!ok) return;
+        try {
+          setStatus("Migration: previewing old AI cleanup...");
+          const cleanup = await postJson("/api/preview-ai-cleanup", { characterPath: els.characterPath.value, profile });
+          lastCleanupPreview = cleanup;
+          renderGraphMigratePlan(cleanup);
+          const releaseAfterCleanup = Number(cleanup.releasePlan?.summary?.reusableAfterQuarantine || 0);
+          if (!releaseAfterCleanup && (lastApplyBlock?.conflicts || []).some((item) => item.status === "conflict")) {
+            showRaw({ mode: "graph_var_migrate_pipeline_blocked", cleanup, conflicts: lastApplyBlock?.conflicts || [] });
+            setStatus("Migration blocked: quarantine will not free enough AI vars", "danger");
+            return;
+          }
+          let quarantineReport = null;
+          if (cleanup.quarantineEligibleCount) {
+            setStatus("Migration: quarantining old AI blocks...");
+            const quarantine = await postJson("/api/apply-ai-quarantine", { characterPath: els.characterPath.value, profile });
+            quarantineReport = quarantine.report;
+          }
+
+          setStatus("Migration: rescanning character...");
+          profile = await postJson("/api/scan", { characterPath: els.characterPath.value });
+          setStatus("Migration: resolving brain after rescan...");
+          plan = await postJson("/api/resolve-plan", patchBody());
+          setStatus("Migration: rebuilding Preview Diff...");
+          lastPreview = await postJson("/api/preview-diff", patchBody());
+          showRaw({
+            mode: "graph_var_migrate_pipeline",
+            cleanup,
+            quarantineReport,
+            plan,
+            preview: lastPreview,
+          });
+          renderAll();
+          const blockers = lastPreview.blockingConflicts || [];
+          if (blockers.length) {
+            renderConflictModal({
+              ...lastPreview,
+              conflicts: blockers,
+              plan,
+              modules: lastPreview.operations?.map((operation) => ({
+                id: operation.moduleId,
+                unresolvedPlaceholders: operation.unresolvedPlaceholders || [],
+              })).filter((item) => item.unresolvedPlaceholders.length) || [],
+            });
+            setStatus(`Migration still blocked: ${blockers.length} review items`, "danger");
+            return;
+          }
+          closeConflictModal();
+          setStep("preview", "done");
+          setStep("apply", "active");
+          setStatus("Migration preview is clean. Review Preview Diff, then Apply.", "ok");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Migration pipeline stopped", "danger");
+        }
+      }
+
+      els.applyManualBtn.addEventListener("click", async () => {
+        const checked = [...els.manualModuleList.querySelectorAll("input[type='checkbox']:checked")]
+          .map((input) => input.value);
+        const ok = confirm(`Apply ${checked.length} checked modules after creating a backup?`);
+        if (!ok) return;
+        await applySelectedModules(checked, "Applying checked modules");
+      });
+
+      function cleanupKindLabel(kind) {
+        if (kind === "marker") return tag("marker", "ok");
+        if (kind === "cmd_ai_state") return tag("cmd AI", "warn");
+        if (kind === "var_comment") return tag("var map", "warn");
+        if (kind === "ai_helper_state") return tag("helper", "warn");
+        return tag(kind || "candidate", "warn");
+      }
+
+      function renderCleanupPreview(preview) {
+        lastCleanupPreview = preview;
+        const candidates = preview?.candidates || [];
+        const markerCount = candidates.filter((item) => item.autoRemovable).length;
+        const quarantineCount = candidates.filter((item) => item.quarantineEligible).length;
+        els.applyCleanupBtn.hidden = markerCount === 0;
+        const safeIds = cleanModuleIds(lastApplyBlock);
+        const actionPanel = markerCount || quarantineCount
+          ? `
+            <div class="list-item">
+              <strong>Automatic old AI handling is available</strong>
+              <span>${escapeHtml(markerCount)} marker blocks can be removed. ${escapeHtml(quarantineCount)} high-confidence AI blocks can be quarantined by adding triggerAll = 0, without deleting code.</span>
+            </div>
+            <div class="modal-actions">
+              <button id="applyQuarantineBtn" type="button" class="primary" ${quarantineCount ? "" : "hidden"} title="Disable high-confidence old AI State -1 blocks by adding triggerAll = 0 after creating a backup.">Quarantine ${escapeHtml(quarantineCount)} Safe AI Blocks</button>
+            </div>
+          `
+          : `
+            <div class="list-item">
+              <strong>No automatic Replace Old AI patch is available</strong>
+              <span>The scanner found heuristic AI-looking lines, but no marker-protected AI_PATCH blocks. Deleting heuristic candidates automatically could remove gameplay code, so this mode is preview-only for this character. Use Safe Lite or Manual Pick to continue.</span>
+            </div>
+            <div class="modal-actions">
+              <button id="cleanupSafeLiteBtn" type="button" class="primary" ${safeIds.length ? "" : "disabled"} title="Apply only modules that have no unresolved placeholders.">${safeIds.length ? `Use Safe Lite Patch (${safeIds.length})` : "No Safe Lite Modules"}</button>
+              <button id="cleanupManualPickBtn" type="button" title="Open the module checklist and apply clean modules manually.">Open Manual Pick</button>
+            </div>
+          `;
+        els.replaceOldAiArea.innerHTML = `
+          <div class="list-item">
+            <strong>Old AI cleanup preview</strong>
+            <span>${escapeHtml(candidates.length)} candidates found. ${escapeHtml(markerCount)} marker blocks can be removed; ${escapeHtml(quarantineCount)} high-confidence blocks can be quarantined; the rest are preview-only.</span>
+          </div>
+          ${actionPanel}
+          <div class="module-picker">
+            ${candidates.map((item) => `
+              <div class="module-check ${item.autoRemovable || item.quarantineEligible ? "" : "partial"}">
+                <span></span>
+                <span>
+                  <strong>${escapeHtml(item.title)}</strong>
+                  <small>${escapeHtml(item.relativePath)}:${escapeHtml(item.startLine)}-${escapeHtml(item.endLine)} - ${escapeHtml(item.reason)}</small>
+                </span>
+                ${cleanupKindLabel(item.kind)}
+              </div>
+            `).join("") || `<div class="empty">No old AI cleanup candidates found. Nothing was changed.</div>`}
+          </div>
+          <div class="modal-actions">
+            <button id="applyCleanupBtn" type="button" class="danger" ${markerCount ? "" : "hidden"} title="Remove only marker-protected old AI blocks after creating a backup. Heuristic blocks are preview-only.">Remove ${escapeHtml(markerCount)} Marker AI Blocks</button>
+          </div>
+        `;
+        els.applyCleanupBtn = document.getElementById("applyCleanupBtn");
+        els.applyCleanupBtn?.addEventListener("click", applyMarkerCleanup);
+        document.getElementById("applyQuarantineBtn")?.addEventListener("click", applyAiQuarantine);
+        document.getElementById("cleanupSafeLiteBtn")?.addEventListener("click", async () => {
+          const nextSafeIds = cleanModuleIds(lastApplyBlock);
+          const ok = confirm(`Safe Lite Patch will apply ${nextSafeIds.length} modules without missing placeholders and skip blocked features. Continue?`);
+          if (!ok) return;
+          await applySelectedModules(nextSafeIds, "Applying Safe Lite Patch");
+        });
+        document.getElementById("cleanupManualPickBtn")?.addEventListener("click", () => {
+          els.manualPickBtn.click();
+        });
+      }
+
+      async function applyAiQuarantine() {
+        if (!lastCleanupPreview) return;
+        const quarantineCount = (lastCleanupPreview.candidates || []).filter((item) => item.quarantineEligible).length;
+        if (!quarantineCount) {
+          setStatus("No safe AI blocks available for quarantine", "danger");
+          return;
+        }
+        const ok = confirm(`Quarantine ${quarantineCount} high-confidence old AI blocks after creating a backup? This adds triggerAll = 0 and does not delete code.`);
+        if (!ok) return;
+        try {
+          setStatus("Quarantining old AI blocks...");
+          const result = await postJson("/api/apply-ai-quarantine", { characterPath: els.characterPath.value, profile });
+          showRaw(result);
+          profile = await postJson("/api/scan", { characterPath: els.characterPath.value });
+          plan = null;
+          lastPreview = null;
+          setStep("scan", "done");
+          setStep("resolve", "active");
+          setStatus(`Old AI quarantined: backup ${result.report.backupId}`, "ok");
+          closeConflictModal();
+          renderAll();
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("AI quarantine failed", "danger");
+        }
+      }
+
+      async function applyMarkerCleanup() {
+        if (!lastCleanupPreview) return;
+        const markerCount = (lastCleanupPreview.candidates || []).filter((item) => item.autoRemovable).length;
+        if (!markerCount) {
+          setStatus("No marker cleanup blocks available", "danger");
+          return;
+        }
+        const ok = confirm(`Remove ${markerCount} marker-protected old AI blocks after creating a backup?`);
+        if (!ok) return;
+        try {
+          setStatus("Removing marker AI blocks...");
+          const result = await postJson("/api/apply-ai-cleanup", { characterPath: els.characterPath.value, profile });
+          showRaw(result);
+          profile = await postJson("/api/scan", { characterPath: els.characterPath.value });
+          setStep("scan", "done");
+          setStatus(`Cleanup applied: backup ${result.report.backupId}`, "ok");
+          closeConflictModal();
+          renderAll();
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Cleanup apply failed", "danger");
+        }
+      }
+
+      els.replaceOldAiBtn.addEventListener("click", async () => {
+        const conflicts = lastApplyBlock?.conflicts || [];
+        els.manualModuleArea.hidden = true;
+        els.replaceOldAiArea.hidden = false;
+        els.graphMigrateArea.hidden = true;
+        els.conflictMessage.innerHTML = `
+          <div class="list-item">
+            <strong>Replace Old AI selected</strong>
+            <span>Scanning for old AI-only marker blocks and AI-looking candidates. Marker blocks can be removed with backup; heuristic blocks are shown for review only.</span>
+          </div>
+        `;
+        try {
+          setStatus("Previewing old AI cleanup...");
+          const preview = await postJson("/api/preview-ai-cleanup", { characterPath: els.characterPath.value, profile });
+          renderCleanupPreview(preview);
+          showRaw({ mode: "replace_old_ai", unresolvedConflicts: conflicts, cleanupPreview: preview });
+          setStatus(`Cleanup preview: ${preview.candidates.length} candidates`, preview.safeRemovableCount ? "ok" : "");
+        } catch (error) {
+          showRaw(error.payload || { error: error.message });
+          setStatus("Cleanup preview failed", "danger");
+        }
+      });
+
+      renderAll();
+    </script>
+  </body>
+</html>

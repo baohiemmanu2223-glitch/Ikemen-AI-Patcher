@@ -1,0 +1,51 @@
+{
+  "name": "ikemen-ai-patcher",
+  "version": "0.1.0",
+  "description": "HTML + Node helper tool for scanning Ikemen/MUGEN characters, loading AI brain markdown files, previewing patch plans, backing up files, applying AI patches, and running quick tests.",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "helper": "node helper/server.js",
+    "electron": "electron .",
+    "pack": "electron-builder --dir",
+    "dist:win": "electron-builder --win portable --x64"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "iconv-lite": "^0.7.2"
+  },
+  "devDependencies": {
+    "electron": "^42.3.0",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.cuocsong8x.ikemen-ai-patcher",
+    "productName": "Ikemen AI Patcher",
+    "asar": false,
+    "files": [
+      "electron/**/*",
+      "helper/**/*",
+      "public/**/*",
+      "brains/**/*",
+      "docs/**/*",
+      "README.md",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "electron/main.cjs"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "signAndEditExecutable": false,
+      "verifyUpdateCodeSignature": false,
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    }
+  }
+}

@@ -1,0 +1,2365 @@
+{
+  "backupId": "20260606_153857_Meiling",
+  "backupRoot": "E:\\x1\\Ikemen_Nighty\\AI_Patcher\\backups\\20260606_153857_Meiling",
+  "characterPath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling",
+  "filesChanged": [
+    {
+      "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling\\KOF_Meirin.cmd",
+      "relativePath": "KOF_Meirin.cmd",
+      "operations": [
+        {
+          "id": "variable_comments:0",
+          "moduleId": "variable_comments",
+          "risk": "low",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling\\KOF_Meirin.cmd",
+          "mode": "upsert-marker",
+          "markerId": "mvc_wolverine_ag:variable_comments:v1",
+          "insertBefore": [
+            "[Command]",
+            "[Statedef -1]",
+            "[State -1"
+          ],
+          "insertAfter": [],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": null,
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "status": "inserted-before-anchor",
+          "anchorUsed": "[Command]",
+          "contentLines": 20,
+          "contentPreview": "; AI_PATCH_BEGIN: mvc_wolverine_ag:variable_comments:v1\n; AI_PATCH_VAR ai_enabled = var(59)\n; AI_PATCH_VAR wolverine_runtime_gate = var(2)\n; AI_PATCH_VAR ai_level = var(54)\n; AI_PATCH_VAR reaction_level = var(53)\n; AI_PATCH_VAR target_index = var(52)\n; AI_PATCH_VAR ground_chain_flag = var(39)\n; AI_PATCH_VAR air_chain_flag = var(14)\n; AI_PATCH_VAR route_lock = var(55)\n; AI_PATCH_VAR pressure_mode = var(56)\n; AI_PATCH_VAR anti_air_memory = var(3)\n; AI_PATCH_VAR drill_lock = var(47)\n; AI_PATCH_VAR hyper_lock = var(5)\n; AI_PATCH_VAR throw_lock = var(45)\n; AI_PATCH_FVAR threat_score = fvar(32)\n; AI_PATCH_FVAR range_score = fvar(33)\n; AI_PATCH_FVAR enemy_y = fvar(34)\n; AI_PATCH_FVAR enemy_vel_x = fvar(35)\n; AI_PATCH_FVAR approach_bias = fvar(36)\n; AI_PATCH_END: mvc_wolverine_ag:variable_comments:v1",
+          "routeTargets": []
+        },
+        {
+          "id": "wolverine_runtime_sensor:0",
+          "moduleId": "wolverine_runtime_sensor",
+          "risk": "low",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling\\KOF_Meirin.cmd",
+          "mode": "upsert-marker",
+          "markerId": "mvc_wolverine_ag:wolverine_runtime_sensor:v1",
+          "insertBefore": [],
+          "insertAfter": [
+            "[Statedef -1]"
+          ],
+          "fallbackInsertBefore": [
+            "[State -1"
+          ],
+          "insertAfterModule": null,
+          "routePreview": [],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "status": "inserted-after-anchor",
+          "anchorUsed": "[Statedef -1]",
+          "contentLines": 111,
+          "contentPreview": "; AI_PATCH_BEGIN: mvc_wolverine_ag:wolverine_runtime_sensor:v1\n[State -1, AI Wolverine AILevel Bridge]\ntype = VarSet\ntrigger1 = AILevel > 0\nvar(59) = AILevel\nignoreHitPause = 1\n\n[State -1, AI Wolverine AILevel Off]\ntype = VarSet\ntrigger1 = AILevel <= 0\nvar(59) = 0\nignoreHitPause = 1\n\n[State -1, AI Wolverine Runtime Gate Sync]\ntype = VarSet\ntrigger1 = var(59) > 0\nvar(2) = 1\ntrigger2 = var(59) <= 0\nvar(2) = 0\nignoreHitPause = 1\n\n[State -1, AI Wolverine Level Sync]\ntype = VarSet\ntrigger1 = var(59) > 0\nvar(54) = ifElse(var(59) > 8, 8, var(59))\nignoreHitPause = 1\n\n[State -1, AI Wolverine Reaction Sync]\ntype = VarSet\ntrigger1 = var(59) > 0\nvar(53) = ifElse(var(59) > 8, 8, var(59))\nignoreHitPause = 1\n\n[State -1, AI Wolverine Target Index]\ntype = VarSet\ntrigger1 = var(59) > 0 && NumEnemy\nvar(52) = 0\nignoreHitPause = 1\n\n[State -1, AI Wolverine Enemy Y Sensor]\ntype = VarSet\ntrigger1 = var(59) > 0 && NumEnemy\nfvar(34) = P2BodyDist Y\nignoreHitPause = 1\n\n[State -1, AI Wolverine Enemy Vel X Sensor]\ntype = VarSet\ntrigger1 = var(59) > 0 && NumEnemy\nfvar(35) = EnemyNear(var(52)), Vel X\nignoreHitPause = 1\n\n[State -1, AI Wolverine Threat Score]\ntype = VarSet\ntrigger1 = var(59) > 0 && NumEnemy\nfvar(32) = (EnemyNear(var(52)), MoveType = A) + (EnemyNear(var(52)), StateType = A) + (Enemy, NumProj > 0)\nignoreHitPause = 1\n\n[State -1, AI Wolverine Range Score Close]\ntype = VarSet\ntrigger1 = var(59) > 0 && P2BodyDist X < 32\nfvar(33) = 1\ntrigger2 = var(59) > 0 && P2BodyDist X = [32,105]\nfvar(33) = 2\ntrigger3 = var(59) > 0 && P2BodyDist X > 105\nfvar(33) = 3\nignoreHitPause = 1\n\n[State -1, AI Wolverine Approach Bias]\ntype = VarSet\ntrigger1 = var(59) > 0\nfvar(36) = ifElse(Life < LifeMax * 0.35, 2, 1)\nignoreHitPause = 1\n\n[State -1, AI Wolverine Anti Air Memory Add]\ntype = VarAdd\ntriggerAll = var(59) > 0 && NumEnemy\ntriggerAll = EnemyNear(var(52)), StateType = A || P2BodyDist Y < -55\ntrigger1 = GameTime % 6 = 0\nvar(3) = 1\nignoreHitPause = 1\n\n[State -1, AI Wolverine Anti Air Memory Decay]\ntype = VarAdd\ntrigger1 = var(3) > 0 && GameTime % 8 = 0\nvar(3) = -1\nignoreHitPause = 1\n\n[State -1, AI Wolverine Route Lock Decay]\ntype = VarAdd\ntrigger1 = var(55) > 0\nvar(55) = -1\nignoreHitPause = 1\n\n[State -1, AI Wolverine Drill Lock Decay]\ntype = VarAdd\ntrigger1 = var(47) > 0\nvar(47) = -1\nignoreHitPause = 1\n\n[State -1, AI Wolverine Hyper Lock Decay]\ntype = VarAdd\ntrigger1 = var(5) > 0\nvar(5) = -1\nignoreHitPause = 1\n\n[State -1, AI Wolverine Throw Lock Decay]\ntype = VarAdd\ntrigger1 = var(45) > 0\nvar(45) = -1\nignoreHitPause = 1\n; AI_PATCH_END: mvc_wolverine_ag:wolverine_runtime_sensor:v1",
+          "routeTargets": []
+        },
+        {
+          "id": "wolverine_launcher_air_router:0",
+          "moduleId": "wolverine_launcher_air_router",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling\\KOF_Meirin.cmd",
+          "mode": "upsert-marker",
+          "markerId": "mvc_wolverine_ag:wolverine_launcher_air_router:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": "wolverine_ground_rush_router",
+          "routePreview": [
+            {
+              "id": "wolverine_air_routes",
+              "type": "air_route",
+              "source": "mvc_air_chain_drill_fatal_claw",
+              "chain": [
+                "air_light",
+                "air_medium",
+                "air_kick",
+                "air_strong",
+                "air_finish",
+                "air_drill_down_forward",
+                "fatal_claw_air"
+              ],
+              "condition": [
+                "airborne_self",
+                "enemy_in_air_or_hitstun",
+                "air_chain_x_y_window",
+                "drill_or_hyper_lock_clear"
+              ],
+              "policy": [
+                "keep_air_actions_air_only",
+                "use_fatal_claw_air_only_with_meter",
+                "do_not_drill_repeatedly_without_contact"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "priorityInsertBefore": [
+            "[State -1, Kakougyoku Hidden]"
+          ],
+          "priorityInsertReason": "before old AI meter state 3500 at original line 382",
+          "status": "inserted-before-old-ai-meter",
+          "anchorUsed": "[State -1, Kakougyoku Hidden]",
+          "contentLines": 113,
+          "contentPreview": "; AI_PATCH_BEGIN: mvc_wolverine_ag:wolverine_launcher_air_router:v1\n[State -1, AI Wolverine Anti Air Launcher]\ntype = ChangeState\nvalue = 250\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Ctrl && var(55) <= 0\ntriggerAll = EnemyNear(var(52)), StateType = A || P2BodyDist Y <= -55 || var(3) >= 4\ntriggerAll = P2BodyDist X = [0,145]\ntrigger1 = Random < 100 + (var(59) * 18)\ntrigger1 = var(56) := 2\n\n[State -1, AI Wolverine Tornado Anti Air]\ntype = ChangeState\nvalue = 2110\ntriggerAll = Power >= 2000 ; AI_PATCH_AUTO_POWER_GATE\n; AI_PATCH_STATE_WINDOW 2110 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-30,40]\ntriggerAll = P2BodyDist Y = [-92,41]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Ctrl && var(55) <= 0\ntriggerAll = EnemyNear(var(52)), StateType = A || P2BodyDist Y <= -55\n; AI_PATCH_SAFE_GUARD: 2110 HitDef p2stateno custom state\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 20)\ntriggerAll = EnemyNear,StateType != L\ntrigger1 = Random < 85 + (var(59) * 16)\ntrigger1 = var(55) := 18\n\n[State -1, AI Wolverine Air Chain Light]\ntype = ChangeState\nvalue = 600\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType = A && MoveType != H\ntriggerAll = Ctrl\ntriggerAll = EnemyNear(var(52)), StateType != L\ntriggerAll = P2BodyDist X = [0,72]\ntriggerAll = P2BodyDist Y = [-95,30]\ntrigger1 = Random < 120 + (var(59) * 14)\n\n[State -1, AI Wolverine Air Light To Medium]\ntype = ChangeState\nvalue = 600\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType = A && MoveType != H\ntriggerAll = StateNo = 600 && MoveContact\ntriggerAll = P2BodyDist X < 72\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = 1\n\n[State -1, AI Wolverine Air Medium To Kick]\ntype = ChangeState\nvalue = 640\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType = A && MoveType != H\ntriggerAll = StateNo = 600 && MoveContact\ntriggerAll = P2BodyDist X < 72\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = 1\n\n[State -1, AI Wolverine Air Kick To Strong]\ntype = ChangeState\nvalue = 650\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType = A && MoveType != H\ntriggerAll = StateNo = 640 && MoveContact\ntriggerAll = P2BodyDist X < 72\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = Random < 720\n\n[State -1, AI Wolverine Air Strong To Finish]\ntype = ChangeState\nvalue = 600\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType = A && MoveType != H\ntriggerAll = StateNo = 650 && MoveContact\ntriggerAll = P2BodyDist X < 72\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = Random < 650\n\n[State -1, AI Wolverine Air Drill Finish]\ntype = ChangeState\nvalue = 1200\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType = A && MoveType != H\ntriggerAll = var(47) <= 0\ntriggerAll = StateNo = 650 || StateNo = 600 || StateNo = 2110\ntriggerAll = MoveContact\ntriggerAll = P2BodyDist X < 72\n; AI_PATCH_MULTI_HIT_GUARD: wait for source state final hit 2110:elem13\ntriggerAll = (StateNo != 2110 || AnimElemTime(13) >= 0)\ntrigger1 = Random < 330\ntrigger1 = var(47) := 45\n\n[State -1, AI Wolverine Air Fatal Claw Cashout]\ntype = ChangeState\nvalue = 2110\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType = A && MoveType != H\ntriggerAll = Power >= 2000 && var(5) <= 0\n; AI_PATCH_STATE_WINDOW 2110 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-30,40]\ntriggerAll = P2BodyDist Y = [-92,41]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = MoveHit && EnemyNear(var(52)), MoveType = H\n; AI_PATCH_SAFE_GUARD: 2110 HitDef p2stateno custom state\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 20)\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = Random < 145 + (var(59) * 10)\ntrigger1 = var(5) := 70\n; AI_PATCH_END: mvc_wolverine_ag:wolverine_launcher_air_router:v1",
+          "routeTargets": [
+            "250",
+            "2110",
+            "600",
+            "640",
+            "650",
+            "1200"
+          ]
+        },
+        {
+          "id": "wolverine_meter_cashout:0",
+          "moduleId": "wolverine_meter_cashout",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling\\KOF_Meirin.cmd",
+          "mode": "upsert-marker",
+          "markerId": "mvc_wolverine_ag:wolverine_meter_cashout:v1",
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": "wolverine_launcher_air_router",
+          "routePreview": [
+            {
+              "id": "wolverine_hyper_cashout_routes",
+              "type": "super_cashout",
+              "source": "one_bar_hypers",
+              "chain": [
+                "speedy_hyper",
+                "barrage_hyper",
+                "weapon_x",
+                "fatal_claw_ground",
+                "secret_hyper"
+              ],
+              "condition": [
+                "power_at_least_1000",
+                "hit_confirm_or_whiff_punish",
+                "close_or_mid_range_window",
+                "target_not_liedown"
+              ],
+              "policy": [
+                "no_meter_spender_without_power",
+                "close_confirm_or_native_wrapper_evidence_required",
+                "self_buff_install_not_combo_finisher",
+                "healing_factor_only_when_life_below_max",
+                "secret_hyper_reserved_for_close_or_kill"
+              ]
+            },
+            {
+              "id": "wolverine_safe_meter_utility",
+              "type": "safe_setup",
+              "source": "meter_reliability_scan",
+              "chain": [
+                "healing_factor"
+              ],
+              "condition": [
+                "self_buff_or_install_only",
+                "target_liedown_or_far",
+                "no_in_guard_dist",
+                "life_below_threshold"
+              ],
+              "policy": [
+                "never_use_as_combo_finisher"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "priorityInsertBefore": [
+            "[State -1, Kakougyoku Hidden]"
+          ],
+          "priorityInsertReason": "before old AI meter state 3500 at original line 382",
+          "status": "inserted-before-old-ai-meter",
+          "anchorUsed": "[State -1, Kakougyoku Hidden]",
+          "contentLines": 124,
+          "contentPreview": "; AI_PATCH_BEGIN: mvc_wolverine_ag:wolverine_meter_cashout:v1\n; AI_PATCH_METER_POLICY: attack cashout must resolve to close_confirm/projectile or native-wrapper evidence.\n; AI_PATCH_METER_POLICY: self_buff/install aliases are safe setup only; unsafe_raw is never auto-generated.\n[State -1, AI Wolverine Berserker Barrage X Cashout]\ntype = ChangeState\nvalue = 3500\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Power >= 3000 && var(5) <= 0\n; AI_PATCH_STATE_WINDOW 3500 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [0,73]\ntriggerAll = P2BodyDist Y = [-82,10]\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_HIGH_COST_FINISHER 3500: 3000-power hard hitstun / lethal punish confirm gate\ntriggerAll = (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 8)\ntriggerAll = EnemyNear(var(52)), StateType != L\n; AI_PATCH_SAFE_GUARD: 3500 HitDef p2stateno custom state, helper follows Root AnimElem\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 20)\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = MoveHit && EnemyNear(var(52)), MoveType = H\ntrigger1 = Random < 125 + (var(59) * 12)\ntrigger1 = var(5) := 70\n\n[State -1, AI Wolverine Weapon X Punish]\ntype = ChangeState\nvalue = 2110\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Power >= 2000 && var(5) <= 0\n; AI_PATCH_STATE_WINDOW 2110 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-30,40]\ntriggerAll = P2BodyDist Y = [-92,41]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear(var(52)), StateType != L\n; AI_PATCH_SAFE_GUARD: 2110 HitDef p2stateno custom state\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 20)\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = MoveHit && EnemyNear(var(52)), MoveType = H && Random < 130 + (var(59) * 10)\ntrigger1 = var(5) := 70\ntrigger2 = Ctrl && EnemyNear(var(52)), MoveType = A && EnemyNear(var(52)), Ctrl = 0 && Random < 65 + (var(59) * 8)\ntrigger2 = var(5) := 70\n\n[State -1, AI Wolverine Fatal Claw Ground Cashout]\ntype = ChangeState\nvalue = 2110\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Power >= 2000 && var(5) <= 0\n; AI_PATCH_STATE_WINDOW 2110 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-30,40]\ntriggerAll = P2BodyDist Y = [-92,41]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear(var(52)), StateType != L\n; AI_PATCH_SAFE_GUARD: 2110 HitDef p2stateno custom state\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 20)\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = MoveHit && EnemyNear(var(52)), MoveType = H\ntrigger1 = Random < 115 + (var(59) * 12)\ntrigger1 = var(5) := 70\n\n[State -1, AI Wolverine Speedy GonzaleX Pressure]\ntype = ChangeState\nvalue = 3500\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Power >= 3000 && var(5) <= 0\n; AI_PATCH_STATE_WINDOW 3500 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [0,73]\ntriggerAll = P2BodyDist Y = [-82,10]\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_HIGH_COST_FINISHER 3500: 3000-power hard hitstun / lethal punish confirm gate\ntriggerAll = (!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 8)\ntriggerAll = EnemyNear(var(52)), StateType != L\n; AI_PATCH_SAFE_GUARD: 3500 HitDef p2stateno custom state, helper follows Root AnimElem\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 20)\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = MoveHit && EnemyNear(var(52)), MoveType = H && Random < 105 + (var(59) * 10)\ntrigger1 = var(5) := 80\ntrigger2 = Ctrl && Life < LifeMax * 0.45 && Random < 45 + (var(59) * 8)\ntrigger2 = var(5) := 80\n\n[State -1, AI Wolverine Secret Hyper Kill Attempt]\ntype = ChangeState\nvalue = 2110\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Power >= 2000 && var(5) <= 0\n; AI_PATCH_STATE_WINDOW 2110 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-30,40]\ntriggerAll = P2BodyDist Y = [-92,41]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear(var(52)), StateType != L\n; AI_PATCH_SAFE_GUARD: 2110 HitDef p2stateno custom state\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 20)\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = EnemyNear(var(52)), Life < 330 && MoveHit && Random < 120 + (var(59) * 12)\ntrigger1 = var(5) := 95\n\n[State -1, AI Wolverine Healing Factor Safe]\ntype = ChangeState\nvalue = 3600\ntriggerAll = var(59) > 0 && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = Power >= 0 && var(5) <= 0\ntriggerAll = Ctrl && Life < LifeMax * 0.55 && Life < 999\ntriggerAll = EnemyNear(var(52)), StateType = L || P2BodyDist X > 130\ntriggerAll = P2BodyDist X > 32 || EnemyNear(var(52)), StateType = L\ntriggerAll = !InGuardDist && Enemy, NumProj = 0\n; AI_PATCH_SAFE_GUARD: 3600 HitDef p2stateno custom state\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 20)\ntriggerAll = EnemyNear,StateType != L\ntrigger1 = Random < 45 + (var(59) * 7)\ntrigger1 = var(5) := 120\n; AI_PATCH_END: mvc_wolverine_ag:wolverine_meter_cashout:v1",
+          "routeTargets": [
+            "3500",
+            "2110",
+            "3600",
+            "120"
+          ]
+        },
+        {
+          "id": "resolver_generated_combo_pool:0",
+          "moduleId": "resolver_generated_combo_pool",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling\\KOF_Meirin.cmd",
+          "mode": "upsert-marker",
+          "markerId": "mvc_wolverine_ag:resolver_generated_combo_pool:v1",
+          "insertBefore": [
+            "[State -1, AI Power Charge]",
+            "[State -1"
+          ],
+          "insertAfter": [
+            "[Statedef -1]"
+          ],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": "meter_cashout_safe",
+          "routePreview": [
+            {
+              "id": "resolver_generated_combo_archetypes",
+              "type": "generated_combo_archetypes",
+              "source": "scan_report_route_candidates",
+              "chain": [
+                "400",
+                "400",
+                "1210",
+                "2000",
+                "400",
+                "400",
+                "1000",
+                "200",
+                "2110",
+                "1210",
+                "2000",
+                "200",
+                "1000",
+                "1100",
+                "3500",
+                "430",
+                "230",
+                "1000",
+                "200",
+                "200",
+                "1430",
+                "2000",
+                "230",
+                "430",
+                "1430",
+                "2000",
+                "430",
+                "440",
+                "1000",
+                "2000",
+                "200",
+                "1005",
+                "200",
+                "1100"
+              ],
+              "condition": [
+                "scanner_confirmed_edge",
+                "movehit_or_movecontact",
+                "range_and_power_gate",
+                "boss_archetype_tags"
+              ],
+              "policy": [
+                "max_10_combo_archetype_routes",
+                "transition_level_patch_only"
+              ],
+              "archetypes": [
+                "Style Crouch Low Confirm Special Cashout: 400->400->1210->2000 [Crouch Low Confirm, Rushdown Combo, Low Starter, Super Combo] source=style_crouch_low_confirm_adapter",
+                "Style Crouch Low Confirm Special: 400->400->1000 [Crouch Low Confirm, Rushdown Combo, Low Starter, Special Combo] source=style_crouch_low_confirm_adapter",
+                "Wolverine Style Rush Launcher Slash Hyper: 200->2110->1210->2000 [Wolverine Style, Rushdown Combo, Launcher Combo, Super Combo] source=wolverine_style_adapter",
+                "Wolverine Style Drill Tornado Cashout: 200->1000->1100->3500 [Wolverine Style, Pressure Combo, Anti-Air Combo, Super Combo] source=wolverine_style_adapter",
+                "Synthetic Mid Kick Shiden: 430->230->1000 [Heavy Confirm Combo, Pressure Combo, Character Native Chain] source=scan_report_synthetic_boss_route",
+                "Synthetic Light Repeat Special Meter: 200->200->1430->2000 [Light Confirm Combo, Pressure Combo, Super Combo] source=scan_report_synthetic_boss_route",
+                "Synthetic Heavy Special Level2: 230->430->1430->2000 [Heavy Confirm Combo, Punish Combo, Max Damage Combo] source=scan_report_synthetic_boss_route",
+                "Synthetic Mid Confirm Cashout: 430->440->1000->2000 [Counter Combo, Desperation Combo, Super Combo] source=scan_report_synthetic_boss_route",
+                "Light Confirm Combo: 200->1005 [Light Confirm, Pressure Combo]",
+                "Heavy Confirm / Punish Combo: 200->1100 [Heavy Confirm, Punish Combo, Counter Combo]"
+              ],
+              "styleAdapter": {
+                "id": "mvc_wolverine_style_adapter",
+                "mode": "active",
+                "coverage": 1,
+                "mappings": [
+                  "crouch_low_poke=400:holddown:high",
+                  "low_chain=400:holddown:high",
+                  "rush_poke=200:x:high",
+                  "launcher=2110:Kakougyoku MAX:high",
+                  "slash=1210:Rakouho EX:high",
+                  "drill=1000:Typhoon A:high",
+                  "tornado=1100:Kouhou X:high",
+                  "air_followup=600:x:high",
+                  "hyper_rush=2000:Saikou Fuurin X:high",
+                  "hyper_heavy=3500:Kakougyoku Hidden:high"
+                ]
+              }
+            },
+            {
+              "id": "resolver_generated_air_poke_pool",
+              "type": "air_poke_options",
+              "source": "scan_report_air_normal_candidates",
+              "chain": [
+                "650",
+                "640",
+                "630"
+              ],
+              "condition": [
+                "air_state_only",
+                "range_y_window",
+                "anti_punish_jump_coverage"
+              ],
+              "policy": [
+                "max_3_air_pokes",
+                "do_not_force_air_to_ground_special"
+              ]
+            },
+            {
+              "id": "resolver_generated_free_special_pool",
+              "type": "special_options",
+              "source": "scan_report_free_special_candidates",
+              "chain": [
+                "1100",
+                "1000",
+                "1200",
+                "1005"
+              ],
+              "condition": [
+                "no_power_cost",
+                "state_has_hitdef_or_helper_hit",
+                "normal_contact_bridge"
+              ],
+              "policy": [
+                "max_4_free_special_states"
+              ]
+            },
+            {
+              "id": "resolver_generated_meter_pool",
+              "type": "meter_options",
+              "source": "scan_report_meter_candidates",
+              "chain": [
+                "1430",
+                "2000"
+              ],
+              "condition": [
+                "power_gate_equals_scanned_cost",
+                "hit_confirm_or_finish_window"
+              ],
+              "policy": [
+                "max_4_meter_states",
+                "do_not_add_costs_together"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "generatedFallback": true,
+          "resolverMode": "supplemental",
+          "generatedResolverPool": {
+            "meterStates": [
+              1430,
+              2000
+            ],
+            "freeSpecialStates": [
+              1100,
+              1000,
+              1200,
+              1005
+            ],
+            "airPokeStates": [
+              650,
+              640,
+              630
+            ],
+            "comboRoutes": [
+              {
+                "id": "style_crouch_low_confirm_special_cashout",
+                "label": "Style Crouch Low Confirm Special Cashout",
+                "tags": [
+                  "Crouch Low Confirm",
+                  "Rushdown Combo",
+                  "Low Starter",
+                  "Super Combo"
+                ],
+                "edge": "400->400->1210->2000",
+                "source": "style_crouch_low_confirm_adapter",
+                "styleAdapter": {
+                  "id": "mvc_wolverine_style_adapter",
+                  "aliases": [
+                    "crouch_low_poke",
+                    "low_chain",
+                    "slash",
+                    "hyper_rush"
+                  ]
+                }
+              },
+              {
+                "id": "style_crouch_low_confirm_special",
+                "label": "Style Crouch Low Confirm Special",
+                "tags": [
+                  "Crouch Low Confirm",
+                  "Rushdown Combo",
+                  "Low Starter",
+                  "Special Combo"
+                ],
+                "edge": "400->400->1000",
+                "source": "style_crouch_low_confirm_adapter",
+                "styleAdapter": {
+                  "id": "mvc_wolverine_style_adapter",
+                  "aliases": [
+                    "crouch_low_poke",
+                    "low_chain",
+                    "drill"
+                  ]
+                }
+              },
+              {
+                "id": "wolverine_style_rush_launcher_slash_hyper",
+                "label": "Wolverine Style Rush Launcher Slash Hyper",
+                "tags": [
+                  "Wolverine Style",
+                  "Rushdown Combo",
+                  "Launcher Combo",
+                  "Super Combo"
+                ],
+                "edge": "200->2110->1210->2000",
+                "source": "wolverine_style_adapter",
+                "styleAdapter": {
+                  "id": "mvc_wolverine_style_adapter",
+                  "aliases": [
+                    "rush_poke",
+                    "launcher",
+                    "slash",
+                    "hyper_rush"
+                  ]
+                }
+              },
+              {
+                "id": "wolverine_style_drill_tornado_cashout",
+                "label": "Wolverine Style Drill Tornado Cashout",
+                "tags": [
+                  "Wolverine Style",
+                  "Pressure Combo",
+                  "Anti-Air Combo",
+                  "Super Combo"
+                ],
+                "edge": "200->1000->1100->3500",
+                "source": "wolverine_style_adapter",
+                "styleAdapter": {
+                  "id": "mvc_wolverine_style_adapter",
+                  "aliases": [
+                    "rush_poke",
+                    "drill",
+                    "tornado",
+                    "hyper_heavy"
+                  ]
+                }
+              },
+              {
+                "id": "synthetic_mid_kick_shiden",
+                "label": "Synthetic Mid Kick Shiden",
+                "tags": [
+                  "Heavy Confirm Combo",
+                  "Pressure Combo",
+                  "Character Native Chain"
+                ],
+                "edge": "430->230->1000",
+                "source": "scan_report_synthetic_boss_route",
+                "styleAdapter": null
+              },
+              {
+                "id": "synthetic_light_repeat_special_meter",
+                "label": "Synthetic Light Repeat Special Meter",
+                "tags": [
+                  "Light Confirm Combo",
+                  "Pressure Combo",
+                  "Super Combo"
+                ],
+                "edge": "200->200->1430->2000",
+                "source": "scan_report_synthetic_boss_route",
+                "styleAdapter": null
+              },
+              {
+                "id": "synthetic_heavy_special_level2",
+                "label": "Synthetic Heavy Special Level2",
+                "tags": [
+                  "Heavy Confirm Combo",
+                  "Punish Combo",
+                  "Max Damage Combo"
+                ],
+                "edge": "230->430->1430->2000",
+                "source": "scan_report_synthetic_boss_route",
+                "styleAdapter": null
+              },
+              {
+                "id": "synthetic_mid_confirm_cashout",
+                "label": "Synthetic Mid Confirm Cashout",
+                "tags": [
+                  "Counter Combo",
+                  "Desperation Combo",
+                  "Super Combo"
+                ],
+                "edge": "430->440->1000->2000",
+                "source": "scan_report_synthetic_boss_route",
+                "styleAdapter": null
+              },
+              {
+                "id": "light_confirm",
+                "label": "Light Confirm Combo",
+                "tags": [
+                  "Light Confirm",
+                  "Pressure Combo"
+                ],
+                "edge": "200->1005",
+                "source": "scan_report",
+                "styleAdapter": null
+              },
+              {
+                "id": "heavy_punish",
+                "label": "Heavy Confirm / Punish Combo",
+                "tags": [
+                  "Heavy Confirm",
+                  "Punish Combo",
+                  "Counter Combo"
+                ],
+                "edge": "200->1100",
+                "source": "scan_report",
+                "styleAdapter": null
+              }
+            ],
+            "styleAdapter": {
+              "id": "mvc_wolverine_style_adapter",
+              "mode": "active",
+              "coverage": 1,
+              "mappings": [
+                {
+                  "alias": "crouch_low_poke",
+                  "state": 400,
+                  "moveName": "holddown",
+                  "commandName": "holddown",
+                  "input": "/$D",
+                  "confidence": "high",
+                  "score": 325,
+                  "reuseLimit": 2,
+                  "hardReuseLimit": 3,
+                  "role": "launcher",
+                  "tags": [
+                    "action_mapped",
+                    "close_range",
+                    "crouch_attack",
+                    "hitdef",
+                    "launcher",
+                    "light_normal",
+                    "low_starter",
+                    "normal"
+                  ],
+                  "reason": "role matches low_starter; role matches crouch_attack; role matches light_normal; role matches normal; role matches crouch_attack; role matches low_starter; CMD \"holddown\" -> state 400; CMD command \"holddown\" maps to ChangeState 400; input /$D; state has direct HitDef; startup 2 (hitdef_animelem)"
+                },
+                {
+                  "alias": "low_chain",
+                  "state": 400,
+                  "moveName": "holddown",
+                  "commandName": "holddown",
+                  "input": "/$D",
+                  "confidence": "high",
+                  "score": 285,
+                  "reuseLimit": 2,
+                  "hardReuseLimit": 3,
+                  "role": "launcher",
+                  "tags": [
+                    "action_mapped",
+                    "close_range",
+                    "crouch_attack",
+                    "hitdef",
+                    "launcher",
+                    "light_normal",
+                    "low_starter",
+                    "normal"
+                  ],
+                  "reason": "role matches low_starter; role matches crouch_attack; role matches normal; role matches crouch_attack; role matches low_starter; CMD \"holddown\" -> state 400; CMD command \"holddown\" maps to ChangeState 400; input /$D; state has direct HitDef; startup 2 (hitdef_animelem)"
+                },
+                {
+                  "alias": "rush_poke",
+                  "state": 200,
+                  "moveName": "x",
+                  "commandName": "x",
+                  "input": "x",
+                  "confidence": "high",
+                  "score": 257,
+                  "reuseLimit": 2,
+                  "hardReuseLimit": 3,
+                  "role": "low_starter",
+                  "tags": [
+                    "action_mapped",
+                    "hitdef",
+                    "light_normal",
+                    "low_starter",
+                    "mid_range",
+                    "normal",
+                    "standing_attack"
+                  ],
+                  "reason": "role matches normal; role matches light_normal; role matches low_starter; role matches standing_attack; CMD \"x\" -> state 200; CMD command \"x\" maps to ChangeState 200; input x; state has direct HitDef; startup 3 (hitdef_animelem)"
+                },
+                {
+                  "alias": "launcher",
+                  "state": 2110,
+                  "moveName": "Kakougyoku MAX",
+                  "commandName": "Kakougyoku MAX",
+                  "input": "~D,DF,F,D,DF,F, x+y",
+                  "confidence": "high",
+                  "score": 233,
+                  "reuseLimit": 1,
+                  "hardReuseLimit": 2,
+                  "role": "meter_cashout",
+                  "tags": [
+                    "action_mapped",
+                    "close_range",
+                    "hitdef",
+                    "hyper",
+                    "launcher",
+                    "meter",
+                    "standing_attack",
+                    "vertical_coverage"
+                  ],
+                  "reason": "role matches launcher; role matches vertical_coverage; CMD \"Kakougyoku MAX\" -> state 2110; CMD command \"Kakougyoku MAX\" maps to ChangeState 2110; input ~D,DF,F,D,DF,F, x+y; state has direct HitDef; helper hit owner 21010; startup 6 (hitdef_animelem); meter reliability close_confirm/hit_confirm_only"
+                },
+                {
+                  "alias": "slash",
+                  "state": 1210,
+                  "moveName": "Rakouho EX",
+                  "commandName": "Rakouho EX",
+                  "input": "~D, DB, B, x+y",
+                  "confidence": "high",
+                  "score": 266,
+                  "reuseLimit": 3,
+                  "hardReuseLimit": 4,
+                  "role": "anti_air_special",
+                  "tags": [
+                    "action_mapped",
+                    "anti_air_special",
+                    "hitdef",
+                    "launcher",
+                    "mid_range",
+                    "pushback_risk",
+                    "rush_special",
+                    "special",
+                    "standing_attack",
+                    "vertical_coverage",
+                    "wall_or_push_route"
+                  ],
+                  "reason": "role matches rush_special; role matches special; role matches mid_range; role matches anti_air_special; CMD \"Rakouho EX\" -> state 1210; CMD command \"Rakouho EX\" maps to ChangeState 1210; input ~D, DB, B, x+y; state has direct HitDef; startup 6 (hitdef_animelem)"
+                },
+                {
+                  "alias": "drill",
+                  "state": 1000,
+                  "moveName": "Typhoon A",
+                  "commandName": "Typhoon A",
+                  "input": "~D, DF, F, a",
+                  "confidence": "high",
+                  "score": 226,
+                  "reuseLimit": 2,
+                  "hardReuseLimit": 3,
+                  "role": "anti_air_special",
+                  "tags": [
+                    "action_mapped",
+                    "anti_air_special",
+                    "hitdef",
+                    "launcher",
+                    "low_starter",
+                    "mid_range",
+                    "special",
+                    "standing_attack"
+                  ],
+                  "reason": "role matches special; preferred state 1000; CMD \"Typhoon A\" -> state 1000; CMD command \"Typhoon A\" maps to ChangeState 1000; input ~D, DF, F, a; state has direct HitDef; helper hit owner 10000; startup 6 (hitdef_animelem)"
+                },
+                {
+                  "alias": "tornado",
+                  "state": 1100,
+                  "moveName": "Kouhou X",
+                  "commandName": "Kouhou X",
+                  "input": "~D, DF, F, x",
+                  "confidence": "high",
+                  "score": 247,
+                  "reuseLimit": 2,
+                  "hardReuseLimit": 3,
+                  "role": "anti_air_special",
+                  "tags": [
+                    "action_mapped",
+                    "anti_air_special",
+                    "close_range",
+                    "hitdef",
+                    "launcher",
+                    "pushback_risk",
+                    "special",
+                    "standing_attack",
+                    "vertical_coverage"
+                  ],
+                  "reason": "role matches anti_air_special; role matches launcher; role matches vertical_coverage; CMD \"Kouhou X\" -> state 1100; CMD command \"Kouhou X\" maps to ChangeState 1100; input ~D, DF, F, x; state has direct HitDef; startup 6 (hitdef_animelem)"
+                },
+                {
+                  "alias": "air_followup",
+                  "state": 600,
+                  "moveName": "x",
+                  "commandName": "x",
+                  "input": "x",
+                  "confidence": "high",
+                  "score": 193,
+                  "reuseLimit": 2,
+                  "hardReuseLimit": 3,
+                  "role": "air_chain",
+                  "tags": [
+                    "action_mapped",
+                    "air_normal",
+                    "air_route",
+                    "close_range",
+                    "hitdef",
+                    "light_normal",
+                    "normal"
+                  ],
+                  "reason": "role matches air_chain; role matches air_normal; CMD \"x\" -> state 600; CMD command \"x\" maps to ChangeState 600; input x; state has direct HitDef; startup 2 (hitdef_animelem)"
+                },
+                {
+                  "alias": "hyper_rush",
+                  "state": 2000,
+                  "moveName": "Saikou Fuurin X",
+                  "commandName": "Saikou Fuurin X",
+                  "input": "~D,DB,B,D,DB,B, x",
+                  "confidence": "high",
+                  "score": 327,
+                  "reuseLimit": 2,
+                  "hardReuseLimit": 3,
+                  "role": "meter_cashout",
+                  "tags": [
+                    "action_mapped",
+                    "hitdef",
+                    "hyper",
+                    "launcher",
+                    "meter",
+                    "mid_range",
+                    "standing_attack",
+                    "vertical_coverage"
+                  ],
+                  "reason": "role matches meter_cashout; role matches hyper; role matches meter; role matches mid_range; CMD \"Saikou Fuurin X\" -> state 2000; CMD command \"Saikou Fuurin X\" maps to ChangeState 2000; input ~D,DB,B,D,DB,B, x; state has direct HitDef; startup 86 (hitdef_time); meter reliability close_confirm/hit_confirm_only"
+                },
+                {
+                  "alias": "hyper_heavy",
+                  "state": 3500,
+                  "moveName": "Kakougyoku Hidden",
+                  "commandName": "Kakougyoku Hidden",
+                  "input": "~D,DF,F,D,DF,F, c",
+                  "confidence": "high",
+                  "score": 267,
+                  "reuseLimit": 1,
+                  "hardReuseLimit": 2,
+                  "role": "meter_cashout",
+                  "tags": [
+                    "action_mapped",
+                    "hitdef",
+                    "hyper",
+                    "launcher",
+                    "meter",
+                    "mid_range",
+                    "pushback_risk",
+                    "standing_attack",
+                    "wall_or_push_route"
+                  ],
+                  "reason": "role matches meter_cashout; role matches hyper; role matches meter; CMD \"Kakougyoku Hidden\" -> state 3500; CMD command \"Kakougyoku Hidden\" maps to ChangeState 3500; input ~D,DF,F,D,DF,F, c; state has direct HitDef; helper hit owner 40000/40003/40004; startup 4 (hitdef_time); meter reliability close_confirm/hit_confirm_only"
+                }
+              ]
+            }
+          },
+          "priorityInsertBefore": [
+            "[State -1, Kakougyoku Hidden]"
+          ],
+          "priorityInsertReason": "before old AI meter state 3500 at original line 382",
+          "status": "inserted-before-old-ai-meter",
+          "anchorUsed": "[State -1, Kakougyoku Hidden]",
+          "contentLines": 922,
+          "contentPreview": "; AI_PATCH_BEGIN: mvc_wolverine_ag:resolver_generated_combo_pool:v1\n; Resolver-generated combo pool from current character scan report.\n; Limits: max 4 meter states, max 4 free specials, max 3 air pokes, max 10 scanner-selected combo archetype routes.\n; Each ChangeState is an independent gated transition, not a forced full chain.\n[State -1, AI Resolver Style Crouch Low Confirm Special Cashout Step 1 400 To 400]\ntype = ChangeState\nvalue = 400\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 400\ntriggerAll = PrevStateNo != 400\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 400\ntriggerAll = P2BodyDist X = [-20,55]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = MoveHit || MoveContact\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 3 || MoveContact\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = Ctrl || MoveHit || MoveContact\ntriggerAll = P2BodyDist X <= 90\ntriggerAll = EnemyNear,StateType != A\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = Random < 108\n[State -1, AI Resolver Style Crouch Low Confirm Special Cashout Step 2 400 To 1210]\ntype = ChangeState\nvalue = 1210\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 1210\ntriggerAll = PrevStateNo != 1210\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 400\ntriggerAll = P2BodyDist X = [-20,86]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = MoveHit || MoveContact\ntriggerAll = P2BodyDist X <= 95\ntriggerAll = P2BodyDist X = [-20,86]\ntriggerAll = P2BodyDist Y = [-92,10]\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = Ctrl || MoveHit || MoveContact\ntriggerAll = P2BodyDist X <= 90\ntriggerAll = EnemyNear,StateType != A\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = Random < 108\n[State -1, AI Resolver Style Crouch Low Confirm Special Cashout Step 3 1210 To 2000]\ntype = ChangeState\nvalue = 2000\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 2000\ntriggerAll = PrevStateNo != 2000\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = Power >= 1000\n; AI_PATCH_STATE_WINDOW 2000 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-30,75]\ntriggerAll = P2BodyDist Y = [-101,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = StateNo = 1210\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = AnimElemTime(9) >= 0\n; AI_PATCH_PUSHBACK_COMPAT 1210->2000 source push 10 projected 206 target reach 75\ntriggerAll = Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0\ntriggerAll = MoveHit || MoveContact\ntriggerAll = EnemyNear,Life < 450 || Life <= 400 || EnemyNear,MoveType = H\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = Ctrl || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != A\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for source state final hit 1210:elem9\ntriggerAll = (StateNo != 1210 || AnimElemTime(9) >= 0)\ntrigger1 = Random < 108\n[State -1, AI Resolver Style Crouch Low Confirm Special Step 1 400 To 400]\ntype = ChangeState\nvalue = 400\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 400\ntriggerAll = PrevStateNo != 400\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 400\ntriggerAll = P2BodyDist X = [-20,55]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = MoveHit || MoveContact\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 3 || MoveContact\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = Ctrl || MoveHit || MoveContact\ntriggerAll = P2BodyDist X <= 90\ntriggerAll = EnemyNear,StateType != A\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = Random < 118\n[State -1, AI Resolver Style Crouch Low Confirm Special Step 2 400 To 1000]\ntype = ChangeState\nvalue = 1000\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 1000\ntriggerAll = PrevStateNo != 1000\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 400\ntriggerAll = P2BodyDist X = [-20,91]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = MoveHit || MoveContact\ntriggerAll = P2BodyDist X <= 95\ntriggerAll = P2BodyDist X = [-20,91]\ntriggerAll = P2BodyDist Y = [-84,10]\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = Ctrl || MoveHit || MoveContact\ntriggerAll = P2BodyDist X <= 90\ntriggerAll = EnemyNear,StateType != A\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = Random < 118\n[State -1, AI Resolver Wolverine Style Rush Launcher Slash Hyper Step 1 200 To 2110]\ntype = ChangeState\nvalue = 2110\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 2110\ntriggerAll = PrevStateNo != 2110\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = Power >= 2000\n; AI_PATCH_STATE_WINDOW 2110 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-30,40]\ntriggerAll = P2BodyDist Y = [-92,41]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = StateNo = 200\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = MoveHit || MoveContact\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 3 || MoveContact\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199])\ntriggerAll = EnemyNear,Ctrl = 0 || MoveHit || MoveContact\ntriggerAll = MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_SAFE_GUARD: 2110 HitDef p2stateno custom state\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 20)\n; AI_PATCH_MULTI_HIT_GUARD: wait for active source state final hit 1205:elem9, 1210:elem9, 1306:elem8, 2000:time90, 2003:time90, 2010:time90, 2100:elem6, 2101:elem6, 2110:elem13, 3600:elem100\ntriggerAll = (StateNo != 1205 || AnimElemTime(9) >= 0) && (StateNo != 1210 || AnimElemTime(9) >= 0) && (StateNo != 1306 || AnimElemTime(8) >= 0) && (StateNo != 2000 || Time >= 90) && (StateNo != 2003 || Time >= 90) && (StateNo != 2010 || Time >= 90) && (StateNo != 2100 || AnimElemTime(6) >= 0) && (StateNo != 2101 || AnimElemTime(6) >= 0) && (StateNo != 2110 || AnimElemTime(13) >= 0) && (StateNo != 3600 || AnimElemTime(100) >= 0)\ntrigger1 = Random < 94\n[State -1, AI Resolver Wolverine Style Rush Launcher Slash Hyper Step 2 2110 To 1210]\ntype = ChangeState\nvalue = 1210\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 1210\ntriggerAll = PrevStateNo != 1210\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2BodyDist X > 18 || MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = StateNo = 2110\ntriggerAll = P2BodyDist X = [-20,86]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = AnimElemTime(13) >= 0\ntriggerAll = MoveHit\ntriggerAll = EnemyNear,StateType = A || EnemyNear,MoveType = H || EnemyNear,GetHitVar(HitTime) >= 8\ntriggerAll = P2BodyDist X = [-20,86]\ntriggerAll = P2BodyDist Y = [-92,10]\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199])\ntriggerAll = EnemyNear,Ctrl = 0 || MoveHit || MoveContact\ntriggerAll = MoveHit || MoveContact\ntriggerAll = P2BodyDist X <= 115\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for source state final hit 2110:elem13\ntriggerAll = (StateNo != 2110 || AnimElemTime(13) >= 0)\ntrigger1 = Random < 94\n[State -1, AI Resolver Wolverine Style Rush Launcher Slash Hyper Step 3 1210 To 2000]\ntype = ChangeState\nvalue = 2000\ntriggerAll = AILevel && NumEnemy && RoundState = 2 && StateType != A && MoveType != H\ntriggerAll = StateNo != 2000\ntriggerAll = PrevStateNo != 2000\ntriggerAll = Time >= 2 || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = P2StateNo != [800,899] || MoveHit || MoveContact || P2BodyDist X > 70\ntriggerAll = Power >= 1000\n; AI_PATCH_STATE_WINDOW 2000 close_confirm scanned target x/y\ntriggerAll = P2BodyDist X = [-30,75]\ntriggerAll = P2BodyDist Y = [-101,10]\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = MoveHit || MoveContact || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = StateNo = 1210\ntriggerAll = EnemyNear,StateType != L\ntriggerAll = !(NumTarget && Target,StateNo = [5100,5199] && Target,Time > 30)\ntriggerAll = MoveHit\ntriggerAll = AnimElemTime(9) >= 0\n; AI_PATCH_PUSHBACK_COMPAT 1210->2000 source push 10 projected 206 target reach 75\ntriggerAll = Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit\ntriggerAll = EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0\ntriggerAll = MoveHit || MoveContact\ntriggerAll = EnemyNear,Life < 450 || Life <= 400 || EnemyNear,MoveType = H\ntriggerAll = MoveHit || MoveContact || EnemyNear,Ctrl = 0 || EnemyNear,MoveType = H\ntriggerAll = EnemyNear,MoveType != A || MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L || (EnemyNear,Anim = 5120 && EnemyNear,AnimTime = [-11,-8]) || (EnemyNear,StateNo = [5110,5119] && EnemyNear,Time >= 8)\ntriggerAll = EnemyNear,MoveType = H || MoveHit || MoveContact\ntriggerAll = MoveHit || MoveContact\ntriggerAll = EnemyNear,StateType != L\n; AI_PATCH_MULTI_HIT_GUARD: wait for source state final hit 1210:elem9\ntriggerAll = (StateNo != 1210 || AnimElemTime(9) >= 0)\ntrigger1 = Random < 94\n[State -1, AI Resolver Wolverine Style Drill Tornado Cashout Step 1 200 To 1000]\ntype = ChangeState",
+          "routeTargets": [
+            "400",
+            "1210",
+            "2000",
+            "1000",
+            "2110",
+            "1100",
+            "3500",
+            "230",
+            "200",
+            "1430",
+            "430",
+            "440",
+            "1005",
+            "1200",
+            "650",
+            "640",
+            "630"
+          ]
+        },
+        {
+          "id": "old_ai_meter_range_guard:0",
+          "moduleId": "old_ai_meter_range_guard",
+          "risk": "medium",
+          "fileRole": "cmd",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling\\KOF_Meirin.cmd",
+          "mode": "patch-old-ai-meter-guards",
+          "markerId": "mvc_wolverine_ag:old_ai_meter_range_guard:v1",
+          "patches": [
+            {
+              "state": 3500,
+              "cost": 3000,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "helper_trap",
+              "scanWindow": {
+                "xMin": 0,
+                "xMax": 73,
+                "yMin": -82,
+                "yMax": 10,
+                "startup": 4,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": null,
+                "y": null
+              },
+              "heading": "[State -1, Kakougyoku Hidden]",
+              "line": 382,
+              "valueExpr": "3500",
+              "triggerText": "command = \"Kakougyoku Hidden\" && power >= ifelse(Var(20)>0,2000,3000) && statetype != A && !winko && var(50)=0 && ctrl && stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=A",
+              "triggerKey": "command = \"kakougyoku hidden\" && power >= ifelse(var(20)>0,2000,3000) && statetype != a && !winko && var(50)=0 && ctrl && stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=a",
+              "reason": "old AI has no upper P2BodyDist X gate; scan xMax is 73; old AI has no P2 Y gate; scan y window is -82..10; 3000-power finisher needs hard hitstun gate (!EnemyNear,Ctrl, EnemyNear,MoveType=H, GetHitVar(HitTime)>=8); cancel flag can route pushback source 210 into meter state 3500",
+              "reasons": [
+                "old AI has no upper P2BodyDist X gate; scan xMax is 73",
+                "old AI has no P2 Y gate; scan y window is -82..10",
+                "3000-power finisher needs hard hitstun gate (!EnemyNear,Ctrl, EnemyNear,MoveType=H, GetHitVar(HitTime)>=8)",
+                "cancel flag can route pushback source 210 into meter state 3500"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 3500 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [0,73]) ; AI_PATCH_OLD_AI_METER_WINDOW 3500",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-82,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 3500",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 3500",
+                "; AI_PATCH_HIGH_COST_FINISHER 3500: 3000-power hard hitstun / lethal punish confirm gate",
+                "triggerAll = !AILevel || ((!EnemyNear,Ctrl && EnemyNear,MoveType = H && EnemyNear,GetHitVar(HitTime) >= 8)) ; AI_PATCH_OLD_AI_METER_WINDOW 3500",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->3500 source push 7 projected 93 target reach 73",
+                "P2BodyDist X <= 59 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0",
+                "; AI_PATCH_PUSHBACK_COMPAT 206->3500 source push 10 projected 88 target reach 73",
+                "P2BodyDist X <= 53 || EnemyNear,StateType = A || EnemyNear,MoveType = H"
+              ]
+            },
+            {
+              "state": 2010,
+              "cost": 2000,
+              "classification": "grab",
+              "rangeClass": "mid",
+              "delivery": "crossup_melee",
+              "scanWindow": {
+                "xMin": -76,
+                "xMax": 75,
+                "yMin": -101,
+                "yMax": 10,
+                "startup": 1,
+                "className": "grab",
+                "use": "point_blank_punish_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": null,
+                  "max": 40,
+                  "hasLower": false,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State -1, Saikou Fuurin MAX]",
+              "line": 395,
+              "valueExpr": "2010",
+              "triggerText": "command = \"Saikou Fuurin MAX\" && power >= ifelse(Var(20)>0,1000,2000) && statetype != A && !winko && var(50)=0 && ctrl && stateno=2000||stateno=2003||stateno=2100||stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=A && stateno=1302||stateno=2002 && statetype!=A && time=[0,15] && p2bodydist x <=40",
+              "triggerKey": "command = \"saikou fuurin max\" && power >= ifelse(var(20)>0,1000,2000) && statetype != a && !winko && var(50)=0 && ctrl && stateno=2000||stateno=2003||stateno=2100||stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=a && stateno=1302||stateno=2002 && statetype!=a && time=[0,15] && p2bodydist x <=40",
+              "reason": "old AI has no P2 Y gate; scan y window is -101..10",
+              "reasons": [
+                "old AI has no P2 Y gate; scan y window is -101..10"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2010 grab scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-8,35]) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-101,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (EnemyNear,StateType != A) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (EnemyNear,Ctrl = 0 || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != H || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "; AI_PATCH_PUSHBACK_COMPAT 1100->2010 source push 7 projected 78 target reach 75",
+                "P2BodyDist X <= 61 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "; AI_PATCH_PUSHBACK_COMPAT 1105->2010 source push 7 projected 78 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 1420->2010 source push 7 projected 75 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 1432->2010 source push 7 projected 75 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->2010 source push 7 projected 79 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 206->2010 source push 10 projected 78 target reach 75",
+                "P2BodyDist X <= 55 || EnemyNear,StateType = A || EnemyNear,MoveType = H"
+              ]
+            },
+            {
+              "state": 2110,
+              "cost": 2000,
+              "classification": "close_confirm",
+              "rangeClass": "close",
+              "delivery": "helper_trap",
+              "scanWindow": {
+                "xMin": -41,
+                "xMax": 40,
+                "yMin": -92,
+                "yMax": 41,
+                "startup": 6,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": null,
+                  "max": 40,
+                  "hasLower": false,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State -1, Kakougyoku MAX]",
+              "line": 412,
+              "valueExpr": "2110",
+              "triggerText": "command = \"Kakougyoku MAX\" && power >= ifelse(Var(20)>0,1000,2000) && statetype != A && !winko && var(50)=0 && numhelper(21010)=0 && ctrl && stateno=2000||stateno=2003||stateno=2100||stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=A && stateno=1302||stateno=2002 && statetype!=A && time=[0,15] && p2bodydist x <=40",
+              "triggerKey": "command = \"kakougyoku max\" && power >= ifelse(var(20)>0,1000,2000) && statetype != a && !winko && var(50)=0 && numhelper(21010)=0 && ctrl && stateno=2000||stateno=2003||stateno=2100||stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=a && stateno=1302||stateno=2002 && statetype!=a && time=[0,15] && p2bodydist x <=40",
+              "reason": "old AI has no P2 Y gate; scan y window is -92..41; cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2110",
+              "reasons": [
+                "old AI has no P2 Y gate; scan y window is -92..41",
+                "cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2110"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2110 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-30,40]) ; AI_PATCH_OLD_AI_METER_WINDOW 2110",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-92,41]) ; AI_PATCH_OLD_AI_METER_WINDOW 2110",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2110",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 2110",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2110",
+                "; AI_PATCH_PUSHBACK_COMPAT 1100->2110 source push 7 projected 92 target reach 40",
+                "P2BodyDist X <= 30 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0",
+                "; AI_PATCH_PUSHBACK_COMPAT 1105->2110 source push 7 projected 92 target reach 40",
+                "; AI_PATCH_PUSHBACK_COMPAT 1420->2110 source push 7 projected 89 target reach 40",
+                "; AI_PATCH_PUSHBACK_COMPAT 1432->2110 source push 7 projected 89 target reach 40",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->2110 source push 7 projected 100 target reach 40",
+                "; AI_PATCH_PUSHBACK_COMPAT 206->2110 source push 10 projected 98 target reach 40"
+              ]
+            },
+            {
+              "state": 2000,
+              "cost": 1000,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "crossup_melee",
+              "scanWindow": {
+                "xMin": -76,
+                "xMax": 75,
+                "yMin": -101,
+                "yMax": 10,
+                "startup": 86,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": null,
+                  "max": 40,
+                  "hasLower": false,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State -1, Saikou Fuurin X]",
+              "line": 431,
+              "valueExpr": "2000",
+              "triggerText": "command = \"Saikou Fuurin X\" && power >= ifelse(Var(20)>0,0,1000) && statetype != A && !winko && var(50)=0 && ctrl && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=A && stateno=1302 && statetype!=A && time=[0,15] && p2bodydist x <=40",
+              "triggerKey": "command = \"saikou fuurin x\" && power >= ifelse(var(20)>0,0,1000) && statetype != a && !winko && var(50)=0 && ctrl && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=a && stateno=1302 && statetype!=a && time=[0,15] && p2bodydist x <=40",
+              "reason": "old AI has no P2 Y gate; scan y window is -101..10; cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2000",
+              "reasons": [
+                "old AI has no P2 Y gate; scan y window is -101..10",
+                "cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2000"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2000 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-30,75]) ; AI_PATCH_OLD_AI_METER_WINDOW 2000",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-101,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2000",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2000",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 2000",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2000",
+                "; AI_PATCH_PUSHBACK_COMPAT 1100->2000 source push 7 projected 134 target reach 75",
+                "P2BodyDist X <= 61 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0",
+                "; AI_PATCH_PUSHBACK_COMPAT 1105->2000 source push 7 projected 134 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 1420->2000 source push 7 projected 138 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 1432->2000 source push 7 projected 138 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->2000 source push 7 projected 149 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 206->2000 source push 10 projected 168 target reach 75",
+                "P2BodyDist X <= 55 || EnemyNear,StateType = A || EnemyNear,MoveType = H"
+              ]
+            },
+            {
+              "state": 2003,
+              "cost": 1000,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "crossup_melee",
+              "scanWindow": {
+                "xMin": -76,
+                "xMax": 75,
+                "yMin": -101,
+                "yMax": 10,
+                "startup": 86,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": null,
+                  "max": 40,
+                  "hasLower": false,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State -1, Saikou Fuurin Y]",
+              "line": 446,
+              "valueExpr": "2003",
+              "triggerText": "command = \"Saikou Fuurin Y\" && power >= ifelse(Var(20)>0,0,1000) && statetype != A && !winko && var(50)=0 && ctrl && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=A && stateno=1302 && statetype!=A && time=[0,15] && p2bodydist x <=40",
+              "triggerKey": "command = \"saikou fuurin y\" && power >= ifelse(var(20)>0,0,1000) && statetype != a && !winko && var(50)=0 && ctrl && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=a && stateno=1302 && statetype!=a && time=[0,15] && p2bodydist x <=40",
+              "reason": "old AI has no P2 Y gate; scan y window is -101..10; cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2003",
+              "reasons": [
+                "old AI has no P2 Y gate; scan y window is -101..10",
+                "cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2003"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2003 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-30,75]) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-101,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "; AI_PATCH_PUSHBACK_COMPAT 1100->2003 source push 7 projected 134 target reach 75",
+                "P2BodyDist X <= 61 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0",
+                "; AI_PATCH_PUSHBACK_COMPAT 1105->2003 source push 7 projected 134 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 1420->2003 source push 7 projected 138 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 1432->2003 source push 7 projected 138 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->2003 source push 7 projected 149 target reach 75",
+                "; AI_PATCH_PUSHBACK_COMPAT 206->2003 source push 10 projected 168 target reach 75",
+                "P2BodyDist X <= 55 || EnemyNear,StateType = A || EnemyNear,MoveType = H"
+              ]
+            },
+            {
+              "state": 2100,
+              "cost": 1000,
+              "classification": "projectile",
+              "rangeClass": "close",
+              "delivery": "projectile",
+              "scanWindow": {
+                "xMin": -5,
+                "xMax": 35,
+                "yMin": -92,
+                "yMax": 10,
+                "startup": 3,
+                "className": "projectile",
+                "use": "spacing_or_punish"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": null,
+                  "max": 40,
+                  "hasLower": false,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State -1, Kakougyoku X]",
+              "line": 463,
+              "valueExpr": "2100",
+              "triggerText": "command = \"Kakougyoku X\" && power >= ifelse(Var(20)>0,0,1000) && statetype != A && !winko && var(50)=0 && ctrl && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=A && stateno=1302 && statetype!=A && time=[0,15] && p2bodydist x <=40",
+              "triggerKey": "command = \"kakougyoku x\" && power >= ifelse(var(20)>0,0,1000) && statetype != a && !winko && var(50)=0 && ctrl && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=a && stateno=1302 && statetype!=a && time=[0,15] && p2bodydist x <=40",
+              "reason": "old AI has no P2 Y gate; scan y window is -92..10",
+              "reasons": [
+                "old AI has no P2 Y gate; scan y window is -92..10"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2100 projectile scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-5,35]) ; AI_PATCH_OLD_AI_METER_WINDOW 2100",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-92,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2100",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2100",
+                "triggerAll = !AILevel || (!InGuardDist || MoveHit || MoveContact || EnemyNear,Ctrl = 0) ; AI_PATCH_OLD_AI_METER_WINDOW 2100",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact || EnemyNear,Ctrl = 0) ; AI_PATCH_OLD_AI_METER_WINDOW 2100"
+              ]
+            },
+            {
+              "state": 2101,
+              "cost": 1000,
+              "classification": "projectile",
+              "rangeClass": "close",
+              "delivery": "projectile",
+              "scanWindow": {
+                "xMin": -5,
+                "xMax": 35,
+                "yMin": -92,
+                "yMax": 10,
+                "startup": 3,
+                "className": "projectile",
+                "use": "spacing_or_punish"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": null,
+                  "max": 40,
+                  "hasLower": false,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State -1, \"Kakougyoku Y\"]",
+              "line": 478,
+              "valueExpr": "2101",
+              "triggerText": "command = \"Kakougyoku Y\" && power >= ifelse(Var(20)>0,0,1000) && statetype != A && !winko && var(50)=0 && ctrl && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=A && stateno=1302 && statetype!=A && time=[0,15] && p2bodydist x <=40",
+              "triggerKey": "command = \"kakougyoku y\" && power >= ifelse(var(20)>0,0,1000) && statetype != a && !winko && var(50)=0 && ctrl && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005||stateno=1400||stateno=1410||stateno=1420||stateno=1430||stateno=1431||stateno=1432||stateno=210||stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=a && stateno=1302 && statetype!=a && time=[0,15] && p2bodydist x <=40",
+              "reason": "old AI has no P2 Y gate; scan y window is -92..10",
+              "reasons": [
+                "old AI has no P2 Y gate; scan y window is -92..10"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2101 projectile scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-5,35]) ; AI_PATCH_OLD_AI_METER_WINDOW 2101",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-92,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2101",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2101",
+                "triggerAll = !AILevel || (!InGuardDist || MoveHit || MoveContact || EnemyNear,Ctrl = 0) ; AI_PATCH_OLD_AI_METER_WINDOW 2101",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact || EnemyNear,Ctrl = 0) ; AI_PATCH_OLD_AI_METER_WINDOW 2101"
+              ]
+            },
+            {
+              "state": 1430,
+              "cost": 500,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "melee",
+              "scanWindow": {
+                "xMin": 1,
+                "xMax": 53,
+                "yMin": -43,
+                "yMax": 10,
+                "startup": 5,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": null,
+                  "max": 40,
+                  "hasLower": false,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State -1, Rekka B]",
+              "line": 774,
+              "valueExpr": "1430",
+              "triggerText": "command = \"Rekka B\" && statetype != A && !winko && var(50)=0 && ctrl && stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=A && stateno=210||stateno=240||stateno=440||stateno=250 && statetype!=A && time>=12 && var(20)>0 && stateno=1302 && statetype!=A && time=[0,15] && p2bodydist x <=40 && var(20)>0 && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005 && movecontact&&statetype!=A && var(20)>0",
+              "triggerKey": "command = \"rekka b\" && statetype != a && !winko && var(50)=0 && ctrl && stateno=206||stateno = 205||stateno=200||stateno=215||stateno=230||stateno=235||stateno=245||stateno=400||stateno=410||stateno=430 && movecontact&&statetype!=a && stateno=210||stateno=240||stateno=440||stateno=250 && statetype!=a && time>=12 && var(20)>0 && stateno=1302 && statetype!=a && time=[0,15] && p2bodydist x <=40 && var(20)>0 && stateno=1200||stateno=1205||stateno=1100||stateno=1105||stateno=1000||stateno=1005 && movecontact&&statetype!=a && var(20)>0",
+              "reason": "old AI has no P2 Y gate; scan y window is -43..10; cancel flag can route pushback source 206/210/240/1100/1105 into meter state 1430",
+              "reasons": [
+                "old AI has no P2 Y gate; scan y window is -43..10",
+                "cancel flag can route pushback source 206/210/240/1100/1105 into meter state 1430"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 1430 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [0,53]) ; AI_PATCH_OLD_AI_METER_WINDOW 1430",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-43,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 1430",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 1430",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 1430",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 1430",
+                "; AI_PATCH_PUSHBACK_COMPAT 206->1430 source push 10 projected 98 target reach 53",
+                "P2BodyDist X <= 33 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "Abs(EnemyNear,Vel X) <= 3 || EnemyNear,StateType = A || EnemyNear,MoveType = H || MoveHit",
+                "EnemyNear,GetHitVar(HitTime) >= 8 || EnemyNear,StateType = A || EnemyNear,Ctrl = 0",
+                "; AI_PATCH_PUSHBACK_COMPAT 210->1430 source push 7 projected 93 target reach 53",
+                "P2BodyDist X <= 39 || EnemyNear,StateType = A || EnemyNear,MoveType = H",
+                "; AI_PATCH_PUSHBACK_COMPAT 240->1430 source push 7 projected 157 target reach 53",
+                "; AI_PATCH_PUSHBACK_COMPAT 1100->1430 source push 7 projected 92 target reach 53",
+                "; AI_PATCH_PUSHBACK_COMPAT 1105->1430 source push 7 projected 92 target reach 53"
+              ]
+            },
+            {
+              "state": 2003,
+              "cost": 1000,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "crossup_melee",
+              "scanWindow": {
+                "xMin": -76,
+                "xMax": 75,
+                "yMin": -101,
+                "yMax": 10,
+                "startup": 86,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": 0,
+                  "max": 200,
+                  "hasLower": true,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State AI, DM1]",
+              "line": 1324,
+              "valueExpr": "2003",
+              "triggerText": "var(50) != 0 && p2statetype != A && power >= ifelse(Var(20)>0,0,1000) && p2stateno = [5000,5012] && p2bodydist x = [0,200] && stateno=1200 && movecontact&&statetype!=A && enemy,var(46) = 0",
+              "triggerKey": "var(50) != 0 && p2statetype != a && power >= ifelse(var(20)>0,0,1000) && p2stateno = [5000,5012] && p2bodydist x = [0,200] && stateno=1200 && movecontact&&statetype!=a && enemy,var(46) = 0",
+              "reason": "old AI X max 200 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10",
+              "reasons": [
+                "old AI X max 200 exceeds scanned xMax 75",
+                "old AI has no P2 Y gate; scan y window is -101..10"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2003 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-30,75]) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-101,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2003"
+              ]
+            },
+            {
+              "state": 2003,
+              "cost": 1000,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "crossup_melee",
+              "scanWindow": {
+                "xMin": -76,
+                "xMax": 75,
+                "yMin": -101,
+                "yMax": 10,
+                "startup": 86,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": 50,
+                  "max": 99,
+                  "hasLower": true,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State AI, DM1]",
+              "line": 1335,
+              "valueExpr": "2003",
+              "triggerText": "var(50) != 0 && p2bodydist X < 100 && p2bodydist X > -10 && random <= 300 && power >= ifelse(Var(20)>0,0,1000) && roundstate = 2 && p2movetype != H && ctrl && statetype != A && statetype = S && p2statetype = A && p2bodydist x = [50,300] && ctrl && enemy,var(46) = 0",
+              "triggerKey": "var(50) != 0 && p2bodydist x < 100 && p2bodydist x > -10 && random <= 300 && power >= ifelse(var(20)>0,0,1000) && roundstate = 2 && p2movetype != h && ctrl && statetype != a && statetype = s && p2statetype = a && p2bodydist x = [50,300] && ctrl && enemy,var(46) = 0",
+              "reason": "old AI X max 99 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10; close_confirm meter is callable without MoveHit/MoveContact confirm",
+              "reasons": [
+                "old AI X max 99 exceeds scanned xMax 75",
+                "old AI has no P2 Y gate; scan y window is -101..10",
+                "close_confirm meter is callable without MoveHit/MoveContact confirm"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2003 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-30,75]) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-101,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2003"
+              ]
+            },
+            {
+              "state": 2003,
+              "cost": 1000,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "crossup_melee",
+              "scanWindow": {
+                "xMin": -76,
+                "xMax": 75,
+                "yMin": -101,
+                "yMax": 10,
+                "startup": 86,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": 0,
+                  "max": 100,
+                  "hasLower": true,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State AI, DM1]",
+              "line": 1350,
+              "valueExpr": "2003",
+              "triggerText": "var(50) != 0 && random < 300 && power >= ifelse(Var(20)>0,0,1000) && p2stateno != [5050,5420] && roundstate = 2 && p2statetype = S && ctrl && statetype != A && p2bodydist x = [0,100] && p2movetype = A && statetype = S && ctrl && enemy,var(46) = 0",
+              "triggerKey": "var(50) != 0 && random < 300 && power >= ifelse(var(20)>0,0,1000) && p2stateno != [5050,5420] && roundstate = 2 && p2statetype = s && ctrl && statetype != a && p2bodydist x = [0,100] && p2movetype = a && statetype = s && ctrl && enemy,var(46) = 0",
+              "reason": "old AI X max 100 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10; close_confirm meter is callable without MoveHit/MoveContact confirm",
+              "reasons": [
+                "old AI X max 100 exceeds scanned xMax 75",
+                "old AI has no P2 Y gate; scan y window is -101..10",
+                "close_confirm meter is callable without MoveHit/MoveContact confirm"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2003 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-30,75]) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-101,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 2003",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2003"
+              ]
+            },
+            {
+              "state": 2101,
+              "cost": 1000,
+              "classification": "projectile",
+              "rangeClass": "close",
+              "delivery": "projectile",
+              "scanWindow": {
+                "xMin": -5,
+                "xMax": 35,
+                "yMin": -92,
+                "yMax": 10,
+                "startup": 3,
+                "className": "projectile",
+                "use": "spacing_or_punish"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": -50,
+                  "max": 300,
+                  "hasLower": true,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State AI, DM2]",
+              "line": 1365,
+              "valueExpr": "2101",
+              "triggerText": "var(50) != 0 && p2statetype = A && power >= ifelse(Var(20)>0,0,1000) && p2stateno = [5020,5030] && p2bodydist x = [-50,300] && stateno = 1200 && movecontact=1&&statetype!=A && enemy,var(46) = 0",
+              "triggerKey": "var(50) != 0 && p2statetype = a && power >= ifelse(var(20)>0,0,1000) && p2stateno = [5020,5030] && p2bodydist x = [-50,300] && stateno = 1200 && movecontact=1&&statetype!=a && enemy,var(46) = 0",
+              "reason": "old AI X max 300 exceeds scanned xMax 35; old AI has no P2 Y gate; scan y window is -92..10",
+              "reasons": [
+                "old AI X max 300 exceeds scanned xMax 35",
+                "old AI has no P2 Y gate; scan y window is -92..10"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2101 projectile scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-5,35]) ; AI_PATCH_OLD_AI_METER_WINDOW 2101",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-92,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2101",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2101",
+                "triggerAll = !AILevel || (!InGuardDist || MoveHit || MoveContact || EnemyNear,Ctrl = 0) ; AI_PATCH_OLD_AI_METER_WINDOW 2101",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact || EnemyNear,Ctrl = 0) ; AI_PATCH_OLD_AI_METER_WINDOW 2101"
+              ]
+            },
+            {
+              "state": 2000,
+              "cost": 1000,
+              "classification": "close_confirm",
+              "rangeClass": "mid",
+              "delivery": "crossup_melee",
+              "scanWindow": {
+                "xMin": -76,
+                "xMax": 75,
+                "yMin": -101,
+                "yMax": 10,
+                "startup": 86,
+                "className": "close_confirm",
+                "use": "hit_confirm_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": -9,
+                  "max": 69,
+                  "hasLower": true,
+                  "hasUpper": true
+                },
+                "y": {
+                  "min": -59,
+                  "max": null,
+                  "hasLower": true,
+                  "hasUpper": false
+                }
+              },
+              "heading": "[State AI, DM3]",
+              "line": 1376,
+              "valueExpr": "2000",
+              "triggerText": "var(50) != 0 && p2bodydist X < 70 && p2bodydist X > -10 && enemy,vel y >= 0 && enemy,vel x >= 0 && p2bodydist Y > -60 && random <= 999 && p2stateno != [5050,5420] && power >= ifelse(Var(20)>0,0,1000) && ctrl && statetype = A && statetype = A && p2statetype = A && ctrl && enemy,var(46) = 0",
+              "triggerKey": "var(50) != 0 && p2bodydist x < 70 && p2bodydist x > -10 && enemy,vel y >= 0 && enemy,vel x >= 0 && p2bodydist y > -60 && random <= 999 && p2stateno != [5050,5420] && power >= ifelse(var(20)>0,0,1000) && ctrl && statetype = a && statetype = a && p2statetype = a && ctrl && enemy,var(46) = 0",
+              "reason": "old AI has no P2 Y gate; scan y window is -101..10; close_confirm meter is callable without MoveHit/MoveContact confirm",
+              "reasons": [
+                "old AI has no P2 Y gate; scan y window is -101..10",
+                "close_confirm meter is callable without MoveHit/MoveContact confirm"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2000 close_confirm scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-30,75]) ; AI_PATCH_OLD_AI_METER_WINDOW 2000",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-101,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2000",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2000",
+                "triggerAll = !AILevel || (MoveHit || MoveContact || EnemyNear,MoveType = H) ; AI_PATCH_OLD_AI_METER_WINDOW 2000",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != A || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2000"
+              ]
+            },
+            {
+              "state": 2010,
+              "cost": 2000,
+              "classification": "grab",
+              "rangeClass": "mid",
+              "delivery": "crossup_melee",
+              "scanWindow": {
+                "xMin": -76,
+                "xMax": 75,
+                "yMin": -101,
+                "yMax": 10,
+                "startup": 1,
+                "className": "grab",
+                "use": "point_blank_punish_only"
+              },
+              "triggerWindow": {
+                "x": {
+                  "min": 0,
+                  "max": 200,
+                  "hasLower": true,
+                  "hasUpper": true
+                },
+                "y": null
+              },
+              "heading": "[State AI, SDM1]",
+              "line": 1390,
+              "valueExpr": "2010",
+              "triggerText": "var(50) != 0 && random < 500 && power >= ifelse(Var(20)>0,1000,2000) && p2stateno != [5050,5420] && roundstate = 2 && p2statetype = S && ctrl && statetype != A && p2bodydist x = [0,200] && p2movetype = A && statetype = S && ctrl && enemy,var(46) = 0",
+              "triggerKey": "var(50) != 0 && random < 500 && power >= ifelse(var(20)>0,1000,2000) && p2stateno != [5050,5420] && roundstate = 2 && p2statetype = s && ctrl && statetype != a && p2bodydist x = [0,200] && p2movetype = a && statetype = s && ctrl && enemy,var(46) = 0",
+              "reason": "old AI X max 200 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10; grab/point-blank meter has old AI X max 200",
+              "reasons": [
+                "old AI X max 200 exceeds scanned xMax 75",
+                "old AI has no P2 Y gate; scan y window is -101..10",
+                "grab/point-blank meter has old AI X max 200"
+              ],
+              "guardLines": [
+                "; AI_PATCH_STATE_WINDOW 2010 grab scanned target x/y",
+                "triggerAll = !AILevel || (P2BodyDist X = [-8,35]) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (P2BodyDist Y = [-101,10]) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (EnemyNear,StateType != L) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (EnemyNear,StateType != A) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (EnemyNear,Ctrl = 0 || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2010",
+                "triggerAll = !AILevel || (EnemyNear,MoveType != H || MoveHit || MoveContact) ; AI_PATCH_OLD_AI_METER_WINDOW 2010"
+              ]
+            }
+          ],
+          "insertBefore": [],
+          "insertAfter": [],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": null,
+          "routePreview": [
+            {
+              "id": "old_ai_meter_range_guard",
+              "type": "old_ai_safety_audit",
+              "source": "scan_report_original_cmd",
+              "chain": [
+                "[State -1, Kakougyoku Hidden] -> 3500",
+                "[State -1, Saikou Fuurin MAX] -> 2010",
+                "[State -1, Kakougyoku MAX] -> 2110",
+                "[State -1, Saikou Fuurin X] -> 2000",
+                "[State -1, Saikou Fuurin Y] -> 2003",
+                "[State -1, Kakougyoku X] -> 2100",
+                "[State -1, \"Kakougyoku Y\"] -> 2101",
+                "[State -1, Rekka B] -> 1430",
+                "[State AI, DM1] -> 2003",
+                "[State AI, DM1] -> 2003",
+                "[State AI, DM1] -> 2003",
+                "[State AI, DM2] -> 2101",
+                "[State AI, DM3] -> 2000",
+                "[State AI, SDM1] -> 2010"
+              ],
+              "condition": [
+                "old_ai_meter_trigger_window_exceeds_scanned_state_window"
+              ],
+              "policy": [
+                "insert_ai_only_triggerall_guards_into_original_blocks",
+                "player_manual_input_remains_available"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "generatedFallback": true,
+          "resolverMode": "supplemental",
+          "status": "patched-old-ai-meter-guards",
+          "anchorUsed": null,
+          "appliedOldAiMeterGuards": [
+            {
+              "state": 2010,
+              "heading": "[State -1, Saikou Fuurin MAX]",
+              "line": 1690,
+              "reason": "old AI has no P2 Y gate; scan y window is -101..10"
+            },
+            {
+              "state": 2110,
+              "heading": "[State -1, Kakougyoku MAX]",
+              "line": 1723,
+              "reason": "old AI has no P2 Y gate; scan y window is -92..41; cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2110"
+            },
+            {
+              "state": 2000,
+              "heading": "[State -1, Saikou Fuurin X]",
+              "line": 1757,
+              "reason": "old AI has no P2 Y gate; scan y window is -101..10; cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2000"
+            },
+            {
+              "state": 2003,
+              "heading": "[State -1, Saikou Fuurin Y]",
+              "line": 1788,
+              "reason": "old AI has no P2 Y gate; scan y window is -101..10; cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2003"
+            },
+            {
+              "state": 2100,
+              "heading": "[State -1, Kakougyoku X]",
+              "line": 1821,
+              "reason": "old AI has no P2 Y gate; scan y window is -92..10"
+            },
+            {
+              "state": 2101,
+              "heading": "[State -1, \"Kakougyoku Y\"]",
+              "line": 1842,
+              "reason": "old AI has no P2 Y gate; scan y window is -92..10"
+            },
+            {
+              "state": 1430,
+              "heading": "[State -1, Rekka B]",
+              "line": 2144,
+              "reason": "old AI has no P2 Y gate; scan y window is -43..10; cancel flag can route pushback source 206/210/240/1100/1105 into meter state 1430"
+            },
+            {
+              "state": 2003,
+              "heading": "[State AI, DM1]",
+              "line": 2709,
+              "reason": "old AI X max 200 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10"
+            },
+            {
+              "state": 2003,
+              "heading": "[State AI, DM1]",
+              "line": 2726,
+              "reason": "old AI X max 99 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10; close_confirm meter is callable without MoveHit/MoveContact confirm"
+            },
+            {
+              "state": 2003,
+              "heading": "[State AI, DM1]",
+              "line": 2747,
+              "reason": "old AI X max 100 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10; close_confirm meter is callable without MoveHit/MoveContact confirm"
+            },
+            {
+              "state": 2101,
+              "heading": "[State AI, DM2]",
+              "line": 2768,
+              "reason": "old AI X max 300 exceeds scanned xMax 35; old AI has no P2 Y gate; scan y window is -92..10"
+            },
+            {
+              "state": 2000,
+              "heading": "[State AI, DM3]",
+              "line": 2785,
+              "reason": "old AI has no P2 Y gate; scan y window is -101..10; close_confirm meter is callable without MoveHit/MoveContact confirm"
+            },
+            {
+              "state": 2010,
+              "heading": "[State AI, SDM1]",
+              "line": 2805,
+              "reason": "old AI X max 200 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10; grab/point-blank meter has old AI X max 200"
+            }
+          ],
+          "contentLines": 14,
+          "contentPreview": "[State -1, Kakougyoku Hidden] state 3500: old AI has no upper P2BodyDist X gate; scan xMax is 73; old AI has no P2 Y gate; scan y window is -82..10; 3000-power finisher needs hard hitstun gate (!EnemyNear,Ctrl, EnemyNear,MoveType=H, GetHitVar(HitTime)>=8); cancel flag can route pushback source 210 into meter state 3500\n[State -1, Saikou Fuurin MAX] state 2010: old AI has no P2 Y gate; scan y window is -101..10\n[State -1, Kakougyoku MAX] state 2110: old AI has no P2 Y gate; scan y window is -92..41; cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2110\n[State -1, Saikou Fuurin X] state 2000: old AI has no P2 Y gate; scan y window is -101..10; cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2000\n[State -1, Saikou Fuurin Y] state 2003: old AI has no P2 Y gate; scan y window is -101..10; cancel flag can route pushback source 1100/1105/1420/1432/210/206 into meter state 2003\n[State -1, Kakougyoku X] state 2100: old AI has no P2 Y gate; scan y window is -92..10\n[State -1, \"Kakougyoku Y\"] state 2101: old AI has no P2 Y gate; scan y window is -92..10\n[State -1, Rekka B] state 1430: old AI has no P2 Y gate; scan y window is -43..10; cancel flag can route pushback source 206/210/240/1100/1105 into meter state 1430\n[State AI, DM1] state 2003: old AI X max 200 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10\n[State AI, DM1] state 2003: old AI X max 99 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10; close_confirm meter is callable without MoveHit/MoveContact confirm\n[State AI, DM1] state 2003: old AI X max 100 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10; close_confirm meter is callable without MoveHit/MoveContact confirm\n[State AI, DM2] state 2101: old AI X max 300 exceeds scanned xMax 35; old AI has no P2 Y gate; scan y window is -92..10\n[State AI, DM3] state 2000: old AI has no P2 Y gate; scan y window is -101..10; close_confirm meter is callable without MoveHit/MoveContact confirm\n[State AI, SDM1] state 2010: old AI X max 200 exceeds scanned xMax 75; old AI has no P2 Y gate; scan y window is -101..10; grab/point-blank meter has old AI X max 200",
+          "routeTargets": []
+        }
+      ]
+    },
+    {
+      "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling\\KOF_Meirin.cns",
+      "relativePath": "KOF_Meirin.cns",
+      "operations": [
+        {
+          "id": "resolver_target_stuck_watchdog:0",
+          "moduleId": "resolver_target_stuck_watchdog",
+          "risk": "medium",
+          "fileRole": "system",
+          "filePath": "E:\\x1\\Ikemen_Nighty\\chars\\Meiling\\KOF_Meirin.cns",
+          "mode": "upsert-marker",
+          "markerId": "mvc_wolverine_ag:resolver_target_stuck_watchdog:v1",
+          "insertBefore": [
+            "[Statedef -1]",
+            "[State -1]"
+          ],
+          "insertAfter": [],
+          "fallbackInsertBefore": [],
+          "insertAfterModule": null,
+          "routePreview": [
+            {
+              "id": "resolver_target_stuck_watchdog",
+              "type": "safety_watchdog",
+              "source": "scan_report_combo_unsafe_states",
+              "chain": [
+                "Self 800-999 -> 5120/5050 after timeout",
+                "Target 800-999/5160/5100-5199 -> 5120 after timeout"
+              ],
+              "condition": [
+                "AILevel",
+                "custom throw/get-hit state",
+                "Time > 150 for custom 800-999"
+              ],
+              "policy": [
+                "watchdog_only",
+                "late_timeout_only",
+                "no_damage_defense_or_heal_change"
+              ]
+            }
+          ],
+          "removeRules": [],
+          "unresolvedPlaceholders": [],
+          "optionalMissingStateAliases": [],
+          "generatedFallback": true,
+          "resolverMode": "supplemental",
+          "status": "appended",
+          "anchorUsed": null,
+          "contentLines": 144,
+          "contentPreview": "; AI_PATCH_BEGIN: mvc_wolverine_ag:resolver_target_stuck_watchdog:v1\n; Resolver safety watchdog for scanner-detected custom target / visual-helper risk.\n; It releases long-lived custom throw/get-hit states only after a conservative timeout.\n; This prevents missing-target custom states from freezing the patched character without interrupting normal throws early.\n[State -2, AI Patch Self NoTarget Custom State Escape Ground]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = StateType != A\ntriggerAll = Time > 180\ntriggerAll = !NumTarget\ntriggerAll = MoveType != A\ntrigger1 = 1\nvalue = 0\nctrl = 1\nignorehitpause = 1\n\n[State -2, AI Patch Self NoTarget Custom State Escape Air]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = StateType = A\ntriggerAll = Time > 180\ntriggerAll = !NumTarget\ntriggerAll = MoveType != A\ntrigger1 = 1\nvalue = 50\nctrl = 1\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom Throw Escape Ground]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = MoveType = H\ntriggerAll = Time > 150\ntriggerAll = StateType != A\ntrigger1 = 1\nvalue = 5120\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom Throw Escape Air]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = MoveType = H\ntriggerAll = Time > 150\ntriggerAll = StateType = A\ntrigger1 = 1\nvalue = 5050\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom Throw Escape Dead]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = !Alive\ntriggerAll = StateNo = [800,999]\ntriggerAll = MoveType = H\ntriggerAll = Time > 150\ntrigger1 = 1\nvalue = 5150\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom State 825 Escape Air]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = 825\ntriggerAll = Time > 150\ntriggerAll = !NumTarget || MoveType = H\ntriggerAll = StateType = A\ntrigger1 = 1\nvalue = 5050\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom State 825 Escape Hit]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = 825\ntriggerAll = Time > 150\ntriggerAll = !NumTarget || MoveType = H\ntriggerAll = StateType != A\ntriggerAll = MoveType = H\ntrigger1 = 1\nvalue = 5120\nctrl = 0\nignorehitpause = 1\n\n[State -2, AI Patch Self Custom State 825 Escape Neutral]\ntype = SelfState\ntriggerAll = AILevel && RoundState = 2\ntriggerAll = Alive\ntriggerAll = StateNo = 825\ntriggerAll = Time > 150\ntriggerAll = !NumTarget\ntriggerAll = StateType != A\ntriggerAll = MoveType != H\ntrigger1 = 1\nvalue = 0\nctrl = 1\nignorehitpause = 1\n\n[State -2, AI Patch Target Custom Throw Release]\ntype = TargetState\ntriggerAll = AILevel && NumTarget && RoundState = 2\ntriggerAll = Target,Alive\ntriggerAll = Target,StateNo = [800,999]\ntriggerAll = Target,MoveType = H\ntriggerAll = Target,Time > 150\ntrigger1 = 1\nvalue = 5120\nignorehitpause = 1\n\n[State -2, AI Patch Target Stuck Release 5160]\ntype = TargetState\ntriggerAll = AILevel && NumTarget && RoundState = 2\ntriggerAll = Target,Alive\ntriggerAll = Target,StateNo = 5160\ntriggerAll = Target,Time > 90\ntriggerAll = Target,StateType = L || Target,MoveType = H\ntrigger1 = 1\nvalue = 5120\nignorehitpause = 1\n\n[State -2, AI Patch Target Stuck Release Common Lie]\ntype = TargetState\ntriggerAll = AILevel && NumTarget && RoundState = 2\ntriggerAll = Target,Alive\ntriggerAll = Target,StateNo = [5100,5199]\ntriggerAll = Target,Time > 150\ntriggerAll = Target,StateType = L || Target,MoveType = H\ntrigger1 = 1\nvalue = 5120\nignorehitpause = 1\n; AI_PATCH_END: mvc_wolverine_ag:resolver_target_stuck_watchdog:v1",
+          "routeTargets": [
+            "5120",
+            "5050",
+            "5150"
+          ]
+        }
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "moduleId": "wolverine_defense_approach",
+      "reason": "Lite Fit fallback has no safe generated template for guard_run",
+      "liteFit": {
+        "moduleId": "wolverine_defense_approach",
+        "tier": "core_defense",
+        "mode": "fallback",
+        "missingRequired": [],
+        "missingOptional": [],
+        "fallbackMode": "guard_run",
+        "fallbackTrigger": "wolverine_ground",
+        "reason": "unresolved placeholders; use guard_run"
+      }
+    },
+    {
+      "moduleId": "wolverine_ground_rush_router",
+      "reason": "Lite Fit fallback has no safe generated template for ground_route",
+      "liteFit": {
+        "moduleId": "wolverine_ground_rush_router",
+        "tier": "boss_core",
+        "mode": "fallback",
+        "missingRequired": [],
+        "missingOptional": [],
+        "fallbackMode": "ground_route",
+        "fallbackTrigger": "wolverine_ground",
+        "reason": "unresolved placeholders; use ground_route"
+      }
+    },
+    {
+      "moduleId": "wolverine_defense_approach",
+      "reason": "Lite Fit fallback: unresolved placeholders; use guard_run",
+      "liteFit": {
+        "moduleId": "wolverine_defense_approach",
+        "tier": "core_defense",
+        "mode": "fallback",
+        "missingRequired": [],
+        "missingOptional": [],
+        "fallbackMode": "guard_run",
+        "fallbackTrigger": "wolverine_ground",
+        "reason": "unresolved placeholders; use guard_run"
+      }
+    },
+    {
+      "moduleId": "wolverine_ground_rush_router",
+      "reason": "Lite Fit fallback: unresolved placeholders; use ground_route",
+      "liteFit": {
+        "moduleId": "wolverine_ground_rush_router",
+        "tier": "boss_core",
+        "mode": "fallback",
+        "missingRequired": [],
+        "missingOptional": [],
+        "fallbackMode": "ground_route",
+        "fallbackTrigger": "wolverine_ground",
+        "reason": "unresolved placeholders; use ground_route"
+      }
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "stand_guard",
+      "actual": null,
+      "preferred": 130,
+      "strategy": "reuse_compatible_state",
+      "status": "needs_review",
+      "reason": "preferred state 130 does not exist and no compatible state was detected",
+      "roleHints": [
+        "standing_attack"
+      ],
+      "options": [
+        0,
+        20,
+        40,
+        50,
+        51,
+        52,
+        100,
+        105,
+        106,
+        170,
+        180,
+        181,
+        190,
+        191,
+        192,
+        195,
+        200,
+        205,
+        206,
+        210,
+        215,
+        230,
+        235,
+        240,
+        245,
+        250,
+        400,
+        410,
+        430,
+        440,
+        540,
+        555,
+        600,
+        610,
+        630,
+        640,
+        650,
+        700,
+        710,
+        800,
+        810,
+        820,
+        821,
+        900,
+        901,
+        1000,
+        1002,
+        1003,
+        1005,
+        1006,
+        1010,
+        1100,
+        1105,
+        1110,
+        1200,
+        1205,
+        1210,
+        1300,
+        1302,
+        1306,
+        1311,
+        1312,
+        1400,
+        1410,
+        1420,
+        1430,
+        1431,
+        1432,
+        1450,
+        1451,
+        1452,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2010,
+        2011
+      ]
+    },
+    {
+      "id": "crouch_guard",
+      "actual": null,
+      "preferred": 131,
+      "strategy": "reuse_compatible_state",
+      "status": "needs_review",
+      "reason": "preferred state 131 does not exist and no compatible state was detected",
+      "roleHints": [
+        "low_starter",
+        "low_coverage",
+        "crouch_attack"
+      ],
+      "options": [
+        0,
+        20,
+        40,
+        50,
+        51,
+        52,
+        100,
+        105,
+        106,
+        170,
+        180,
+        181,
+        190,
+        191,
+        192,
+        195,
+        200,
+        205,
+        206,
+        210,
+        215,
+        230,
+        235,
+        240,
+        245,
+        250,
+        400,
+        410,
+        430,
+        440,
+        540,
+        555,
+        600,
+        610,
+        630,
+        640,
+        650,
+        700,
+        710,
+        800,
+        810,
+        820,
+        821,
+        900,
+        901,
+        1000,
+        1002,
+        1003,
+        1005,
+        1006,
+        1010,
+        1100,
+        1105,
+        1110,
+        1200,
+        1205,
+        1210,
+        1300,
+        1302,
+        1306,
+        1311,
+        1312,
+        1400,
+        1410,
+        1420,
+        1430,
+        1431,
+        1432,
+        1450,
+        1451,
+        1452,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2010,
+        2011
+      ]
+    },
+    {
+      "id": "air_guard",
+      "actual": null,
+      "preferred": 132,
+      "strategy": "reuse_compatible_state",
+      "status": "needs_review",
+      "reason": "preferred state 132 does not exist and no compatible state was detected",
+      "roleHints": [],
+      "options": [
+        0,
+        20,
+        40,
+        50,
+        51,
+        52,
+        100,
+        105,
+        106,
+        170,
+        180,
+        181,
+        190,
+        191,
+        192,
+        195,
+        200,
+        205,
+        206,
+        210,
+        215,
+        230,
+        235,
+        240,
+        245,
+        250,
+        400,
+        410,
+        430,
+        440,
+        540,
+        555,
+        600,
+        610,
+        630,
+        640,
+        650,
+        700,
+        710,
+        800,
+        810,
+        820,
+        821,
+        900,
+        901,
+        1000,
+        1002,
+        1003,
+        1005,
+        1006,
+        1010,
+        1100,
+        1105,
+        1110,
+        1200,
+        1205,
+        1210,
+        1300,
+        1302,
+        1306,
+        1311,
+        1312,
+        1400,
+        1410,
+        1420,
+        1430,
+        1431,
+        1432,
+        1450,
+        1451,
+        1452,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2010,
+        2011
+      ]
+    },
+    {
+      "id": "launcher_jump",
+      "actual": null,
+      "preferred": 203,
+      "strategy": "reuse_compatible_state",
+      "status": "needs_review",
+      "reason": "preferred state 203 does not exist and no compatible state was detected",
+      "roleHints": [
+        "launcher",
+        "vertical_coverage",
+        "air_normal",
+        "air_route"
+      ],
+      "options": [
+        0,
+        20,
+        40,
+        50,
+        51,
+        52,
+        100,
+        105,
+        106,
+        170,
+        180,
+        181,
+        190,
+        191,
+        192,
+        195,
+        200,
+        205,
+        206,
+        210,
+        215,
+        230,
+        235,
+        240,
+        245,
+        250,
+        400,
+        410,
+        430,
+        440,
+        540,
+        555,
+        600,
+        610,
+        630,
+        640,
+        650,
+        700,
+        710,
+        800,
+        810,
+        820,
+        821,
+        900,
+        901,
+        1000,
+        1002,
+        1003,
+        1005,
+        1006,
+        1010,
+        1100,
+        1105,
+        1110,
+        1200,
+        1205,
+        1210,
+        1300,
+        1302,
+        1306,
+        1311,
+        1312,
+        1400,
+        1410,
+        1420,
+        1430,
+        1431,
+        1432,
+        1450,
+        1451,
+        1452,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2010,
+        2011
+      ]
+    },
+    {
+      "id": "throw_y",
+      "actual": null,
+      "preferred": 300,
+      "strategy": "reuse_compatible_state",
+      "status": "needs_review",
+      "reason": "preferred state 300 does not exist and no compatible state was detected",
+      "roleHints": [
+        "throw",
+        "close_range"
+      ],
+      "options": [
+        0,
+        20,
+        40,
+        50,
+        51,
+        52,
+        100,
+        105,
+        106,
+        170,
+        180,
+        181,
+        190,
+        191,
+        192,
+        195,
+        200,
+        205,
+        206,
+        210,
+        215,
+        230,
+        235,
+        240,
+        245,
+        250,
+        400,
+        410,
+        430,
+        440,
+        540,
+        555,
+        600,
+        610,
+        630,
+        640,
+        650,
+        700,
+        710,
+        800,
+        810,
+        820,
+        821,
+        900,
+        901,
+        1000,
+        1002,
+        1003,
+        1005,
+        1006,
+        1010,
+        1100,
+        1105,
+        1110,
+        1200,
+        1205,
+        1210,
+        1300,
+        1302,
+        1306,
+        1311,
+        1312,
+        1400,
+        1410,
+        1420,
+        1430,
+        1431,
+        1432,
+        1450,
+        1451,
+        1452,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2010,
+        2011
+      ]
+    },
+    {
+      "id": "throw_z",
+      "actual": null,
+      "preferred": 360,
+      "strategy": "reuse_compatible_state",
+      "status": "needs_review",
+      "reason": "preferred state 360 does not exist and no compatible state was detected",
+      "roleHints": [
+        "throw",
+        "close_range"
+      ],
+      "options": [
+        0,
+        20,
+        40,
+        50,
+        51,
+        52,
+        100,
+        105,
+        106,
+        170,
+        180,
+        181,
+        190,
+        191,
+        192,
+        195,
+        200,
+        205,
+        206,
+        210,
+        215,
+        230,
+        235,
+        240,
+        245,
+        250,
+        400,
+        410,
+        430,
+        440,
+        540,
+        555,
+        600,
+        610,
+        630,
+        640,
+        650,
+        700,
+        710,
+        800,
+        810,
+        820,
+        821,
+        900,
+        901,
+        1000,
+        1002,
+        1003,
+        1005,
+        1006,
+        1010,
+        1100,
+        1105,
+        1110,
+        1200,
+        1205,
+        1210,
+        1300,
+        1302,
+        1306,
+        1311,
+        1312,
+        1400,
+        1410,
+        1420,
+        1430,
+        1431,
+        1432,
+        1450,
+        1451,
+        1452,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2010,
+        2011
+      ]
+    },
+    {
+      "id": "air_throw",
+      "actual": null,
+      "preferred": 690,
+      "strategy": "reuse_compatible_state",
+      "status": "needs_review",
+      "reason": "preferred state 690 does not exist and no compatible state was detected",
+      "roleHints": [
+        "throw",
+        "close_range"
+      ],
+      "options": [
+        0,
+        20,
+        40,
+        50,
+        51,
+        52,
+        100,
+        105,
+        106,
+        170,
+        180,
+        181,
+        190,
+        191,
+        192,
+        195,
+        200,
+        205,
+        206,
+        210,
+        215,
+        230,
+        235,
+        240,
+        245,
+        250,
+        400,
+        410,
+        430,
+        440,
+        540,
+        555,
+        600,
+        610,
+        630,
+        640,
+        650,
+        700,
+        710,
+        800,
+        810,
+        820,
+        821,
+        900,
+        901,
+        1000,
+        1002,
+        1003,
+        1005,
+        1006,
+        1010,
+        1100,
+        1105,
+        1110,
+        1200,
+        1205,
+        1210,
+        1300,
+        1302,
+        1306,
+        1311,
+        1312,
+        1400,
+        1410,
+        1420,
+        1430,
+        1431,
+        1432,
+        1450,
+        1451,
+        1452,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2010,
+        2011
+      ]
+    }
+  ],
+  "createdAt": "2026-06-06T15:38:57.485Z"
+}

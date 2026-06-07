@@ -1,0 +1,1969 @@
+{
+  "generatedAt": "2026-06-05T15:08:05.780Z",
+  "name": "AngelaAI",
+  "characterPath": "E:\\x1\\Ikemen_Nighty\\chars\\AngelaAI",
+  "comboHealth": [
+    {
+      "id": "Starter",
+      "status": "ok",
+      "detail": "5 normal/low starter candidate(s)"
+    },
+    {
+      "id": "Normal chain",
+      "status": "weak",
+      "detail": "191 total edge(s); no normal-chain edge confirmed"
+    },
+    {
+      "id": "Special bridge",
+      "status": "ok",
+      "detail": "confirmed edge to special"
+    },
+    {
+      "id": "Super cashout",
+      "status": "ok",
+      "detail": "confirmed edge to super"
+    },
+    {
+      "id": "Air follow-up",
+      "status": "ok",
+      "detail": "5 air normal(s) and 26 launcher(s) scanned"
+    }
+  ],
+  "meterCandidates": [
+    {
+      "state": 730,
+      "cost": 60,
+      "role": "utility",
+      "delivery": "helper_trap",
+      "rangeClass": "close",
+      "reachMaxX": 41,
+      "actions": [
+        730
+      ],
+      "helperStates": [
+        8330,
+        8331,
+        8340,
+        8341
+      ],
+      "meterReliability": {
+        "kind": "meter",
+        "classification": "install",
+        "confidence": 0.66,
+        "recommendedUse": "safe_neutral_or_knockdown_setup",
+        "timing": {
+          "actions": [
+            730
+          ],
+          "frameCount": 4,
+          "startup": 2,
+          "activeEnd": 2,
+          "recovery": 2,
+          "source": "air_clsn1_frame"
+        },
+        "range": {
+          "maxX": 41,
+          "minY": -126,
+          "maxY": 2,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 730,
+          "helperStates": [
+            8330,
+            8331,
+            8340,
+            8341
+          ],
+          "helperIds": [
+            8330,
+            8331,
+            8340,
+            8341
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 41,
+          "spawnFrame": null,
+          "helperStartup": null,
+          "startup": null,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "install/invulnerability/visual mode signal",
+          "startup 2",
+          "y -126..2"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "state": 750,
+      "cost": 500,
+      "role": "special",
+      "delivery": "helper_trap",
+      "rangeClass": "close",
+      "reachMaxX": null,
+      "actions": [
+        4050
+      ],
+      "helperStates": [
+        8350
+      ],
+      "meterReliability": {
+        "kind": "ex",
+        "classification": "install",
+        "confidence": 0.58,
+        "recommendedUse": "safe_neutral_or_knockdown_setup",
+        "timing": {
+          "actions": [
+            4050
+          ],
+          "frameCount": 1,
+          "startup": null,
+          "activeEnd": null,
+          "recovery": null,
+          "source": "unknown"
+        },
+        "range": {
+          "maxX": null,
+          "minY": null,
+          "maxY": null,
+          "reachCount": 0
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 750,
+          "helperStates": [
+            8350
+          ],
+          "helperIds": [
+            8350
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": null,
+          "spawnFrame": null,
+          "helperStartup": null,
+          "startup": null,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "install/invulnerability/visual mode signal",
+          "state mutates vars or looks like self utility without hit"
+        ],
+        "warnings": [
+          "startup unknown"
+        ]
+      }
+    },
+    {
+      "state": 1030,
+      "cost": 500,
+      "role": "special launcher",
+      "delivery": "melee",
+      "rangeClass": "mid",
+      "reachMaxX": 62,
+      "actions": [
+        1000
+      ],
+      "helperStates": [],
+      "meterReliability": {
+        "kind": "ex",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            1000
+          ],
+          "frameCount": 15,
+          "startup": 5,
+          "activeEnd": 5,
+          "recovery": 10,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 62,
+          "minY": -114,
+          "maxY": -11,
+          "reachCount": 1
+        },
+        "delivery": "melee",
+        "helperTravel": null,
+        "reasons": [
+          "close/mid hitbox maxX 62",
+          "startup 5",
+          "y -114..-11"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "state": 1430,
+      "cost": 500,
+      "role": "special launcher",
+      "delivery": "helper_trap",
+      "rangeClass": "long",
+      "reachMaxX": 106,
+      "actions": [
+        1400
+      ],
+      "helperStates": [
+        1410,
+        8150
+      ],
+      "meterReliability": {
+        "kind": "ex",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            1400
+          ],
+          "frameCount": 23,
+          "startup": 9,
+          "activeEnd": 21,
+          "recovery": 2,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 106,
+          "minY": -180,
+          "maxY": 3,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 1430,
+          "helperStates": [
+            1410,
+            8150
+          ],
+          "helperIds": [
+            1410,
+            8150
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 106,
+          "spawnFrame": 9,
+          "helperStartup": null,
+          "startup": 9,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_hit"
+        },
+        "reasons": [
+          "close/mid hitbox maxX 106",
+          "startup 9",
+          "y -180..3"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "state": 770,
+      "cost": 1000,
+      "role": "super",
+      "delivery": "helper_trap",
+      "rangeClass": "close",
+      "reachMaxX": null,
+      "actions": [
+        770
+      ],
+      "helperStates": [
+        8291,
+        780
+      ],
+      "meterReliability": {
+        "kind": "super",
+        "classification": "self_buff",
+        "confidence": 0.62,
+        "recommendedUse": "knockdown_or_far_safe_only",
+        "timing": {
+          "actions": [
+            770
+          ],
+          "frameCount": 4,
+          "startup": null,
+          "activeEnd": null,
+          "recovery": null,
+          "source": "unknown"
+        },
+        "range": {
+          "maxX": null,
+          "minY": null,
+          "maxY": null,
+          "reachCount": 0
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 770,
+          "helperStates": [
+            8291,
+            780
+          ],
+          "helperIds": [
+            8291,
+            780
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": null,
+          "spawnFrame": 1,
+          "helperStartup": null,
+          "startup": 1,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "state mutates vars or looks like self utility without hit",
+          "startup 1"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "state": 3000,
+      "cost": 1000,
+      "role": "super",
+      "delivery": "helper_trap",
+      "rangeClass": "mid",
+      "reachMaxX": 76,
+      "actions": [
+        12003,
+        3000
+      ],
+      "helperStates": [
+        8500
+      ],
+      "meterReliability": {
+        "kind": "super",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            12003,
+            3000
+          ],
+          "frameCount": 24,
+          "startup": 9,
+          "activeEnd": 23,
+          "recovery": 1,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 76,
+          "minY": -131,
+          "maxY": -11,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3000,
+          "helperStates": [
+            8500
+          ],
+          "helperIds": [
+            8500
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 76,
+          "spawnFrame": 4,
+          "helperStartup": null,
+          "startup": 4,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "close/mid hitbox maxX 76",
+          "startup 9",
+          "y -131..-11"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "state": 3100,
+      "cost": 1000,
+      "role": "super",
+      "delivery": "helper_trap",
+      "rangeClass": "mid",
+      "reachMaxX": 80,
+      "actions": [
+        3100,
+        3101,
+        3102
+      ],
+      "helperStates": [
+        8500
+      ],
+      "meterReliability": {
+        "kind": "super",
+        "classification": "grab",
+        "confidence": 0.76,
+        "recommendedUse": "point_blank_punish_only",
+        "timing": {
+          "actions": [
+            3100,
+            3101,
+            3102
+          ],
+          "frameCount": 51,
+          "startup": 5,
+          "activeEnd": 44,
+          "recovery": 7,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 80,
+          "minY": -115,
+          "maxY": -20,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3100,
+          "helperStates": [
+            8500
+          ],
+          "helperIds": [
+            8500
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 80,
+          "spawnFrame": 2,
+          "helperStartup": null,
+          "startup": 2,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "throw/grab/custom target signal",
+          "startup 5",
+          "y -115..-20"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "state": 3010,
+      "cost": 2000,
+      "role": "super",
+      "delivery": "helper_trap",
+      "rangeClass": "mid",
+      "reachMaxX": 76,
+      "actions": [
+        12003,
+        3010
+      ],
+      "helperStates": [
+        8510
+      ],
+      "meterReliability": {
+        "kind": "super",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            12003,
+            3010
+          ],
+          "frameCount": 31,
+          "startup": 9,
+          "activeEnd": 30,
+          "recovery": 1,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 76,
+          "minY": -131,
+          "maxY": -11,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3010,
+          "helperStates": [
+            8510
+          ],
+          "helperIds": [
+            8500
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 76,
+          "spawnFrame": 4,
+          "helperStartup": null,
+          "startup": 4,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "close/mid hitbox maxX 76",
+          "startup 9",
+          "y -131..-11"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "state": 3150,
+      "cost": 2000,
+      "role": "super",
+      "delivery": "helper_trap",
+      "rangeClass": "mid",
+      "reachMaxX": 80,
+      "actions": [
+        3100,
+        3101,
+        3103
+      ],
+      "helperStates": [
+        8510
+      ],
+      "meterReliability": {
+        "kind": "super",
+        "classification": "grab",
+        "confidence": 0.76,
+        "recommendedUse": "point_blank_punish_only",
+        "timing": {
+          "actions": [
+            3100,
+            3101,
+            3103
+          ],
+          "frameCount": 56,
+          "startup": 5,
+          "activeEnd": 48,
+          "recovery": 8,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 80,
+          "minY": -115,
+          "maxY": -20,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3150,
+          "helperStates": [
+            8510
+          ],
+          "helperIds": [
+            8500
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 80,
+          "spawnFrame": 2,
+          "helperStartup": null,
+          "startup": 2,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "throw/grab/custom target signal",
+          "startup 5",
+          "y -115..-20"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "state": 3300,
+      "cost": 3000,
+      "role": "super",
+      "delivery": "helper_trap",
+      "rangeClass": "mid",
+      "reachMaxX": 53,
+      "actions": [
+        3200,
+        3201
+      ],
+      "helperStates": [
+        8520
+      ],
+      "meterReliability": {
+        "kind": "super",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            3200,
+            3201
+          ],
+          "frameCount": 10,
+          "startup": 1,
+          "activeEnd": 1,
+          "recovery": 9,
+          "source": "air_clsn1_frame"
+        },
+        "range": {
+          "maxX": 53,
+          "minY": -105,
+          "maxY": -10,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3300,
+          "helperStates": [
+            8520
+          ],
+          "helperIds": [
+            8520
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 53,
+          "spawnFrame": 2,
+          "helperStartup": null,
+          "startup": 2,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "close/mid hitbox maxX 53",
+          "startup 1",
+          "y -105..-10"
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "state": 8330,
+      "cost": 3000,
+      "role": "super",
+      "delivery": "melee",
+      "rangeClass": "close",
+      "reachMaxX": null,
+      "actions": [
+        1
+      ],
+      "helperStates": [],
+      "meterReliability": {
+        "kind": "super",
+        "classification": "unsafe_raw",
+        "confidence": 0.37,
+        "recommendedUse": "do_not_raw",
+        "timing": {
+          "actions": [
+            1
+          ],
+          "frameCount": 1,
+          "startup": null,
+          "activeEnd": null,
+          "recovery": null,
+          "source": "unknown"
+        },
+        "range": {
+          "maxX": null,
+          "minY": null,
+          "maxY": null,
+          "reachCount": 0
+        },
+        "delivery": "melee",
+        "helperTravel": null,
+        "reasons": [],
+        "warnings": [
+          "no direct/effective HitDef found",
+          "startup unknown"
+        ]
+      }
+    }
+  ],
+  "keyStates": [
+    {
+      "state": 200,
+      "role": "launcher",
+      "roleFamily": "low_starter",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "light_normal",
+        "low_starter",
+        "mid_range",
+        "normal",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 57,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          200
+        ],
+        "frameCount": 6,
+        "startup": 4,
+        "activeEnd": 4,
+        "recovery": 2,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "S, NA | dmg ceil(ifelse(fvar(11) * 21 < 7, 7, fvar(11) * 21)), 0 | stun G12/A120/B12 | airVel -4.31, -7.36"
+    },
+    {
+      "state": 210,
+      "role": "launcher",
+      "roleFamily": "low_starter",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "light_normal",
+        "low_starter",
+        "mid_range",
+        "normal",
+        "standing_attack"
+      ],
+      "reachMaxX": 98,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          211
+        ],
+        "frameCount": 11,
+        "startup": 3,
+        "activeEnd": 3,
+        "recovery": 8,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "S,NA | dmg ceil(ifElse(fvar(11) * 36 < 7, 7, fvar(11) * 36)), 0 | stun G15/A120/B15 | airVel -3.24, -7.73"
+    },
+    {
+      "state": 220,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "launcher",
+        "low_starter",
+        "medium_normal",
+        "mid_range",
+        "normal",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 59,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          220
+        ],
+        "frameCount": 9,
+        "startup": 4,
+        "activeEnd": 4,
+        "recovery": 5,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "S,NA | dmg 45,0 | stun G18/A120/B18 | airVel -5.39, -5.65"
+    },
+    {
+      "state": 230,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "launcher",
+        "light_normal",
+        "low_starter",
+        "mid_range",
+        "normal",
+        "standing_attack"
+      ],
+      "reachMaxX": 105,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          230
+        ],
+        "frameCount": 7,
+        "startup": 3,
+        "activeEnd": 3,
+        "recovery": 4,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "S,NA | dmg ceil(ifelse(fvar(11)*25<7, 7, fvar(11)*25)), 0 | stun G12/A120/B12 | airVel -6.46, -5.25"
+    },
+    {
+      "state": 240,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "launcher",
+        "light_normal",
+        "long_range",
+        "low_starter",
+        "normal",
+        "standing_attack"
+      ],
+      "reachMaxX": 118,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          240
+        ],
+        "frameCount": 12,
+        "startup": 5,
+        "activeEnd": 5,
+        "recovery": 7,
+        "source": "air_clsn1_frame"
+      },
+      "meterReliability": null,
+      "hitSummary": "S,NA | dmg ceil(ifelse(fvar(11)*33<7, 7, fvar(11)*33)), 0 | stun G15/A120/B15 | airVel -6.46, -5.25"
+    },
+    {
+      "state": 250,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "launcher",
+        "low_starter",
+        "medium_normal",
+        "mid_range",
+        "normal",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 101,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          250
+        ],
+        "frameCount": 9,
+        "startup": 5,
+        "activeEnd": 5,
+        "recovery": 4,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "S,NA | dmg ceil(ifelse(fvar(11)*45<7, 7, fvar(11)*45)), 0 | stun G18/A120/B18 | fall | airVel -6.46, -5.25"
+    },
+    {
+      "state": 400,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "crouch_attack",
+        "hitdef",
+        "launcher",
+        "light_normal",
+        "low_starter",
+        "mid_range",
+        "normal"
+      ],
+      "reachMaxX": 79,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          400
+        ],
+        "frameCount": 4,
+        "startup": 2,
+        "activeEnd": 2,
+        "recovery": 2,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "C,NA | dmg ceil(ifelse(fvar(11)*21<7, 7, fvar(11)*21)), 0 | stun G12/A120/B12 | airVel -6.46, -5.25"
+    },
+    {
+      "state": 410,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "crouch_attack",
+        "hitdef",
+        "launcher",
+        "light_normal",
+        "low_starter",
+        "mid_range",
+        "normal"
+      ],
+      "reachMaxX": 79,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          410
+        ],
+        "frameCount": 5,
+        "startup": 2,
+        "activeEnd": 2,
+        "recovery": 3,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "C,NA | dmg ceil(ifelse(fvar(11)*35<7, 7, fvar(11)*35)), 0 | stun G15/A120/B15 | airVel -6.46, -5.25"
+    },
+    {
+      "state": 420,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "crouch_attack",
+        "hitdef",
+        "launcher",
+        "low_starter",
+        "medium_normal",
+        "mid_range",
+        "normal",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 96,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          420
+        ],
+        "frameCount": 10,
+        "startup": 4,
+        "activeEnd": 4,
+        "recovery": 6,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "C,NA | dmg ceil(ifelse(fvar(11)*48<7, 7, fvar(11)*48)), 0 | stun G18/A120/B18 | airVel -3.23, -7.73"
+    },
+    {
+      "state": 430,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "crouch_attack",
+        "hitdef",
+        "launcher",
+        "light_normal",
+        "low_starter",
+        "mid_range",
+        "normal"
+      ],
+      "reachMaxX": 75,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          430
+        ],
+        "frameCount": 5,
+        "startup": 2,
+        "activeEnd": 2,
+        "recovery": 3,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "C,NA | dmg ceil(ifelse(fvar(11)*28<7, 7, fvar(11)*28)), 0 | stun G12/A120/B12 | airVel -6.46, -5.25"
+    },
+    {
+      "state": 440,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "crouch_attack",
+        "hitdef",
+        "launcher",
+        "light_normal",
+        "low_starter",
+        "mid_range",
+        "normal"
+      ],
+      "reachMaxX": 91,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          440
+        ],
+        "frameCount": 10,
+        "startup": 5,
+        "activeEnd": 5,
+        "recovery": 5,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "C,NA | dmg ceil(ifelse(fvar(11)*36<7, 7, fvar(11)*36)), 0 | stun G15/A120/B15 | airVel -6.46, -5.25"
+    },
+    {
+      "state": 450,
+      "role": "utility",
+      "roleFamily": "utility",
+      "tags": [
+        "action_mapped",
+        "close_range",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 53,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          450
+        ],
+        "frameCount": 10,
+        "startup": 5,
+        "activeEnd": 5,
+        "recovery": 5,
+        "source": "air_clsn1_frame"
+      },
+      "meterReliability": null,
+      "hitSummary": ""
+    },
+    {
+      "state": 650,
+      "role": "air normal",
+      "roleFamily": "air_chain",
+      "tags": [
+        "action_mapped",
+        "air_normal",
+        "air_route",
+        "hitdef",
+        "launcher",
+        "low_starter",
+        "medium_normal",
+        "mid_range",
+        "normal"
+      ],
+      "reachMaxX": 65,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          650
+        ],
+        "frameCount": 6,
+        "startup": 3,
+        "activeEnd": 3,
+        "recovery": 3,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "A,NA | dmg ceil(ifelse(fvar(11)*45<7, 7, fvar(11)*45)), 0 | stun G12/A120/B18 | airVel -6.46, -5.25"
+    },
+    {
+      "state": 710,
+      "role": "utility",
+      "roleFamily": "utility",
+      "tags": [
+        "action_mapped"
+      ],
+      "reachMaxX": null,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          710
+        ],
+        "frameCount": 9,
+        "startup": null,
+        "activeEnd": null,
+        "recovery": null,
+        "source": "unknown"
+      },
+      "meterReliability": null,
+      "hitSummary": ""
+    },
+    {
+      "state": 715,
+      "role": "utility",
+      "roleFamily": "utility",
+      "tags": [
+        "action_mapped"
+      ],
+      "reachMaxX": null,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          715
+        ],
+        "frameCount": 9,
+        "startup": null,
+        "activeEnd": null,
+        "recovery": null,
+        "source": "unknown"
+      },
+      "meterReliability": null,
+      "hitSummary": ""
+    },
+    {
+      "state": 730,
+      "role": "utility",
+      "roleFamily": "utility",
+      "tags": [
+        "action_mapped",
+        "close_range",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 41,
+      "delivery": "helper_trap",
+      "timing": {
+        "actions": [
+          730
+        ],
+        "frameCount": 4,
+        "startup": 2,
+        "activeEnd": 2,
+        "recovery": 2,
+        "source": "air_clsn1_frame"
+      },
+      "meterReliability": {
+        "kind": "meter",
+        "classification": "install",
+        "confidence": 0.66,
+        "recommendedUse": "safe_neutral_or_knockdown_setup",
+        "timing": {
+          "actions": [
+            730
+          ],
+          "frameCount": 4,
+          "startup": 2,
+          "activeEnd": 2,
+          "recovery": 2,
+          "source": "air_clsn1_frame"
+        },
+        "range": {
+          "maxX": 41,
+          "minY": -126,
+          "maxY": 2,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 730,
+          "helperStates": [
+            8330,
+            8331,
+            8340,
+            8341
+          ],
+          "helperIds": [
+            8330,
+            8331,
+            8340,
+            8341
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 41,
+          "spawnFrame": null,
+          "helperStartup": null,
+          "startup": null,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "install/invulnerability/visual mode signal",
+          "startup 2",
+          "y -126..2"
+        ],
+        "warnings": []
+      },
+      "hitSummary": ""
+    },
+    {
+      "state": 750,
+      "role": "special",
+      "roleFamily": "utility",
+      "tags": [
+        "action_mapped",
+        "meter"
+      ],
+      "reachMaxX": null,
+      "delivery": "helper_trap",
+      "timing": {
+        "actions": [
+          4050
+        ],
+        "frameCount": 1,
+        "startup": null,
+        "activeEnd": null,
+        "recovery": null,
+        "source": "unknown"
+      },
+      "meterReliability": {
+        "kind": "ex",
+        "classification": "install",
+        "confidence": 0.58,
+        "recommendedUse": "safe_neutral_or_knockdown_setup",
+        "timing": {
+          "actions": [
+            4050
+          ],
+          "frameCount": 1,
+          "startup": null,
+          "activeEnd": null,
+          "recovery": null,
+          "source": "unknown"
+        },
+        "range": {
+          "maxX": null,
+          "minY": null,
+          "maxY": null,
+          "reachCount": 0
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 750,
+          "helperStates": [
+            8350
+          ],
+          "helperIds": [
+            8350
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": null,
+          "spawnFrame": null,
+          "helperStartup": null,
+          "startup": null,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "install/invulnerability/visual mode signal",
+          "state mutates vars or looks like self utility without hit"
+        ],
+        "warnings": [
+          "startup unknown"
+        ]
+      },
+      "hitSummary": ""
+    },
+    {
+      "state": 760,
+      "role": "utility",
+      "roleFamily": "utility",
+      "tags": [
+        "action_mapped"
+      ],
+      "reachMaxX": null,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          760
+        ],
+        "frameCount": 3,
+        "startup": null,
+        "activeEnd": null,
+        "recovery": null,
+        "source": "unknown"
+      },
+      "meterReliability": null,
+      "hitSummary": ""
+    },
+    {
+      "state": 761,
+      "role": "utility",
+      "roleFamily": "utility",
+      "tags": [
+        "action_mapped"
+      ],
+      "reachMaxX": null,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          761
+        ],
+        "frameCount": 3,
+        "startup": null,
+        "activeEnd": null,
+        "recovery": null,
+        "source": "unknown"
+      },
+      "meterReliability": null,
+      "hitSummary": ""
+    },
+    {
+      "state": 762,
+      "role": "utility",
+      "roleFamily": "utility",
+      "tags": [
+        "action_mapped"
+      ],
+      "reachMaxX": null,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          762
+        ],
+        "frameCount": 4,
+        "startup": null,
+        "activeEnd": null,
+        "recovery": null,
+        "source": "unknown"
+      },
+      "meterReliability": null,
+      "hitSummary": ""
+    },
+    {
+      "state": 800,
+      "role": "launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "close_range",
+        "hitdef",
+        "launcher",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 49,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          800
+        ],
+        "frameCount": 5,
+        "startup": 2,
+        "activeEnd": 2,
+        "recovery": 3,
+        "source": "air_clsn1_frame"
+      },
+      "meterReliability": null,
+      "hitSummary": "S, NT | fall"
+    },
+    {
+      "state": 1000,
+      "role": "special launcher",
+      "roleFamily": "anti_air_special",
+      "tags": [
+        "action_mapped",
+        "anti_air_special",
+        "hitdef",
+        "launcher",
+        "mid_range",
+        "special",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 62,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          1000
+        ],
+        "frameCount": 15,
+        "startup": 5,
+        "activeEnd": 11,
+        "recovery": 4,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "S, SA | dmg ceil(ifElse(fvar(11) * 34 < 7, 7, fvar(11) * 34)), 0 | stun G18/A8/B12 | airVel -1.5,-3"
+    },
+    {
+      "state": 1030,
+      "role": "special launcher",
+      "roleFamily": "attack",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "meter",
+        "mid_range",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 62,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          1000
+        ],
+        "frameCount": 15,
+        "startup": 5,
+        "activeEnd": 5,
+        "recovery": 10,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": {
+        "kind": "ex",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            1000
+          ],
+          "frameCount": 15,
+          "startup": 5,
+          "activeEnd": 5,
+          "recovery": 10,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 62,
+          "minY": -114,
+          "maxY": -11,
+          "reachCount": 1
+        },
+        "delivery": "melee",
+        "helperTravel": null,
+        "reasons": [
+          "close/mid hitbox maxX 62",
+          "startup 5",
+          "y -114..-11"
+        ],
+        "warnings": []
+      },
+      "hitSummary": "S, SA | dmg ceil(ifElse(fvar(11) * 54 < 7, 7, fvar(11) * 54)), 0 | stun G18/A8/B12 | airVel -1.5,-3"
+    },
+    {
+      "state": 1100,
+      "role": "special launcher",
+      "roleFamily": "anti_air_special",
+      "tags": [
+        "action_mapped",
+        "anti_air_special",
+        "hitdef",
+        "launcher",
+        "long_range",
+        "rush_special",
+        "special",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 143,
+      "delivery": "projectile",
+      "timing": {
+        "actions": [
+          11010,
+          1100
+        ],
+        "frameCount": 12,
+        "startup": 5,
+        "activeEnd": 7,
+        "recovery": 5,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "S, SA | dmg ceil(ifElse(fvar(11) * 44 < 7, 7, fvar(11) * 44)), 0 | stun G32/A32/B18 | fall | airVel -1,-2"
+    },
+    {
+      "state": 1200,
+      "role": "special launcher",
+      "roleFamily": "anti_air_special",
+      "tags": [
+        "action_mapped",
+        "anti_air_special",
+        "close_range",
+        "hitdef",
+        "launcher",
+        "special",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 47,
+      "delivery": "melee",
+      "timing": {
+        "actions": [
+          1201,
+          1211
+        ],
+        "frameCount": 23,
+        "startup": 5,
+        "activeEnd": 12,
+        "recovery": 11,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": null,
+      "hitSummary": "S, SA | dmg ceil(ifElse(fvar(11) * 34 < 7, 7, fvar(11) * 34)), 0 | stun G20/A24/B18 | airVel -3,-3"
+    },
+    {
+      "state": 1430,
+      "role": "special launcher",
+      "roleFamily": "launcher",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "launcher",
+        "meter",
+        "mid_range",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 106,
+      "delivery": "helper_trap",
+      "timing": {
+        "actions": [
+          1400
+        ],
+        "frameCount": 23,
+        "startup": 9,
+        "activeEnd": 21,
+        "recovery": 2,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": {
+        "kind": "ex",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            1400
+          ],
+          "frameCount": 23,
+          "startup": 9,
+          "activeEnd": 21,
+          "recovery": 2,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 106,
+          "minY": -180,
+          "maxY": 3,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 1430,
+          "helperStates": [
+            1410,
+            8150
+          ],
+          "helperIds": [
+            1410,
+            8150
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 106,
+          "spawnFrame": 9,
+          "helperStartup": null,
+          "startup": 9,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_hit"
+        },
+        "reasons": [
+          "close/mid hitbox maxX 106",
+          "startup 9",
+          "y -180..3"
+        ],
+        "warnings": []
+      },
+      "hitSummary": "S, SP | dmg ceil(ifElse(fvar(11) * 48 < 7, 7, fvar(11) * 48)), 0 | stun G18/A32/B8 | fall | airVel -2.5,-6"
+    },
+    {
+      "state": 3000,
+      "role": "super",
+      "roleFamily": "meter_cashout",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "hyper",
+        "launcher",
+        "low_starter",
+        "meter",
+        "mid_range",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 76,
+      "delivery": "helper_trap",
+      "timing": {
+        "actions": [
+          12003,
+          3000
+        ],
+        "frameCount": 24,
+        "startup": 9,
+        "activeEnd": 23,
+        "recovery": 1,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": {
+        "kind": "super",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            12003,
+            3000
+          ],
+          "frameCount": 24,
+          "startup": 9,
+          "activeEnd": 23,
+          "recovery": 1,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 76,
+          "minY": -131,
+          "maxY": -11,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3000,
+          "helperStates": [
+            8500
+          ],
+          "helperIds": [
+            8500
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 76,
+          "spawnFrame": 4,
+          "helperStartup": null,
+          "startup": 4,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "close/mid hitbox maxX 76",
+          "startup 9",
+          "y -131..-11"
+        ],
+        "warnings": []
+      },
+      "hitSummary": "S,NA | dmg ceil(ifElse(fvar(11) * 24 < 7, 7, fvar(11) * 24)), 0 | stun G18/A120/B18 | airVel -5.39, -5.65"
+    },
+    {
+      "state": 3010,
+      "role": "super",
+      "roleFamily": "meter_cashout",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "hyper",
+        "launcher",
+        "low_starter",
+        "meter",
+        "mid_range",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 76,
+      "delivery": "helper_trap",
+      "timing": {
+        "actions": [
+          12003,
+          3010
+        ],
+        "frameCount": 31,
+        "startup": 9,
+        "activeEnd": 30,
+        "recovery": 1,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": {
+        "kind": "super",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            12003,
+            3010
+          ],
+          "frameCount": 31,
+          "startup": 9,
+          "activeEnd": 30,
+          "recovery": 1,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 76,
+          "minY": -131,
+          "maxY": -11,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3010,
+          "helperStates": [
+            8510
+          ],
+          "helperIds": [
+            8500
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 76,
+          "spawnFrame": 4,
+          "helperStartup": null,
+          "startup": 4,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "close/mid hitbox maxX 76",
+          "startup 9",
+          "y -131..-11"
+        ],
+        "warnings": []
+      },
+      "hitSummary": "S,NA | dmg ceil(ifElse(fvar(11) * 24 < 7, 7, fvar(11) * 24)), 0 | stun G18/A120/B18 | airVel -5.39, -5.65"
+    },
+    {
+      "state": 3100,
+      "role": "super",
+      "roleFamily": "meter_cashout",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "hyper",
+        "launcher",
+        "low_starter",
+        "meter",
+        "mid_range",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 80,
+      "delivery": "helper_trap",
+      "timing": {
+        "actions": [
+          3100,
+          3101,
+          3102
+        ],
+        "frameCount": 51,
+        "startup": 5,
+        "activeEnd": 44,
+        "recovery": 7,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": {
+        "kind": "super",
+        "classification": "grab",
+        "confidence": 0.76,
+        "recommendedUse": "point_blank_punish_only",
+        "timing": {
+          "actions": [
+            3100,
+            3101,
+            3102
+          ],
+          "frameCount": 51,
+          "startup": 5,
+          "activeEnd": 44,
+          "recovery": 7,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 80,
+          "minY": -115,
+          "maxY": -20,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3100,
+          "helperStates": [
+            8500
+          ],
+          "helperIds": [
+            8500
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 80,
+          "spawnFrame": 2,
+          "helperStartup": null,
+          "startup": 2,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "throw/grab/custom target signal",
+          "startup 5",
+          "y -115..-20"
+        ],
+        "warnings": []
+      },
+      "hitSummary": "S, HA | dmg ceil(ifElse(fvar(11) * 14 < 7, 7, fvar(11) * 14)), 0 | stun G20/A24/B18 | airVel -3,-3"
+    },
+    {
+      "state": 3150,
+      "role": "super",
+      "roleFamily": "meter_cashout",
+      "tags": [
+        "action_mapped",
+        "hitdef",
+        "hyper",
+        "launcher",
+        "low_starter",
+        "meter",
+        "mid_range",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 80,
+      "delivery": "helper_trap",
+      "timing": {
+        "actions": [
+          3100,
+          3101,
+          3103
+        ],
+        "frameCount": 56,
+        "startup": 5,
+        "activeEnd": 48,
+        "recovery": 8,
+        "source": "hitdef_animelem"
+      },
+      "meterReliability": {
+        "kind": "super",
+        "classification": "grab",
+        "confidence": 0.76,
+        "recommendedUse": "point_blank_punish_only",
+        "timing": {
+          "actions": [
+            3100,
+            3101,
+            3103
+          ],
+          "frameCount": 56,
+          "startup": 5,
+          "activeEnd": 48,
+          "recovery": 8,
+          "source": "hitdef_animelem"
+        },
+        "range": {
+          "maxX": 80,
+          "minY": -115,
+          "maxY": -20,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3150,
+          "helperStates": [
+            8510
+          ],
+          "helperIds": [
+            8500
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 80,
+          "spawnFrame": 2,
+          "helperStartup": null,
+          "startup": 2,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "throw/grab/custom target signal",
+          "startup 5",
+          "y -115..-20"
+        ],
+        "warnings": []
+      },
+      "hitSummary": "S, HA | dmg ceil(ifElse(fvar(11) * 34 < 7, 7, fvar(11) * 34)), 0 | stun G22/A24/B18 | airVel -3,-3"
+    },
+    {
+      "state": 3300,
+      "role": "super",
+      "roleFamily": "meter_cashout",
+      "tags": [
+        "action_mapped",
+        "close_range",
+        "hitdef",
+        "hyper",
+        "meter",
+        "standing_attack",
+        "vertical_coverage"
+      ],
+      "reachMaxX": 53,
+      "delivery": "helper_trap",
+      "timing": {
+        "actions": [
+          3200,
+          3201
+        ],
+        "frameCount": 10,
+        "startup": 1,
+        "activeEnd": 1,
+        "recovery": 9,
+        "source": "air_clsn1_frame"
+      },
+      "meterReliability": {
+        "kind": "super",
+        "classification": "close_confirm",
+        "confidence": 0.78,
+        "recommendedUse": "hit_confirm_only",
+        "timing": {
+          "actions": [
+            3200,
+            3201
+          ],
+          "frameCount": 10,
+          "startup": 1,
+          "activeEnd": 1,
+          "recovery": 9,
+          "source": "air_clsn1_frame"
+        },
+        "range": {
+          "maxX": 53,
+          "minY": -105,
+          "maxY": -10,
+          "reachCount": 1
+        },
+        "delivery": "helper_trap",
+        "helperTravel": {
+          "ownerState": 3300,
+          "helperStates": [
+            8520
+          ],
+          "helperIds": [
+            8520
+          ],
+          "maxX": null,
+          "minX": null,
+          "ownerMaxX": 53,
+          "spawnFrame": 2,
+          "helperStartup": null,
+          "startup": 2,
+          "activeEnd": null,
+          "travelDistance": null,
+          "kind": "helper_setup"
+        },
+        "reasons": [
+          "close/mid hitbox maxX 53",
+          "startup 1",
+          "y -105..-10"
+        ],
+        "warnings": []
+      },
+      "hitSummary": "S,HT | stun B20"
+    }
+  ]
+}

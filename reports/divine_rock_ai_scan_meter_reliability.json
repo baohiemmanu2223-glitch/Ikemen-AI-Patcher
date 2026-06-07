@@ -1,0 +1,52 @@
+{
+  "character": "DivineRockAI",
+  "scanned_from": "chars/DivineRockAI",
+  "scanner_version": "meter_reliability_v1",
+  "scan_summary": {
+    "state_count": 255,
+    "route_candidates": 260,
+    "meter_candidates": 17,
+    "combat_health": [
+      { "id": "Starter", "status": "ok", "detail": "6 normal/low starter candidate(s)" },
+      { "id": "Normal chain", "status": "weak", "detail": "260 total edge(s); no normal-chain edge confirmed" },
+      { "id": "Special bridge", "status": "ok", "detail": "confirmed edge to special" },
+      { "id": "Super cashout", "status": "ok", "detail": "confirmed edge to super" },
+      { "id": "Air follow-up", "status": "ok", "detail": "6 air normal(s) and 47 launcher(s) scanned" }
+    ]
+  },
+  "meter_reliability": {
+    "close_confirm": [
+      { "state": 1030, "cost": 500, "use": "hit_confirm_only", "confidence": 0.78, "reach_x": 35, "startup": 7, "delivery": "helper_trap" },
+      { "state": 1430, "cost": 500, "use": "hit_confirm_only", "confidence": 0.78, "reach_x": 38, "startup": 3, "delivery": "helper_trap" },
+      { "state": 1530, "cost": 500, "use": "hit_confirm_only", "confidence": 0.78, "reach_x": 77, "startup": 4, "delivery": "melee" },
+      { "state": 3005, "cost": 1000, "use": "hit_confirm_only", "confidence": 0.78, "reach_x": 45, "startup": 1, "delivery": "crossup_melee" },
+      { "state": 3100, "cost": 1000, "use": "hit_confirm_only", "confidence": 0.78, "reach_x": 82, "startup": 7, "delivery": "helper_trap" },
+      { "state": 3150, "cost": 2000, "use": "hit_confirm_only", "confidence": 0.78, "reach_x": 82, "startup": 7, "delivery": "helper_trap" }
+    ],
+    "grab": [
+      { "state": 1130, "cost": 500, "use": "point_blank_punish_only", "confidence": 0.76, "startup": 5, "delivery": "melee" },
+      { "state": 3200, "cost": 3000, "use": "point_blank_punish_only", "confidence": 0.76, "startup": 3, "delivery": "helper_trap" }
+    ],
+    "install": [
+      { "state": 740, "cost": 1000, "use": "safe_neutral_or_knockdown_setup", "confidence": 0.58, "delivery": "helper_trap" },
+      { "state": 750, "cost": 1000, "use": "safe_neutral_or_knockdown_setup", "confidence": 0.58, "delivery": "helper_trap" },
+      { "state": 3000, "cost": 1000, "use": "safe_neutral_or_knockdown_setup", "confidence": 0.66, "startup": 3, "delivery": "helper_trap" },
+      { "state": 3050, "cost": 2000, "use": "safe_neutral_or_knockdown_setup", "confidence": 0.58, "delivery": "helper_trap" }
+    ],
+    "self_buff": [
+      { "state": 770, "cost": 1000, "use": "knockdown_or_far_safe_only", "confidence": 0.62, "startup": 1, "delivery": "helper_trap" },
+      { "state": 1230, "cost": 500, "use": "knockdown_or_far_safe_only", "confidence": 0.62, "startup": 2, "delivery": "melee" },
+      { "state": 1330, "cost": 500, "use": "knockdown_or_far_safe_only", "confidence": 0.54, "delivery": "melee" },
+      { "state": 10004, "cost": 1000, "use": "knockdown_or_far_safe_only", "confidence": 0.54, "delivery": "melee" }
+    ],
+    "unsafe_raw": [
+      { "state": 8330, "cost": 3000, "use": "do_not_raw", "confidence": 0.37 }
+    ]
+  },
+  "brain_update_notes": [
+    "Generic hit-confirm cashout aliases should prefer 3005, 3100, and 3150.",
+    "3000 and 3050 are install/setup in the DivineRockAI source scan, not direct cashout attacks.",
+    "3200 is grab/custom-target style and should be point-blank punish only unless the target scanner confirms close_confirm behavior.",
+    "8330 is blocked as unsafe_raw."
+  ]
+}
