@@ -238,6 +238,41 @@ The core patching logic is organized around four major layers:
 
 When adding new AI behavior, prefer adding scanner evidence and audit rules instead of hardcoding a single character's state layout. This keeps brains reusable across different characters.
 
+## For Developers
+
+End users who download the release `.exe` do not need `AI_Patcher/node_modules`.
+
+The `node_modules` folder is only needed when running, editing, or building Ikemen AI Patcher from source. It should not be committed to the repository. The expected GitHub workflow is to keep `package.json` and `package-lock.json` in the repo, then let developers install dependencies locally.
+
+To set up the project from source:
+
+1. Install Node.js for your operating system.
+2. Clone or download this repository.
+3. Open a terminal in the `AI_Patcher` folder.
+4. Install dependencies:
+
+```powershell
+npm install
+```
+
+This creates:
+
+```text
+AI_Patcher/node_modules/
+```
+
+Developer commands are defined in `AI_Patcher/package.json`.
+
+Common development tasks:
+
+```powershell
+npm run electron
+npm run pack
+npm run dist:win
+```
+
+Use these only when working from source. Normal users should use the packaged release build instead.
+
 ## Donate
 
 If this project helps you, you can support development here:
