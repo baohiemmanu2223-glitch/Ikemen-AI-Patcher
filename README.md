@@ -242,20 +242,32 @@ When adding new AI behavior, prefer adding scanner evidence and audit rules inst
 
 End users who download the release `.exe` do not need `AI_Patcher/node_modules`.
 
-The `node_modules` folder is only needed when running, editing, or building Ikemen AI Patcher from source. It should not be committed to the repository. The expected GitHub workflow is to keep `package.json` and `package-lock.json` in the repo, then let developers install dependencies locally.
+The `node_modules` folder is only needed when running, editing, or building Ikemen AI Patcher from source. It is generated locally after dependency installation and should not be committed to the repository.
+
+Dependency files:
+
+- `package.json` defines the direct dependencies, scripts, app metadata, and build settings.
+- `package-lock.json` locks the exact dependency versions used for reproducible installs and release builds.
+- `AI_Patcher/node_modules/` is the locally installed dependency folder created by npm.
 
 To set up the project from source:
 
 1. Install Node.js for your operating system.
 2. Clone or download this repository.
 3. Open a terminal in the `AI_Patcher` folder.
-4. Install dependencies:
+4. Install dependencies for normal development:
 
 ```powershell
 npm install
 ```
 
-This creates:
+For a clean reproducible install based exactly on `package-lock.json`, use:
+
+```powershell
+npm ci
+```
+
+Both commands create:
 
 ```text
 AI_Patcher/node_modules/
