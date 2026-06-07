@@ -4,7 +4,6 @@ Ikemen AI Patcher is a local desktop tool for scanning, resolving, previewing, b
 
 The goal is to help users add or replace character AI without manually editing large `.cmd`, `.cns`, `.st`, and `.air` files by hand. The tool scans the target character first, resolves conflicts against the selected AI brain, previews the generated patch, creates backups, and writes marker-based AI blocks that can be updated safely later.
 
-![Donate with PayPal](https://i.ibb.co/BV79KDVm/Donate-Paypal.png)
 
 ## Features
 
